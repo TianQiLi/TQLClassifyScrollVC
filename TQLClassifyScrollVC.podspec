@@ -10,8 +10,9 @@ Pod::Spec.new do |s|
   s.name         = "TQLClassifyScrollVC"
   s.version      = "0.0.1"
   s.summary      = "多tab 控制器."
-  s.homepage     = "https://github.com/TianQiLi/TQLClassifyScrollVC.git"
-  s.license      = "MIT"
+  s.homepage     = "https://github.com/TianQiLi/TQLClassifyScrollVC"
+  #s.license      = "MIT"
+  s.license       = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { "litianqi" => "871651575@qq.com" }
   s.platform     = :ios, "8.0"
 
