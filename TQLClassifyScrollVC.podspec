@@ -10,12 +10,13 @@ Pod::Spec.new do |s|
   s.name         = "TQLClassifyScrollVC"
   s.version      = "0.0.1"
   s.summary      = "多tab 控制器."
-  s.homepage     = "http://www.100yy.com"
+  s.homepage     = "https://github.com/TianQiLi/TQLClassifyScrollVC.git"
   s.license      = "MIT"
   s.author       = { "litianqi" => "871651575@qq.com" }
   s.platform     = :ios, "8.0"
 
-  s.source       = { :path => "." }
+  s.source       = { :path => "https://github.com/TianQiLi/TQLClassifyScrollVC.git" }
+  #s.source       = { :path => "." }
   s.source_files  = "TQLClassifyScrollVC/**/*.{h,m}"
 
   s.resources = "TQLClassifyScrollVC/*.xib"
