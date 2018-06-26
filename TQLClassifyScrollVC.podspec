@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   s.author       = { "litianqi" => "871651575@qq.com" }
   s.platform     = :ios, "8.0"
 
-  s.source       = { :path => "https://github.com/TianQiLi/TQLClassifyScrollVC.git" }
+  s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git" }
   #s.source       = { :path => "." }
   s.source_files  = "TQLClassifyScrollVC/**/*.{h,m}"
 
