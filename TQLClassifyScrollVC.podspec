@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.tvos.deployment_target = '9.0'
  
-  s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git" , :tag => "v#{s.version}"}
+  s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git"}
   #s.source       = { :path => "." }
   s.source_files  =  "TQLClassifyScrollVC/**/*.{h,m}"
 
