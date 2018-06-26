@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
 
   s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git" }
   #s.source       = { :path => "." }
-  s.source_files  = "TQLClassifyScrollVC/**/*.{h,m}"
+  s.source_files  =  'Classes',"TQLClassifyScrollVC/**/*.{h,m}"
 
   s.resources = "TQLClassifyScrollVC/*.xib"
   s.requires_arc = true
