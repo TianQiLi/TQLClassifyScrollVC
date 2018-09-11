@@ -13,22 +13,24 @@ demo:
  //初始化分类滚动控制器：MyOrderListVC 重写TQLViewContorller 类
  
      TQLClassifyScrollVC * vc = [[TQLClassifyScrollVC alloc] initWithSwitchItemArray:@[@"全部",@"待付款",@"已付款"]     
-     withClassArray:@[NSStringFromClass([MyOrderListVC class])] 
-     withIdentifiter:@[[MyOrderListVC cellIdentifiter]] withRect:CGRectMake(0,0,self.view.frame.size.width,height)];
+                                withClassArray:@[NSStringFromClass([MyOrderListVC class])] 
+                                     withIdentifiter:@[[MyOrderListVC cellIdentifiter]]               
+                                          withRect:CGRectMake(0,0,self.view.frame.size.width,height)];
            
        
 //自定义配置分类按钮样式        
         
         vc.switchViewStyle = [[TQLSwitchViewStyleModel alloc] initSwitchButtonStyle:[UIColor colorWithHexString:@"0x333333"] 
-        selectedColor:[UIColor colorWithHexString:kAPPMainColor] flagColor:[UIColor colorWithHexString:kAPPMainColor] 
-        titleNormalBtnFont:[UIFont systemFontOfSize:15] selectedNormalBtnFont:[UIFont boldSystemFontOfSize:15] 
-        flagViewWidth:CGSizeMake(28, 3) bottomLineColor:[UIColor colorWithHexString:@"0xefeff0"] bottonLineHidden:NO 
-        switchViewRect:CGRectMake(0, 0, 0, 45)];
+                             selectedColor:[UIColor colorWithHexString:kAPPMainColor] 
+                                    flagColor:[UIColor colorWithHexString:kAPPMainColor] 
+                                         titleNormalBtnFont:[UIFont systemFontOfSize:15] 
+                                             selectedNormalBtnFont:[UIFont boldSystemFontOfSize:15] 
+                                                   flagViewWidth:CGSizeMake(28, 3)
+                                                           bottomLineColor:[UIColor colorWithHexString:@"0xefeff0"] 
+                                                               bottonLineHidden:NO  switchViewRect:CGRectMake(0, 0, 0, 45)];
     
-      [vc setSwitchButtonBottomMargin:0];
-       vc.title = @"我的";
-       
-       
+       [vc setSwitchButtonBottomMargin:0];
+        vc.title = @"我的";
         vc.enableScollForSwitchClick = YES;
         vc.justTwoScrollForSwitchClick = YES;
         vc.enumerateItemBtnBlock = ^(TQLRedBadgeBttton *itemBtn, NSInteger index) {
