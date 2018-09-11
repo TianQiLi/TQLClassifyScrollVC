@@ -201,48 +201,48 @@
 }
 @end
 
-@implementation TQLSwitchViewButtonCollectionCell
-
--(id)initWithFrame:(CGRect)frame{
-    if (self = [super initWithFrame:frame]) {
-        _swithchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, 0,[TQLSwitchViewTool contentSize].width, [TQLSwitchViewTool contentSize].height)];
-        _swithchViewTool.delegate = self;
-        [self.contentView addSubview:_swithchViewTool];
-    }
-    return self;
-}
-
-#pragma mark -- SwitchViewButtonDelegate
-- (void)clickButton:(NSInteger)index{
-    if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
-        [self.delegate clickButton:index];
-    }
-}
-
-@end
-
-@implementation TQLSwitchViewButtonCollectionReusableViewCell
--(id)initWithFrame:(CGRect)frame{
-    if (self = [super initWithFrame:frame]) {
-        _swithchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, 0, [TQLSwitchViewTool contentSize].width, [TQLSwitchViewTool contentSize].height)];
-        _swithchViewTool.delegate = self;
-        [self addSubview:_swithchViewTool];
-    }
-    return self;
-}
-
--(void)setCurrentIndex:(NSInteger)currentIndex{
-    _currentIndex = currentIndex;
-    _swithchViewTool.currentIndex = _currentIndex;
-}
-#pragma mark -- SwitchViewButtonDelegate
-- (void)clickButton:(NSInteger)index{
-    
-    if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
-        [self.delegate clickButton:index];
-    }
-}
-
-
-
-@end
+//@implementation TQLSwitchViewButtonCollectionCell
+//
+//-(id)initWithFrame:(CGRect)frame{
+//    if (self = [super initWithFrame:frame]) {
+//        _swithchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, 0,[TQLSwitchViewTool contentSize].width, [TQLSwitchViewTool contentSize].height)];
+//        _swithchViewTool.delegate = self;
+//        [self.contentView addSubview:_swithchViewTool];
+//    }
+//    return self;
+//}
+//
+//#pragma mark -- SwitchViewButtonDelegate
+//- (void)clickButton:(NSInteger)index{
+//    if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
+//        [self.delegate clickButton:index];
+//    }
+//}
+//
+//@end
+//
+//@implementation TQLSwitchViewButtonCollectionReusableViewCell
+//-(id)initWithFrame:(CGRect)frame{
+//    if (self = [super initWithFrame:frame]) {
+//        _swithchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, 0, [TQLSwitchViewTool contentSize].width, [TQLSwitchViewTool contentSize].height)];
+//        _swithchViewTool.delegate = self;
+//        [self addSubview:_swithchViewTool];
+//    }
+//    return self;
+//}
+//
+//-(void)setCurrentIndex:(NSInteger)currentIndex{
+//    _currentIndex = currentIndex;
+//    _swithchViewTool.currentIndex = _currentIndex;
+//}
+//#pragma mark -- SwitchViewButtonDelegate
+//- (void)clickButton:(NSInteger)index{
+//
+//    if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
+//        [self.delegate clickButton:index];
+//    }
+//}
+//
+//
+//
+//@end
