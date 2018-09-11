@@ -42,17 +42,17 @@ typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index
 
 
 
-@interface TQLSwitchViewButtonCollectionCell : UICollectionViewCell<TQLSwitchViewToolDelegate>
-@property (nonatomic, strong) TQLSwitchViewTool * swithchViewTool;
-@property (nonatomic, weak) id<TQLSwitchViewToolDelegate> delegate;
-
-@end
-
-
-@interface TQLSwitchViewButtonCollectionReusableViewCell : UICollectionReusableView<TQLSwitchViewToolDelegate>
-@property (nonatomic, strong) TQLSwitchViewTool * swithchViewTool;
-@property (nonatomic, weak) id<TQLSwitchViewToolDelegate> delegate;
-@property (nonatomic, assign) NSInteger currentIndex;
-
-
-@end
+//@interface TQLSwitchViewButtonCollectionCell : UICollectionViewCell<TQLSwitchViewToolDelegate>
+//@property (nonatomic, strong) TQLSwitchViewTool * swithchViewTool;
+//@property (nonatomic, weak) id<TQLSwitchViewToolDelegate> delegate;
+//
+//@end
+//
+//
+//@interface TQLSwitchViewButtonCollectionReusableViewCell : UICollectionReusableView<TQLSwitchViewToolDelegate>
+//@property (nonatomic, strong) TQLSwitchViewTool * swithchViewTool;
+//@property (nonatomic, weak) id<TQLSwitchViewToolDelegate> delegate;
+//@property (nonatomic, assign) NSInteger currentIndex;
+//
+//
+//@end
