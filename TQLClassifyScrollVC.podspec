@@ -28,5 +28,6 @@ s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git"
   s.requires_arc = true
   s.dependency "Masonry"
   s.dependency "DZNEmptyDataSet"
+  s.dependency "MJRefresh", '~>2.0'
 
 end
