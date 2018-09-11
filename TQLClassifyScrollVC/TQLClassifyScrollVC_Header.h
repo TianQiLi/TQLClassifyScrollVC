@@ -11,7 +11,8 @@
 #import <Foundation/Foundation.h>
 #import "TQLViewContorller.h"
 #import "TQLClassifyScrollVC.h"
-#import "TQLSwitchViewButton.h"
+#import "TQLSwitchViewTool.h"
 #import "TQLSwitchViewStyleModel.h"
+#import "TQLRedBadgeBttton.h"
 #import <Masonry/Masonry.h>
 #endif /* TQLClassifyScrollVC_Header_h */

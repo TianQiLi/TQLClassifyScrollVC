@@ -10,9 +10,11 @@
 // //数据接口请求的状态
 typedef NS_ENUM(NSInteger, CCDataAPIStatusType) {
     CCDataStatusNoKnown,//未知 : 请求前
-    CCDataStatusOk, //成功   :成功返回
+    CCDataStatusNoData, //请求成功，无数据
+    CCDataStatusIncompleteData, //请求成功 ,返回数据不足一页,表示后面没有数据
+    CCDataStatusOk, //成功   :成功数据返回-满足一页数据要求
     CCDataStatusError, // 错误 :错误返回
-    CCDataStatusNoData //请求成功，无数据
+    
 };
 
 @interface TQLCollectionViewCellBase (DZNEmptyDataSet)
@@ -28,4 +30,5 @@ typedef NS_ENUM(NSInteger, CCDataAPIStatusType) {
 @property (nullable,nonatomic,copy) NSNumber * spaceHeight;//item 间距
 @property (nullable,nonatomic,copy) NSString * dataStatusTextColor;//默认文字颜色
 
+@property (nullable,nonatomic,copy) NSString * dataStatusEmptyBGColor;//默认背景颜色
 @end

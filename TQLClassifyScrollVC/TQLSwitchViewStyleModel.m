@@ -6,38 +6,58 @@
 //
 
 #import "TQLSwitchViewStyleModel.h"
+@interface TQLSwitchViewStyleModel()
+@property (nonatomic, strong) UIFont *selectedBtn_Font;
+@property (nonatomic, strong) UIFont *normalBtn_Font;
+@end
 
 @implementation TQLSwitchViewStyleModel
 
 - (id)init{
     if (self = [super init]) {
         _switchViewHeight = 48;
+        _switchViewY = 0;
          
     }
     return self;
 }
 
-- (id)initSwitchButtonStyle:(UIColor *)colorNormal selectedColor:(UIColor *)colorSelected flagColor:(UIColor *)flagColor titleBtnFont:(UIFont *)fontBtn flagViewWidth:(CGSize)flagSize bottomLineColor:(UIColor *)bottomLineColor bottonLineHidden:(BOOL)hidden switchViewHeight:(NSInteger)switchViewHeight{
+
+- (id)initSwitchButtonStyle:(UIColor *)colorNormal selectedColor:(UIColor *)colorSelected flagColor:(UIColor *)flagColor titleNormalBtnFont:(UIFont *)normalFontBtn selectedNormalBtnFont:(UIFont *)selectedFontBtn flagViewWidth:(CGSize)flagSize bottomLineColor:(UIColor *)bottomLineColor bottonLineHidden:(BOOL)hidden switchViewRect:(CGRect)switchViewRect{
     if (self = [self init]) {
         _colorNormal = colorNormal;
         _colorSelected = colorSelected;
         _flagColor = flagColor;
-        _customBtnFont = fontBtn;
+       
+        _selectedBtn_Font = selectedFontBtn;
+        _normalBtn_Font = normalFontBtn;
         _flagSize = flagSize;
-        
         _bottomLineColor = bottomLineColor;
         _bottomLineHidden = hidden;
-        _switchViewHeight = switchViewHeight;
-
+        _switchViewHeight = switchViewRect.size.height;
+        _switchViewY = switchViewRect.origin.y;
+        
     }
     return self;
+    
 }
 
-- (UIFont *)customBtnFont{
-    if (!_customBtnFont) {
-        _customBtnFont = [UIFont systemFontOfSize:16];
+- (id)initSwitchButtonStyle:(UIColor *)colorNormal selectedColor:(UIColor *)colorSelected flagColor:(UIColor *)flagColor titleBtnFont:(UIFont *)fontBtn flagViewWidth:(CGSize)flagSize bottomLineColor:(UIColor *)bottomLineColor bottonLineHidden:(BOOL)hidden switchViewRect:(CGRect)switchViewRect{
+    return  [self initSwitchButtonStyle:colorNormal selectedColor:colorSelected flagColor:flagColor titleNormalBtnFont:fontBtn selectedNormalBtnFont:fontBtn flagViewWidth:flagSize bottomLineColor:bottomLineColor bottonLineHidden:hidden switchViewRect:switchViewRect];
+}
+
+- (UIFont *)normalBtn_Font{
+    if (!_normalBtn_Font) {
+        _normalBtn_Font = [UIFont systemFontOfSize:15];
     }
-    return _customBtnFont;
+    return _normalBtn_Font;
+}
+
+- (UIFont *)selectedBtn_Font{
+    if (!_selectedBtn_Font) {
+        _selectedBtn_Font = [UIFont boldSystemFontOfSize:16];
+    }
+    return _selectedBtn_Font;
 }
 
 - (UIColor *)colorNormal{

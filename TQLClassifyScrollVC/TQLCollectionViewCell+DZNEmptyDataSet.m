@@ -31,6 +31,7 @@ static char const * const VerticalOffset = "VerticalOffset";
 static char const * const SpaceHeightKey = "SpaceHeightKey";
 
 static char const * const DataStatusTextColorKey = "DataStatusTextColorKey";
+static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey";
 
 
 @implementation TQLCollectionViewCellBase (DZNEmptyDataSet)
@@ -127,10 +128,23 @@ static char const * const DataStatusTextColorKey = "DataStatusTextColorKey";
     
 }
 
+
+- (NSString *)dataStatusEmptyBGColor{
+    return objc_getAssociatedObject(self, DataStatusEmptyBgColorKey);
+}
+
+- (void)setDataStatusEmptyBGColor:(NSString *)dataStatusEmptyBGColor{
+    return objc_setAssociatedObject(self, DataStatusEmptyBgColorKey, dataStatusEmptyBGColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+
 #pragma mark --DZNEmptyDataSetDelegate
 - (UIColor *)backgroundColorForEmptyDataSet:(UIScrollView *)scrollView
 {
-    return [[self class] colorWithHexString:@"0xffffff"];
+    if (self.dataStatusEmptyBGColor) {
+        return [[self class] colorWithHexString:self.dataStatusEmptyBGColor];
+    }
+    return [[self class] colorWithHexString:@"0xf4f6f9"];
 }
 
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
@@ -176,7 +190,7 @@ static char const * const DataStatusTextColorKey = "DataStatusTextColorKey";
         if (!text || text.length == 0) {
             text = DefaultUnKnowndataText;
         }
-    }else if ([self.dataStatusType integerValue] == CCDataStatusOk){
+    }else if ([self.dataStatusType integerValue] == CCDataStatusOk || [self.dataStatusType integerValue] == CCDataStatusIncompleteData){
         text = @"";
     }
     text = text ? text : @"";

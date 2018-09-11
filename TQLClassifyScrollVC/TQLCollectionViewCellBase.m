@@ -17,6 +17,7 @@
 
 - (UICollectionView *)subCollectionView{
     if (!_subCollectionView) {
+        
         UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc] init];
         [flowLayout setMinimumInteritemSpacing:0.0f];
         [flowLayout setMinimumLineSpacing:0.0f];
@@ -26,6 +27,9 @@
         [_subCollectionView setBackgroundColor:[UIColor whiteColor]];
         _subCollectionView.delegate = self;
         _subCollectionView.dataSource = self;
+        if (@available(iOS 11.0, *)) {
+            _subCollectionView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
         _subCollectionView.emptyDataSetSource = self;
         _subCollectionView.emptyDataSetDelegate = self;
         [self.contentView addSubview:_subCollectionView];
@@ -35,6 +39,7 @@
             make.top.equalTo(self.contentView);
             make.bottom.equalTo(self.contentView);
         }];
+        _currentScrollView = _subCollectionView;
     }
     return _subCollectionView;
 }
@@ -46,6 +51,13 @@
         _tableView.dataSource = self;
         _tableView.emptyDataSetSource = self;
         _tableView.emptyDataSetDelegate = self;
+        _tableView.estimatedRowHeight = 0;
+        _tableView.estimatedSectionFooterHeight = 0;
+        _tableView.estimatedSectionHeaderHeight = 0;
+        _tableView.tableFooterView = [UIView new];
+        if (@available(iOS 11.0, *)) {
+            _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
         [self.contentView addSubview:_tableView];
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.equalTo(self.contentView);
@@ -53,9 +65,22 @@
             make.top.equalTo(self.contentView);
             make.bottom.equalTo(self.contentView);
         }];
+         _currentScrollView = _tableView;
     }
     return _tableView;
 }
+
+
+- (BOOL)isTableViewContoller{
+    if (_tableView) {
+        return YES;
+    }
+    if (_subCollectionView) {
+        return NO;
+    }
+    return NO;
+}
+
 
 - (void)viewDidLoad{
     
