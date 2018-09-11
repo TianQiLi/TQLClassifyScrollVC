@@ -16,7 +16,8 @@ demo:
            
        
 //自定义配置分类按钮样式        
-          vc.switchViewStyle = [[TQLSwitchViewStyleModel alloc] initSwitchButtonStyle:[UIColor colorWithHexString:@"0x333333"] selectedColor:[UIColor colorWithHexString:kAPPMainColor] flagColor:[UIColor colorWithHexString:kAPPMainColor] titleNormalBtnFont:[UIFont systemFontOfSize:15] selectedNormalBtnFont:[UIFont boldSystemFontOfSize:15] flagViewWidth:CGSizeMake(28, 3) bottomLineColor:[UIColor colorWithHexString:@"0xefeff0"] bottonLineHidden:NO switchViewRect:CGRectMake(0, 0, 0, 45)];
+        
+        vc.switchViewStyle = [[TQLSwitchViewStyleModel alloc] initSwitchButtonStyle:[UIColor colorWithHexString:@"0x333333"] selectedColor:[UIColor colorWithHexString:kAPPMainColor] flagColor:[UIColor colorWithHexString:kAPPMainColor] titleNormalBtnFont:[UIFont systemFontOfSize:15] selectedNormalBtnFont:[UIFont boldSystemFontOfSize:15] flagViewWidth:CGSizeMake(28, 3) bottomLineColor:[UIColor colorWithHexString:@"0xefeff0"] bottonLineHidden:NO switchViewRect:CGRectMake(0, 0, 0, 45)];
     
       [vc setSwitchButtonBottomMargin:0];
        vc.title = @"我的";
