@@ -19,13 +19,13 @@ Pod::Spec.new do |s|
   s.frameworks   = "Foundation", "UIKit"
 #s.libraries = "bz2", "iconv", "stdc++.6.0.9"
 
-s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git",tag => "#{s.version}"}
+s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git", :tag => "#{s.version}"}
 
-  s.source_files  =  "TQLClassifyScrollVC/**/*.{h,m}"
+  s.source_files  =  "TQLClassifyScrollVC/*.{h,m}"
   s.resources = "TQLClassifyScrollVC/Resources/*.png","TQLClassifyScrollVC/Resources/*.xcassets"
   s.requires_arc = true
   s.dependency "Masonry"
   s.dependency "DZNEmptyDataSet"
-s.dependency "MJRefresh", '~>2.0'
+  s.dependency "MJRefresh", '~>2.0'
 
 end
