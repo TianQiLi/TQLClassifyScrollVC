@@ -13,6 +13,9 @@
 		1C3B809C228AB14100AEFCFE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1C3B809B228AB14100AEFCFE /* Assets.xcassets */; };
 		1C3B809F228AB14100AEFCFE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1C3B809D228AB14100AEFCFE /* LaunchScreen.storyboard */; };
 		1C3B80A2228AB14100AEFCFE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C3B80A1228AB14100AEFCFE /* main.m */; };
+		1C3B80AB228AB15B00AEFCFE /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 1C3B80A9228AB15B00AEFCFE /* README.md */; };
+		1C3B80AC228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 1C3B80AA228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec */; };
+		7B44118CF4E359169CE2EB3B /* libPods-TQLClassifyScrollVCDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E811C99992F8B4BCAAE21976 /* libPods-TQLClassifyScrollVCDemo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +29,11 @@
 		1C3B809E228AB14100AEFCFE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1C3B80A0228AB14100AEFCFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1C3B80A1228AB14100AEFCFE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		1C3B80A9228AB15B00AEFCFE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		1C3B80AA228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TQLClassifyScrollVC.podspec; path = ../TQLClassifyScrollVC.podspec; sourceTree = "<group>"; };
+		548A8F9C097B2EB84381F7A7 /* Pods-TQLClassifyScrollVCDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TQLClassifyScrollVCDemo.release.xcconfig"; path = "Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo.release.xcconfig"; sourceTree = "<group>"; };
+		A5259CEA601720A00343BBC0 /* Pods-TQLClassifyScrollVCDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TQLClassifyScrollVCDemo.debug.xcconfig"; path = "Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo.debug.xcconfig"; sourceTree = "<group>"; };
+		E811C99992F8B4BCAAE21976 /* libPods-TQLClassifyScrollVCDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TQLClassifyScrollVCDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7B44118CF4E359169CE2EB3B /* libPods-TQLClassifyScrollVCDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,8 +51,11 @@
 		1C3B8086228AB14000AEFCFE = {
 			isa = PBXGroup;
 			children = (
+				1C3B80A8228AB14E00AEFCFE /* Spec */,
 				1C3B8091228AB14000AEFCFE /* TQLClassifyScrollVCDemo */,
 				1C3B8090228AB14000AEFCFE /* Products */,
+				AE025EB6CB99C4B3A68C7DFC /* Pods */,
+				EB89E7CE951AA1E23D102CD3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +83,33 @@
 			path = TQLClassifyScrollVCDemo;
 			sourceTree = "<group>";
 		};
+		1C3B80A8228AB14E00AEFCFE /* Spec */ = {
+			isa = PBXGroup;
+			children = (
+				1C3B80A9228AB15B00AEFCFE /* README.md */,
+				1C3B80AA228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec */,
+			);
+			name = Spec;
+			sourceTree = "<group>";
+		};
+		AE025EB6CB99C4B3A68C7DFC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				A5259CEA601720A00343BBC0 /* Pods-TQLClassifyScrollVCDemo.debug.xcconfig */,
+				548A8F9C097B2EB84381F7A7 /* Pods-TQLClassifyScrollVCDemo.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		EB89E7CE951AA1E23D102CD3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E811C99992F8B4BCAAE21976 /* libPods-TQLClassifyScrollVCDemo.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -78,9 +117,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1C3B80A5228AB14100AEFCFE /* Build configuration list for PBXNativeTarget "TQLClassifyScrollVCDemo" */;
 			buildPhases = (
+				D547F3A9197F2B664873AE8B /* [CP] Check Pods Manifest.lock */,
 				1C3B808B228AB14000AEFCFE /* Sources */,
 				1C3B808C228AB14000AEFCFE /* Frameworks */,
 				1C3B808D228AB14000AEFCFE /* Resources */,
+				F547CA5CC83E10DEB1F9B24D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -130,11 +171,62 @@
 			files = (
 				1C3B809F228AB14100AEFCFE /* LaunchScreen.storyboard in Resources */,
 				1C3B809C228AB14100AEFCFE /* Assets.xcassets in Resources */,
+				1C3B80AC228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec in Resources */,
+				1C3B80AB228AB15B00AEFCFE /* README.md in Resources */,
 				1C3B809A228AB14000AEFCFE /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		D547F3A9197F2B664873AE8B /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TQLClassifyScrollVCDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F547CA5CC83E10DEB1F9B24D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo-resources.sh",
+				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
+				"${PODS_ROOT}/../TQLClassifyScrollVC/TQLClassifyScrollVC/Resources/Media.xcassets",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		1C3B808B228AB14000AEFCFE /* Sources */ = {
@@ -283,6 +375,7 @@
 		};
 		1C3B80A6228AB14100AEFCFE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A5259CEA601720A00343BBC0 /* Pods-TQLClassifyScrollVCDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -300,6 +393,7 @@
 		};
 		1C3B80A7228AB14100AEFCFE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 548A8F9C097B2EB84381F7A7 /* Pods-TQLClassifyScrollVCDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

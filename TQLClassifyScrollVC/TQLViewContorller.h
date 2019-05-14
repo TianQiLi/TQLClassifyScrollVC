@@ -11,7 +11,7 @@
 #import "TQLCollectionViewCellBase.h"
 #import "TQLCollectionViewCell+DZNEmptyDataSet.h"
 #import "TQLSwitchViewTool.h"
-#import "MJRefresh.h"
+
 extern NSString * const SwitchBttonClickNotification;
 extern NSString * const CellSelectedNotification;
 

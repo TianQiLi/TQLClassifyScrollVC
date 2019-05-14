@@ -7,6 +7,7 @@
 //
 
 #import "TQLViewContorller.h"
+#import "MJRefresh.h"
 NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
 @interface TQLViewContorller(){
