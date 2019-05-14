@@ -38,10 +38,10 @@ extern NSString * const CellSelectedNotification;
 @property (assign, nonatomic) NSInteger pageFirst;//默认0
 
 /** btnArray */
-@property (nonatomic, strong) NSArray *switchToolBtnArray;
+@property (nonatomic, strong) NSArray<TQLRedBadgeBttton *>  *switchToolBtnArray;
 
 /** itemArray */
-@property (nonatomic, strong) NSArray *switchToolItemArray;
+@property (nonatomic, strong) NSArray<NSString *> *switchToolItemArray;
 
 @property (nonatomic, strong) UIColor * mjRefreshColor;
 
@@ -57,7 +57,7 @@ extern NSString * const CellSelectedNotification;
 
 - (void)cellForItem:(NSInteger)row;
 - (void)willDisplayRow:(NSInteger)row;
-
+- (void)didEndDisplayRow:(NSInteger)row;
 - (void)setCurrentVC:(TQLClassifyScrollVC *)currentVC;
 - (TQLSwitchViewTool *)switchViewTool;
 /*need override*/
@@ -69,6 +69,8 @@ extern NSString * const CellSelectedNotification;
 - (void)basicRequestData;
 - (void)loadTopData;
 - (void)loadMoreData;
+/*默认采用row:0-n 作为key ;可以重写改方法，针对用于一个row 对应不同数据的情况*/
+- (NSString *)keyForCurrentData;
 
 - (TQLRedBadgeBttton *)currentSwitchBtn;
 - (NSString *)currentSwitchItem;

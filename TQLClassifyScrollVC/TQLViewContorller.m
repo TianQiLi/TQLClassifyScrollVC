@@ -38,10 +38,15 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     self.arrayData = @[];
     if (self.isTableViewContoller) {
         [self.tableView reloadData];
-    }else{
+    }else  if (self.isCollectionViewContoller) {
         [self.subCollectionView reloadData];
     }
     
+}
+
+- (void)didEndDisplayRow:(NSInteger)row{
+     _row = row;
+     [self viewDidDisappear:_row];
 }
 
 - (void)willDisplayRow:(NSInteger)row{
@@ -55,7 +60,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     NSNumber * page = self.pageForIndex[@(row)];
     _page = page? [page integerValue] : _pageFirst;
     
-    _arrayData = [self.dataForRowArray objectForKey:@(_row)];
+    _arrayData = [self.dataForRowArray objectForKey:[self keyForCurrentData]];
     if (_arrayData.count == 0) {
         [self.currentScrollView.mj_header beginRefreshing];
     }else{
@@ -107,11 +112,12 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
            
             
             //读取当前所有的数据
-            NSMutableArray * arrayReslust = [strongSelf.dataForRowArray objectForKey:@(strongSelf.row)];
+            NSString * keyForData = [strongSelf keyForCurrentData];
+            NSMutableArray * arrayReslust = [strongSelf.dataForRowArray objectForKey:keyForData];
             arrayReslust =  arrayReslust ? arrayReslust :@[].mutableCopy;
             if (strongSelf.page == strongSelf.pageFirst) {
                 [arrayReslust removeAllObjects];
-                [strongSelf.dataForRowArray removeObjectForKey:@(strongSelf.row)];
+                [strongSelf.dataForRowArray removeObjectForKey:keyForData];
             }
             
             if (tempArray.count > 0) {
@@ -119,7 +125,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
             }
            
             //TODO:保存到字典里面
-            [strongSelf.dataForRowArray setObject:arrayReslust forKey:@(strongSelf.row)];
+            [strongSelf.dataForRowArray setObject:arrayReslust forKey:keyForData];
             
             //每次操作完成，要更新数组
             strongSelf.arrayData = arrayReslust.copy;
@@ -161,22 +167,13 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     [super viewDidLoad];
 }
 
-//-(NSArray *)arrayData{
-//    NSMutableArray * currentArray = [self.dataForRowArray objectForKey:@(self.row)];
-//    _arrayData = currentArray;
-//    if (!_arrayData) {
-//        _arrayData = @[].mutableCopy;
-//        [self.dataForRowArray setObject:_arrayData forKey:@(self.row)];
-//    }
-//    return _arrayData;
-//}
-
 - (void)setEndRefresh:(NSArray *)array{
     if (self.page == self.pageFirst) {
         [self.currentScrollView.mj_header endRefreshing];
         if (!array || array.count == 0) {
             self.currentScrollView.mj_footer.alpha = 0;
-        }else{
+        } 
+        else{
             self.currentScrollView.mj_footer.alpha = 1;
         }
     }
@@ -243,6 +240,57 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     return [super pointInside:point withEvent:event];
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    CGPoint translate = [scrollView.panGestureRecognizer translationInView:scrollView];
+    NSArray * arrayScrollView = [self getScrollViewSuper];
+    if (arrayScrollView.count > 0) {//下
+        __block  BOOL needScroll = NO;
+        if (translate.y > 0) {
+            if (scrollView.contentOffset.y < 0 ) {
+                [arrayScrollView enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIScrollView * superScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (superScrollView.contentOffset.y > 0) {
+                        NSInteger offsetY = MAX(superScrollView.contentOffset.y - translate.y, 0);
+                        [superScrollView setContentOffset:CGPointMake(0, offsetY) animated:NO];
+                        needScroll = YES;
+                        *stop = YES;
+                    }
+                }];
+                if (needScroll) {
+                    [scrollView setContentOffset:CGPointZero animated:NO];
+                }
+                
+                return;
+            }
+        }else{
+            [arrayScrollView enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIScrollView * superScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
+                NSInteger maxScrollView = superScrollView.contentSize.height - superScrollView.frame.size.height;
+                if (superScrollView.contentOffset.y < maxScrollView) {
+                    NSInteger offsetY = MIN(superScrollView.contentOffset.y - translate.y, maxScrollView);
+                    [superScrollView setContentOffset:CGPointMake(0, offsetY) animated:NO];
+                    needScroll = YES;
+                    *stop = YES;
+                }
+            }];
+            if (needScroll) {
+                [scrollView setContentOffset:CGPointZero animated:NO];
+            }
+        }
+    }
+}
+
+- (NSArray *)getScrollViewSuper{
+    UIScrollView * scrollView = nil;
+    NSMutableArray * array = [NSMutableArray new];
+    UIView * superView = self.superview;
+    while (superView) {
+        if ([superView isMemberOfClass:[UIScrollView class]] || [superView isMemberOfClass:[UICollectionView class]] || [superView isMemberOfClass:[UITableView class]]) {
+            [array addObject:superView];
+        }
+        superView = superView.superview;
+    }
+    return array;
+}
+
 #pragma mark -- 接口网络请求
 
 - (void)loadTopData{
@@ -262,6 +310,10 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
 - (void)basicRequestData {
     NSAssert(NO, @"子类必须重写");
+}
+
+- (NSString *)keyForCurrentData{
+    return [NSString stringWithFormat:@"%ld",self.row];
 }
 
 #pragma mark -- 当前的分类按钮

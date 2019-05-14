@@ -8,7 +8,7 @@
 #import "TQLCollectionViewCellBase.h"
 #import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
 #import <Masonry/Masonry.h>
-@interface TQLCollectionViewCellBase()<DZNEmptyDataSetDelegate,DZNEmptyDataSetSource,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UITableViewDelegate,UITableViewDataSource>{
+@interface TQLCollectionViewCellBase()<DZNEmptyDataSetDelegate,DZNEmptyDataSetSource>{
     UICollectionView * _subCollectionView;
     UITableView * _tableView;
 }
@@ -75,12 +75,16 @@
     if (_tableView) {
         return YES;
     }
-    if (_subCollectionView) {
-        return NO;
-    }
     return NO;
 }
 
+- (BOOL)isCollectionViewContoller{
+    if (_subCollectionView) {
+        return YES;
+    }
+    
+    return NO;
+}
 
 - (void)viewDidLoad{
     
@@ -89,6 +93,8 @@
 - (void)viewWillAppear:(NSInteger)index{
     
 }
-
+- (void)viewDidDisappear:(NSInteger)index{
+    
+}
 
 @end

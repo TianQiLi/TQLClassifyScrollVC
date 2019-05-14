@@ -37,7 +37,8 @@ typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index
 
 + (CGSize)contentSize;
 - (void)setSwitchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle;
-
+- (UIView *)flagView;
+-(void)clickButton:(id)sender;
 @end
 
 

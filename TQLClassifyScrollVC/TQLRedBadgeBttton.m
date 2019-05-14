@@ -24,7 +24,10 @@
 }
 
 - (void)showNumRedPoint:(NSInteger)num withPointBGColor:(UIColor *)pointColor textColor:(UIColor *)textColor font:(UIFont *)font size:(CGSize)size offSetLeadingBottom:(CGPoint)offset borderWidth:(NSInteger)borderWidth borderColor:(UIColor *)borderColor{
-    _lableNum.hidden = NO;
+    if (num == -1) {
+        _lableNum.hidden = YES;
+    }else
+         _lableNum.hidden = NO;
     _redNum = num;
     if (num) {
          _lableNum.text = [NSString stringWithFormat:@"%ld",num];
@@ -41,6 +44,7 @@
     
     if (borderWidth) {
         _lableNum.layer.borderColor = borderColor ? borderColor.CGColor : [UIColor whiteColor].CGColor;
+        _lableNum.layer.borderWidth = borderWidth;
     }else{
         _lableNum.layer.borderWidth = 0;
     }

@@ -11,7 +11,7 @@
 @class TQLSwitchViewStyleModel;
 //@class TQLSwitchViewTool;
 extern NSString * const SwitchBttonClickNotification;
-
+typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
 @interface TQLClassifyScrollVC : UIViewController
 @property (nonatomic, strong) UIImage *navBarShadowImageHidden;
 @property (nonatomic, strong) UIImage *navBarShadowImageShow;
@@ -19,10 +19,10 @@ extern NSString * const SwitchBttonClickNotification;
 @property (nonatomic, readonly) TQLSwitchViewTool * switchViewTool;
 @property (nonatomic, strong) UIView *maskView;
 
-/**clollection scroll by SwitchClick NO */
-@property (nonatomic, assign) BOOL enableScollForSwitchClick;
+/**collection scroll by SwitchClick NO ; enable scroll animation */
+@property (nonatomic, assign) BOOL enableScollForSwitchClick;//default:NO
 /**when enableScollForSwitchClick = yes, justTwoScrollForSwitchClick is yes ,animation happen in two cell ;else hapen more cell */
-@property (nonatomic, assign) BOOL justTwoScrollForSwitchClick;
+@property (nonatomic, assign) BOOL justTwoScrollForSwitchClick;//default:YES
 
 /** TQLSwitchViewStyleModel */
 @property (nonatomic, strong) TQLSwitchViewStyleModel *switchViewStyle;
@@ -30,6 +30,10 @@ extern NSString * const SwitchBttonClickNotification;
 @property (nonatomic, strong) NSDictionary *paramaterDic;
 
 @property (nonatomic, copy) EnumerateItemBtnBlock enumerateItemBtnBlock;
+@property (nonatomic, copy) DissmissForTQLClassifyVC  dissmissCompletion;
+
+/** 监听屏幕旋转刷新:默认为NO */
+@property (nonatomic, assign) BOOL enableRotate;
 
 
 - (id)initWithSwitchItemArray:(NSArray<NSString *> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray;
@@ -47,7 +51,12 @@ extern NSString * const SwitchBttonClickNotification;
 
 - (void)setMJRefreshBgColor:(UIColor *)mjRefreshColor;
 
-
+- (void)setOrignalRect:(CGRect)orignalRect;
+/** 1-n **/
 - (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex;
+/*
+ * row: collecion 的row :0-n
+ */
+- (void)reloadSpecialCellReload:(NSInteger)row;
 - (NSInteger)currentSwitchBtnIndex;
 @end

@@ -9,6 +9,8 @@
 #import "TQLClassifyScrollVC.h"
 #import "TQLClassifyScrollVC_Header.h"
 NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
+
+static NSInteger heightCollection = 0;
 @interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate>
 @property (nonatomic, strong) UICollectionView * collection;
 @property (nonatomic, strong) TQLSwitchViewTool * switchViewTool;
@@ -114,6 +116,7 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
         _bottomMargin = 10;//default
         _currentSwitchBtnIndex = 1;
         _enableScollForSwitchClick = NO;
+        _enableRotate = NO;
         _orignalRect = frame;
     }
     return  self;
@@ -130,11 +133,22 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     _bottomMargin = bottomMargin;
 }
 
+- (void)setOrignalRect:(CGRect)orignalRect{
+    _orignalRect = orignalRect;
+    if (_orignalRect.size.width > 0) {
+        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, _orignalRect.size.width, _orignalRect.size.height);
+    }else
+        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
+    
+    heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
+    [self.collection reloadData];
+}
+
 - (TQLSwitchViewTool *)switchViewTool{
     if (!_switchViewTool) {
-        _switchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, self.switchViewStyle.switchViewY, _orignalRect.size.width,self.switchViewStyle.switchViewHeight)switchViewStyle:self.switchViewStyle];
+        _switchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, self.switchViewStyle.switchViewY, self.view.frame.size.width,self.switchViewStyle.switchViewHeight)switchViewStyle:self.switchViewStyle];
         _switchViewTool.enumerateItemBtnBlock = self.enumerateItemBtnBlock;
-        
+        [self.view addSubview:_switchViewTool];
     }
     return _switchViewTool;
 }
@@ -152,7 +166,13 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.view.frame = _orignalRect;
+    if (_orignalRect.size.width > 0) {
+      self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, _orignalRect.size.width, _orignalRect.size.height);
+    }else
+        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
+    
+    heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
+    
     _maskView = [[UIView alloc] initWithFrame:self.view.bounds];
     [_maskView setBackgroundColor:[UIColor whiteColor]];
     [self.view addSubview:_maskView];
@@ -192,8 +212,8 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     [flowLayout setMinimumLineSpacing:0.0f];
     [flowLayout setSectionInset:UIEdgeInsetsZero];
 
-    _collection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, _orignalRect.size.width, _orignalRect.size.height-self.switchViewStyle.switchViewHeight) collectionViewLayout:flowLayout];
-   
+    _collection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, heightCollection) collectionViewLayout:flowLayout];
+    _collection.pagingEnabled = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     if (@available(iOS 11.0,*)) {
         self.collection.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
@@ -226,20 +246,27 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     [_collection mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leading.equalTo(self.view);
         make.trailing.equalTo(self.view);
-        make.top.equalTo(self.switchViewTool.mas_bottom).offset(_bottomMargin);
+        make.top.equalTo(self.switchViewTool.mas_bottom).offset(self.bottomMargin);
         make.bottom.equalTo(self.view);
     }];
+
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLayoutCollectionView:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
-//     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLayoutCollectionView:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    if (_currentSwitchBtnIndex > 1) {
+        self.switchViewTool.currentIndex = self.currentSwitchBtnIndex;
+        [self clickButton:_switchViewTool.currentIndex];
+    }
+    
+   
 }
 
 -(void)reLayoutCollectionView:(NSNotification *)notification {
-//    _collection. itemSize = CGSizeMake(self.collection.bounds.size.width, self.collection.bounds.size.height);
-//    [self.collection reloadData];
-    
+    if (_enableRotate) {
+        [self.collection reloadData];
+    }
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -247,10 +274,12 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (_orignalRect.size.height) {
-        return CGSizeMake(_orignalRect.size.width, _orignalRect.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY);
-    }
-    return CGSizeMake(self.view.frame.size.width, _collection.frame.size.height);
+//    return CGSizeMake(_collection.frame.size.width,heightCollection);
+    return CGSizeMake(_collection.frame.size.width,_collection.frame.size.height);
+//    if (_orignalRect.size.height) {
+//        return CGSizeMake(_orignalRect.size.width, _orignalRect.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY);
+//    }
+//    return CGSizeMake(_collection.frame.size.width, _collection.frame.size.height);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -279,6 +308,13 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     [cellNew willDisplayRow:indexPath.row];
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    TQLViewContorller * cellNew = (TQLViewContorller *)cell;
+    [cellNew didEndDisplayRow:indexPath.row];
+   
+}
+
+
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
     return 0;
 }
@@ -298,6 +334,27 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     _currentSwitchBtnIndex = row + 1;
     self.switchViewTool.currentIndex = _currentSwitchBtnIndex;
 }
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    if (scrollView.dragging || scrollView.tracking || scrollView.decelerating) {
+        return;
+    }
+    
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    [self performSelector:@selector(scrollViewDidEndScrollingAnimation:) withObject:scrollView afterDelay:0.3];
+    
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+    [NSObject cancelPreviousPerformRequestsWithTarget:self];
+    CGFloat offSet = scrollView.contentOffset.x;
+    CGFloat offsetNew = MAX((_currentSwitchBtnIndex-1), 0)*self.view.frame.size.width;
+    if (offsetNew != offSet ) {
+        scrollView.contentOffset = CGPointMake(offsetNew, 0);
+    }
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -346,13 +403,22 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
     _mjRefreshColor = mjRefreshColor;
 }
 
+- (void)reloadSpecialCellReload:(NSInteger)row{
+    TQLViewContorller * cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
+    if([cell isKindOfClass:[TQLViewContorller class]]){
+        [cell willDisplayRow:row];
+    }
+
+}
+
 - (void)staticsCourseType:(NSInteger)index{
     
 }
 
 - (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex{
-    _switchViewTool.currentIndex = switchBtnIndex;
-    [self clickButton:_switchViewTool.currentIndex];
+    self.currentSwitchBtnIndex = switchBtnIndex;
+//    self.switchViewTool.currentIndex = switchBtnIndex;
+//    [self clickButton:_switchViewTool.currentIndex];
     
 }
 

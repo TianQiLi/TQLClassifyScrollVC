@@ -8,26 +8,24 @@
 
 Pod::Spec.new do |s|
   s.name         = "TQLClassifyScrollVC"
-  s.version      = "0.0.3"
+  s.version      = "0.0.1"
   s.summary      = "多tab 控制器."
-  s.description = 'this a controller manager other vc'
   s.homepage     = "https://github.com/TianQiLi/TQLClassifyScrollVC"
   #s.license      = "MIT"
   s.license       = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { "litianqi" => "871651575@qq.com" }
-  #s.platform     = :ios, "8.0"
-  s.ios.deployment_target = '8.0'
-#s.tvos.deployment_target = '9.0'
-  s.frameworks   = "Foundation", "UIKit"
-s.libraries = "bz2", "iconv", "stdc++.6.0.9"
+  s.platform     = :ios, "8.0"
 
-s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git",:tag => s.version}
-#s.source       = { :path => "." }
+  s.frameworks   = "Foundation", "UIKit"
+#s.libraries = "bz2", "iconv", "stdc++.6.0.9"
+
+s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git",tag => "#{s.version}"}
+
   s.source_files  =  "TQLClassifyScrollVC/**/*.{h,m}"
   s.resources = "TQLClassifyScrollVC/Resources/*.png","TQLClassifyScrollVC/Resources/*.xcassets"
   s.requires_arc = true
   s.dependency "Masonry"
   s.dependency "DZNEmptyDataSet"
-  s.dependency "MJRefresh", '~>2.0'
+s.dependency "MJRefresh", '~>2.0'
 
 end

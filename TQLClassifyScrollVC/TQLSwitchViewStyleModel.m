@@ -17,6 +17,7 @@
     if (self = [super init]) {
         _switchViewHeight = 48;
         _switchViewY = 0;
+        _needSequenceStatus = NO;
          
     }
     return self;
