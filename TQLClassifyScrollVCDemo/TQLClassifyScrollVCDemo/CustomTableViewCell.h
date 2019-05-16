@@ -1,18 +1,19 @@
 //
-//  TestVC.h
+//  CustomTableViewCell.h
 //  TQLClassifyScrollVCDemo
 //
-//  Created by litianqi on 2019/5/14.
+//  Created by litianqi on 2019/5/16.
 //  Copyright © 2019 edu24ol. All rights reserved.
 //
 
-#import "TQLViewContorller.h"
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface TestVC : TQLViewContorller
+@interface CustomTableViewCell : UITableViewCell
 + (NSString *)cellIdentifiter;
 
++ (CGFloat)cellHeight;
 + (void)registerNibInTableView:(UITableView*)tableView;
 @end
 

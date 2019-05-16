@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface TestVC2 : TQLViewContorller
 + (NSString *)cellIdentifiter;
 
-+ (CGFloat)cellHeight;
 + (void)registerNibInTableView:(UITableView*)tableView;
 @end
 
