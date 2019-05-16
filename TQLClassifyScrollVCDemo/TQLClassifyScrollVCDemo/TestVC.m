@@ -44,7 +44,7 @@
     if (1) {
         //接口返回成功获取到了
         [NSThread sleepForTimeInterval:1.5];
-        self.successBlock(@[@"11",@"22"]);
+        self.successBlock(@[@"11",@"22",@"33",@"44",@"22",@"22"]);
     }else{
         //接口返回失败
         self.failureBlock(nil);

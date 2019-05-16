@@ -24,7 +24,7 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="placeImgIcon" translatesAutoresizingMaskIntoConstraints="NO" id="xlW-ng-Hnv">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="test11.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="xlW-ng-Hnv">
                         <rect key="frame" x="16" y="11" width="91" height="62"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="91" id="pLe-v6-bwQ"/>
@@ -51,6 +51,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="placeImgIcon" width="21" height="18"/>
+        <image name="test11.jpg" width="1280" height="800"/>
     </resources>
 </document>

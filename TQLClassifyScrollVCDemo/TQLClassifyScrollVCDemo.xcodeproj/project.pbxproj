@@ -21,6 +21,8 @@
 		1C7795DD228D755F00247155 /* CustomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C7795DB228D755F00247155 /* CustomTableViewCell.xib */; };
 		1C7795E1228D800300247155 /* CustomTableViewCell2.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C7795DF228D800300247155 /* CustomTableViewCell2.m */; };
 		1C7795E2228D800300247155 /* CustomTableViewCell2.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C7795E0228D800300247155 /* CustomTableViewCell2.xib */; };
+		1C7795E8228D85B900247155 /* test11.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1C7795E5228D85B900247155 /* test11.jpg */; };
+		1C7795E9228D85B900247155 /* test22.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1C7795E6228D85B900247155 /* test22.jpg */; };
 		7B44118CF4E359169CE2EB3B /* libPods-TQLClassifyScrollVCDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E811C99992F8B4BCAAE21976 /* libPods-TQLClassifyScrollVCDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +49,8 @@
 		1C7795DE228D800300247155 /* CustomTableViewCell2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomTableViewCell2.h; sourceTree = "<group>"; };
 		1C7795DF228D800300247155 /* CustomTableViewCell2.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomTableViewCell2.m; sourceTree = "<group>"; };
 		1C7795E0228D800300247155 /* CustomTableViewCell2.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomTableViewCell2.xib; sourceTree = "<group>"; };
+		1C7795E5228D85B900247155 /* test11.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test11.jpg; sourceTree = "<group>"; };
+		1C7795E6228D85B900247155 /* test22.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test22.jpg; sourceTree = "<group>"; };
 		548A8F9C097B2EB84381F7A7 /* Pods-TQLClassifyScrollVCDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TQLClassifyScrollVCDemo.release.xcconfig"; path = "Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo.release.xcconfig"; sourceTree = "<group>"; };
 		A5259CEA601720A00343BBC0 /* Pods-TQLClassifyScrollVCDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TQLClassifyScrollVCDemo.debug.xcconfig"; path = "Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		E811C99992F8B4BCAAE21976 /* libPods-TQLClassifyScrollVCDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TQLClassifyScrollVCDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -100,6 +104,7 @@
 				1C3B80B2228ABDE900AEFCFE /* TestVC.m */,
 				1C3B80B4228ABF7E00AEFCFE /* TestVC2.h */,
 				1C3B80B5228ABF7E00AEFCFE /* TestVC2.m */,
+				1C7795E4228D85B900247155 /* img */,
 				1C3B8098228AB14000AEFCFE /* Main.storyboard */,
 				1C3B809B228AB14100AEFCFE /* Assets.xcassets */,
 				1C3B809D228AB14100AEFCFE /* LaunchScreen.storyboard */,
@@ -116,6 +121,15 @@
 				1C3B80AA228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec */,
 			);
 			name = Spec;
+			sourceTree = "<group>";
+		};
+		1C7795E4228D85B900247155 /* img */ = {
+			isa = PBXGroup;
+			children = (
+				1C7795E5228D85B900247155 /* test11.jpg */,
+				1C7795E6228D85B900247155 /* test22.jpg */,
+			);
+			path = img;
 			sourceTree = "<group>";
 		};
 		AE025EB6CB99C4B3A68C7DFC /* Pods */ = {
@@ -197,6 +211,8 @@
 				1C7795E2228D800300247155 /* CustomTableViewCell2.xib in Resources */,
 				1C3B809F228AB14100AEFCFE /* LaunchScreen.storyboard in Resources */,
 				1C3B809C228AB14100AEFCFE /* Assets.xcassets in Resources */,
+				1C7795E8228D85B900247155 /* test11.jpg in Resources */,
+				1C7795E9228D85B900247155 /* test22.jpg in Resources */,
 				1C7795DD228D755F00247155 /* CustomTableViewCell.xib in Resources */,
 				1C3B80AC228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec in Resources */,
 				1C3B80AB228AB15B00AEFCFE /* README.md in Resources */,

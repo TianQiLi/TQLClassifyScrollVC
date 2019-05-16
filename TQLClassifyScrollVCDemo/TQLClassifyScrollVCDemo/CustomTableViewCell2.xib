@@ -18,7 +18,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="117.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="placeImgIcon" translatesAutoresizingMaskIntoConstraints="NO" id="ngh-U5-boR">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="test22.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="ngh-U5-boR">
                         <rect key="frame" x="16" y="7" width="288" height="75.5"/>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="看图说话" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4SD-my-p2s">
@@ -42,6 +42,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="placeImgIcon" width="21" height="18"/>
+        <image name="test22.jpg" width="1920" height="1200"/>
     </resources>
 </document>
