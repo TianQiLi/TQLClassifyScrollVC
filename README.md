@@ -4,6 +4,14 @@
    2.1  viewDidLoad 方法用于加载自定义的view  
 
 
+# pod 依赖
+  pod 'TQLClassifyScrollVC'
+
+
+
+
+
+
 
 demo:
  
