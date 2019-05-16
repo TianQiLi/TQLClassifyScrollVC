@@ -41,9 +41,6 @@
     recordCouseVC.enableScollForSwitchClick = YES;
     recordCouseVC.justTwoScrollForSwitchClick = YES;
     
-    //青藤隐藏导航栏底部underline
-    //    recordCouseVC.navBarShadowImageHidden = [UIImage imageWithColor:[UIColor whiteColor]];
-    //    recordCouseVC.navBarShadowImageShow = [UIImage imageWithColor:[UIColor colorWithHexString:kAPPNavBarShadowImageColor]];
     [recordCouseVC setMJRefreshBgColor:[UIColor whiteColor]];
     
     
