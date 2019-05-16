@@ -1,7 +1,7 @@
 # Uncomment the next line to define a global platform for your project
 # platform :ios, '9.0'
 source 'https://github.com/CocoaPods/Specs.git'
-
+source 'https://github.com/TianQiLi/TQRepo.git'
 # 忽略所有pods的警告
 inhibit_all_warnings!
 target 'TQLClassifyScrollVCDemo' do
@@ -9,8 +9,8 @@ target 'TQLClassifyScrollVCDemo' do
   # use_frameworks!
 
   # Pods for TQLClassifyScrollVCDemo
-   #pod 'TQLClassifyScrollVC'
+   pod 'TQLClassifyScrollVC'
    
- #pod 'TQLClassifyScrollVC', :path =>'./TQLClassifyScrollVC'
+ #pod 'TQLClassifyScrollVC', :path =>'./TQLClassifyScrollVC' //本地依赖
 
 end
