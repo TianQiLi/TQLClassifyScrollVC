@@ -13,7 +13,7 @@
 
 
 
-demo:
+# demo:
  
  
  NSInteger height = kScreen_Height - StatusBarAndNavgationBarHeight;
