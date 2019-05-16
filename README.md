@@ -8,6 +8,21 @@
 3. 需要注意的是同样的页面类型是复用的，所以需要在viewWillAppear 里面动态的去实现差异化的内容
 4. 当前页面没有数据的时候，每次进入都会自动刷新，当前页面数组有内容的时候，不会再次自动刷新，减少网络请求，合理利用缓存
 
+5. 网络请求可以重写basicRequestData 数据请求方法,  请求成功返回successBlock ，失败返回failureBlock
+6. 可以利用框架本身的数据结构arrayData 存放当前的数据
+-(void)basicRequestData{
+    //TODO: 网络请求
+    if (1) {
+        //接口返回成功获取到了
+        [NSThread sleepForTimeInterval:1.5];
+        self.successBlock(@[@"11",@"22",@"33",@"44",@"22",@"22"]);
+    }else{
+        //接口返回失败
+        self.failureBlock(nil);
+    }
+    
+    
+}
 
 # pod 依赖
   pod 'TQLClassifyScrollVC'
