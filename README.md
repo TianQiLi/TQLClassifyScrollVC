@@ -1,7 +1,12 @@
 # TQLClassifyScrollVCDemo
 1. 支持多个控制器的滚动切换，采用了collection作为容器提供左右交互需要
-2. 重写TQLCollectionViewCell 实现需要的控制器页面
-   2.1  viewDidLoad 方法用于加载自定义的view  
+2. 重写TQLViewContorller 实现需要的控制器页面
+   2.1  viewDidLoad 方法用于加载自定义的view 
+   2.2  viewWillAppear 用于每次要显示的时候加载当前控制器的一些参数
+   
+   
+3. 需要注意的是同样的页面类型是复用的，所以需要在viewWillAppear 里面动态的去实现差异化的内容
+4. 当前页面没有数据的时候，每次进入都会自动刷新，当前页面数组有内容的时候，不会再次自动刷新，减少网络请求，合理利用缓存
 
 
 # pod 依赖
