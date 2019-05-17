@@ -98,7 +98,7 @@
         shapeLayer.frame = self.bounds;
         self.layer.mask = shapeLayer;
     }
- 
+    
 }
 
 - (void)setArrayItem:(NSArray *)arrayItem{
@@ -132,19 +132,19 @@
         TQLRedBadgeBttton * button  = [TQLRedBadgeBttton buttonWithType:UIButtonTypeCustom];
         [button setTitle:obj forState:UIControlStateNormal];
         NSInteger textWidth = 0;
-
+        
         if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFlexible) {
             if (index == 0) {
                 textWidth = ceil(self.switchViewStyle.selectedBtn_Font.pointSize) * button.titleLabel.text.length;
             }else{
                 textWidth = ceil(self.switchViewStyle.normalBtn_Font.pointSize) * button.titleLabel.text.length;
             }
-
+            
             if (index == 0) {
                 [button.titleLabel setTextAlignment:NSTextAlignmentLeft];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2;
                 [button setTitleEdgeInsets: UIEdgeInsetsMake(0, - self.switchViewStyle.scrollViewItemInterMargin/2, 0, 0)];
-               
+                
             }else if ((index + 1) == countItem){//last
                 [button.titleLabel setTextAlignment:NSTextAlignmentRight];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
@@ -155,7 +155,7 @@
                 [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
             }
-          
+            
             [button setFrame:CGRectMake(lastBtnx,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
             lastBtnx = CGRectGetMinX(button.frame) + CGRectGetWidth(button.frame);
         }else{
@@ -175,10 +175,16 @@
             if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
             }else if(button.titleLabel.textAlignment == NSTextAlignmentLeft){
-                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame) - self.switchViewStyle.scrollViewItemInterMargin/2 ,self.flagLine.center.y);
-                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
+                //                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame) - self.switchViewStyle.scrollViewItemInterMargin/2 ,self.flagLine.center.y);
+                //                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
+                NSInteger centerX = button.center.x;
+                if (centerX == 0) {
+                    centerX = button.frame.origin.x + button.frame.size.width/2;
+                }
+                
+                self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
             }else{
-                 NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
+                NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
                 self.flagLine.center = CGPointMake(button.frame.origin.x + button.frame.size.width - offsetx ,self.flagLine.center.y);
             }
             
@@ -205,9 +211,9 @@
 -(void)clickButton:(id)sender{
     UIButton * button = (UIButton*)sender;
     NSInteger index = [button tag];
-//    [self updateButtonFrame:index];
+    //    [self updateButtonFrame:index];
     self.currentIndex = index;
-
+    
     if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
         [self.delegate clickButton:index];
     }
@@ -238,13 +244,13 @@
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2;
                 [button.titleLabel setTextAlignment:NSTextAlignmentLeft];
             }else if ((index + 1) == countItem){//last
-//                [button.titleLabel setTextAlignment:NSTextAlignmentRight];
+                //                [button.titleLabel setTextAlignment:NSTextAlignmentRight];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
             else{
-//                [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
+                //                [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
             }
             CGRect frame = button.frame;
@@ -266,7 +272,7 @@
     
     [self changeButtonStyle:_currentIndex withIsSelected:NO];
     _currentIndex = currentIndex;
- 
+    
     [self changeButtonStyle:_currentIndex withIsSelected:YES];
     
     if (self.switchViewStyle.needSequenceStatus) {
@@ -278,7 +284,7 @@
             }
         }];
     }
-
+    
 }
 
 -(void)changeButtonStyle:(NSInteger)index  withIsSelected:(BOOL)isSelect{
@@ -286,7 +292,7 @@
     if (!button || ![button isKindOfClass:[UIButton class]]) {
         return;
     }
-   
+    
     if (isSelect) {
         //TODO: 调整button 的位置
         NSInteger currentOffsetx = self.scrollView.contentOffset.x;
@@ -325,7 +331,7 @@
                 self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
             }
             else{
-                 self.flagLine.center = CGPointMake(button.center.x,self.flagLine.center.y);
+                self.flagLine.center = CGPointMake(button.center.x,self.flagLine.center.y);
             }
             
         } completion:nil];
@@ -341,7 +347,7 @@
 
 + (CGSize)contentSize{
     return CGSizeMake([UIScreen mainScreen].bounds.size.width, 50);
-
+    
 }
 @end
 
@@ -381,7 +387,7 @@
 //}
 //#pragma mark -- SwitchViewButtonDelegate
 //- (void)clickButton:(NSInteger)index{
-//    
+//
 //    if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
 //        [self.delegate clickButton:index];
 //    }
@@ -390,3 +396,4 @@
 //
 //
 //@end
+
