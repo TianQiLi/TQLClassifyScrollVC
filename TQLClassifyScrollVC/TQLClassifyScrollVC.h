@@ -52,8 +52,10 @@ typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
 - (void)setMJRefreshBgColor:(UIColor *)mjRefreshColor;
 
 - (void)setOrignalRect:(CGRect)orignalRect;
-/** 1-n **/
-- (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex;
+/** 1-n
+ * @param  isDefault = yes 表示首次初始化
+ **/
+- (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex isDefault:(BOOL)isDefault;
 /*
  * row: collecion 的row :0-n
  */

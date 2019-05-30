@@ -415,11 +415,13 @@ static NSInteger heightCollection = 0;
     
 }
 
-- (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex{
+- (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex isDefault:(BOOL)isDefault{
     self.currentSwitchBtnIndex = switchBtnIndex;
-//    self.switchViewTool.currentIndex = switchBtnIndex;
-//    [self clickButton:_switchViewTool.currentIndex];
-    
+    if (!isDefault) {
+        self.switchViewTool.currentIndex = switchBtnIndex;
+        [self clickButton:_switchViewTool.currentIndex];
+    }
+ 
 }
 
 /*
