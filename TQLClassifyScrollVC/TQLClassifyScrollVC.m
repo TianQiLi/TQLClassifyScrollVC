@@ -79,6 +79,10 @@ static NSInteger heightCollection = 0;
     NSLog(@"%s",__func__);
     [_maskView removeGestureRecognizer:_tagG];
     _tagG = nil;
+    if(self.blockForDealloc){
+        self.blockForDealloc();
+    }
+
 }
 
 - (UICollectionView *)collection{
@@ -408,7 +412,14 @@ static NSInteger heightCollection = 0;
     if([cell isKindOfClass:[TQLViewContorller class]]){
         [cell willDisplayRow:row];
     }
+}
 
+- (void)reload{
+    [self.collection reloadData];
+}
+
+- (void)removeAllData{
+    [self.dataForRowArray removeAllObjects];
 }
 
 - (void)staticsCourseType:(NSInteger)index{

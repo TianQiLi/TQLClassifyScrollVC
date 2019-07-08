@@ -34,6 +34,7 @@ typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
 
 /** 监听屏幕旋转刷新:默认为NO */
 @property (nonatomic, assign) BOOL enableRotate;
+@property (nonatomic, copy) void(^blockForDealloc)();
 
 
 - (id)initWithSwitchItemArray:(NSArray<NSString *> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray;
@@ -60,5 +61,12 @@ typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
  * row: collecion 的row :0-n
  */
 - (void)reloadSpecialCellReload:(NSInteger)row;
+/**
+ * TQLClassifyScrollVC 容器本身刷新
+ */
+- (void)reload;
+/*清空所有内存数据*/
+- (void)removeAllData;
+
 - (NSInteger)currentSwitchBtnIndex;
 @end
