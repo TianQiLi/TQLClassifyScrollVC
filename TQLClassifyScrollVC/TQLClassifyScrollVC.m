@@ -177,19 +177,20 @@ static NSInteger heightCollection = 0;
     
     heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
     
-    _maskView = [[UIView alloc] initWithFrame:self.view.bounds];
-    [_maskView setBackgroundColor:[UIColor whiteColor]];
-    [self.view addSubview:_maskView];
-    _tagG = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTapG:)];
-    [_maskView addGestureRecognizer:_tagG];
-
-    [_maskView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leading.equalTo(self.view);
-        make.trailing.equalTo(self.view);
-        make.top.equalTo(self.view);
-        make.bottom.equalTo(self.view);
-    }];
-    
+    if (self.switchViewStyle.switchViewY > 0) {
+        _maskView = [[UIView alloc] initWithFrame:self.view.bounds];
+        [_maskView setBackgroundColor:[UIColor whiteColor]];
+        [self.view addSubview:_maskView];
+        _tagG = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTapG:)];
+        [_maskView addGestureRecognizer:_tagG];
+        
+        [_maskView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.leading.equalTo(self.view);
+            make.trailing.equalTo(self.view);
+            make.top.equalTo(self.view);
+            make.bottom.equalTo(self.view);
+        }];
+    }
     
     if (self.viewBgColor) {
          [_maskView setBackgroundColor:self.viewBgColor];

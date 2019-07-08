@@ -17,6 +17,7 @@ typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
 @property (nonatomic, strong) UIImage *navBarShadowImageShow;
 @property (nonatomic, readonly) UICollectionView * collection;
 @property (nonatomic, readonly) TQLSwitchViewTool * switchViewTool;
+/** switchViewStyle.switchViewY > 0 才会初始化*/
 @property (nonatomic, strong) UIView *maskView;
 
 /**collection scroll by SwitchClick NO ; enable scroll animation */
