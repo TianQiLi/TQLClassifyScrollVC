@@ -158,13 +158,38 @@ static NSInteger heightCollection = 0;
 }
 
 - (void)clickTapG:(UITapGestureRecognizer *)tagG{
+    [self removeFromSuperViewWithAnimation:nil];
+}
+
+- (void)removeFromSuperViewWithAnimation:(void(^)())block{
     [UIView animateWithDuration:0.3 animations:^{
-        self.view.transform = CGAffineTransformMakeTranslation(0, self.view.frame.size.height);
+        self.switchViewTool.transform = CGAffineTransformMakeTranslation(0, self.view.frame.size.height);
+        self.collection.transform = self.switchViewTool.transform;
     } completion:^(BOOL finished) {
-        self.view.transform = CGAffineTransformIdentity;
+        self.switchViewTool.transform = CGAffineTransformIdentity;
+        self.collection.transform = CGAffineTransformIdentity;
         [self.view removeFromSuperview];
+        if (block) {
+            block();
+        }
     }];
-   
+    
+    [UIView animateWithDuration:0.25 animations:^{
+        self.maskView.alpha = 0.4;
+    }];
+}
+
+- (void)showViewWithAnimation:(void(^)())block{
+    self.switchViewTool.transform = CGAffineTransformMakeTranslation(0, self.view.frame.size.height);
+    self.collection.transform = self.switchViewTool.transform;
+    [UIView animateWithDuration:0.3 animations:^{
+        self.switchViewTool.transform = CGAffineTransformIdentity;
+        self.collection.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        if (block) {
+            block();
+        }
+    }];
 }
 
 - (void)viewDidLoad {

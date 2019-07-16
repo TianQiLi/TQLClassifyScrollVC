@@ -70,4 +70,8 @@ typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
 - (void)removeAllData;
 
 - (NSInteger)currentSwitchBtnIndex;
+/* remove view */
+- (void)removeFromSuperViewWithAnimation:(void(^)())block;
+/* 动画*/
+- (void)showViewWithAnimation:(void(^)())block;
 @end
