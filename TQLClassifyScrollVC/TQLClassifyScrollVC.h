@@ -14,7 +14,7 @@
 extern NSString * const SwitchBttonClickNotification;
 typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
 
-typedef void(^ViewDidLoadBlock) ();
+typedef void(^ViewLoadBlock) ();
 
 typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row,id obj);//row :0...n
 
@@ -39,7 +39,12 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 @property (nonatomic, copy) EnumerateItemBtnBlock enumerateItemBtnBlock;
 @property (nonatomic, copy) DissmissForTQLClassifyVC  dissmissCompletion;
 /**  */
-@property (nonatomic, copy) ViewDidLoadBlock viewDidLoadBlock;
+@property (nonatomic, copy) ViewLoadBlock viewDidLoadBlock;
+
+@property (nonatomic, copy) ViewLoadBlock viewWillAppearBlock;
+@property (nonatomic, copy) ViewLoadBlock viewDidAppearBlock;
+@property (nonatomic, copy) ViewLoadBlock viewWillDisappearBlock;
+@property (nonatomic, copy) ViewLoadBlock viewDidDisappearBlock;
 /** 配置自定义的c控制器：比如传参*/
 @property (nonatomic, copy) ConfigTQLViewContorllerBlock configTQLVCBlock;
 

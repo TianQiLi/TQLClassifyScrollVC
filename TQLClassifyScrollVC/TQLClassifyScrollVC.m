@@ -59,6 +59,9 @@ static NSInteger heightCollection = 0;
     if (_navBarShadowImageHidden) {
         [self.navigationController.navigationBar setShadowImage:_navBarShadowImageHidden];
     }
+    if (self.viewWillAppearBlock) {
+        self.viewWillAppearBlock();
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated{
@@ -66,12 +69,25 @@ static NSInteger heightCollection = 0;
     if (_navBarShadowImageHidden) {
         [self.navigationController.navigationBar setShadowImage:_navBarShadowImageHidden];
     }
+    if (self.viewDidAppearBlock) {
+        self.viewDidAppearBlock();
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
     [super viewDidDisappear:animated];
     if (_navBarShadowImageShow) {
          [self.navigationController.navigationBar setShadowImage:_navBarShadowImageShow];
+    }
+    if (self.viewDidDisappearBlock) {
+        self.viewDidDisappearBlock();
+    }
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+    [super viewWillDisappear:animated];
+    if (self.viewWillDisappearBlock) {
+        self.viewWillDisappearBlock();
     }
 }
 
