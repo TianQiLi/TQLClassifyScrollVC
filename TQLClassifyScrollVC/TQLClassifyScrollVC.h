@@ -9,9 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "TQLSwitchViewTool.h"
 @class TQLSwitchViewStyleModel;
-//@class TQLSwitchViewTool;
+@class TQLViewContorller;
+
 extern NSString * const SwitchBttonClickNotification;
 typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
+
+typedef void(^ViewDidLoadBlock) ();
+
+typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row,id obj);//row :0...n
+
 @interface TQLClassifyScrollVC : UIViewController
 @property (nonatomic, strong) UIImage *navBarShadowImageHidden;
 @property (nonatomic, strong) UIImage *navBarShadowImageShow;
@@ -32,6 +38,10 @@ typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
 
 @property (nonatomic, copy) EnumerateItemBtnBlock enumerateItemBtnBlock;
 @property (nonatomic, copy) DissmissForTQLClassifyVC  dissmissCompletion;
+/**  */
+@property (nonatomic, copy) ViewDidLoadBlock viewDidLoadBlock;
+/** 配置自定义的c控制器：比如传参*/
+@property (nonatomic, copy) ConfigTQLViewContorllerBlock configTQLVCBlock;
 
 /** 监听屏幕旋转刷新:默认为NO */
 @property (nonatomic, assign) BOOL enableRotate;

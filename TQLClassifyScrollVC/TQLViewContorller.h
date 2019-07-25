@@ -48,6 +48,8 @@ extern NSString * const CellSelectedNotification;
 
 @property (nonatomic, copy)  SuccessBlock  successBlock;
 @property (nonatomic, copy)  FailureBlock  failureBlock;
+
+@property (nonatomic, copy) ConfigTQLViewContorllerBlock configTQLVCBlock;
 @property (assign, nonatomic) BOOL enableHeaderRefresh;//默认NO
 @property (assign, nonatomic) BOOL enableFooterRefresh;//默认NO
 

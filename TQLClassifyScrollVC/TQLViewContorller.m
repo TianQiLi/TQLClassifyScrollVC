@@ -53,6 +53,9 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 - (void)willDisplayRow:(NSInteger)row{
     //赋值row
     _row = row;
+    if (self.configTQLVCBlock) {
+        self.configTQLVCBlock(self, row,nil);
+    }
     if (_mjRefreshColor) {
         self.currentScrollView.mj_header.backgroundColor = self.mjRefreshColor;
         self.currentScrollView.mj_footer.backgroundColor = self.mjRefreshColor;

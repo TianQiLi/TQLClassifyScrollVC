@@ -18,7 +18,7 @@
         _switchViewHeight = 48;
         _switchViewY = 0;
         _needSequenceStatus = NO;
-         
+        _scrollViewItemInterMargin = 5;
     }
     return self;
 }

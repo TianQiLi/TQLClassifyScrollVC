@@ -46,8 +46,13 @@ typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
 
 /** needSequenceStatus:默认为NO,除了当前的按钮样式选中之外，之前的也处于一个选中的样式*/
 @property (nonatomic, assign) BOOL needSequenceStatus;
+/**
+ 采用TQLSwitchViewWidthStyleFlexible 时，需要设置scrollViewItemEdge & scrollViewItemInterMargin
+ */
 @property (nonatomic, assign) TQLSwitchViewWidthStyle scrollViewWidthStyle;
+/* 默认值0 ： scroll控件边框四周间距*/
 @property (nonatomic, assign) UIEdgeInsets scrollViewItemEdge;//TQLSwitchViewWidthStyleFlexible 时有效
+/* 默认值5：元素间距*/
 @property (nonatomic, assign) NSInteger scrollViewItemInterMargin;//TQLSwitchViewWidthStyleFlexible 时有效
 
 

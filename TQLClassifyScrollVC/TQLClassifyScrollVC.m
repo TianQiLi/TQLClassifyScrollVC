@@ -290,6 +290,9 @@ static NSInteger heightCollection = 0;
         [self clickButton:_switchViewTool.currentIndex];
     }
     
+    if (self.viewDidLoadBlock) {
+        self.viewDidLoadBlock();
+    }
    
 }
 
@@ -321,6 +324,7 @@ static NSInteger heightCollection = 0;
     }
 //    NSLog(@"cellForItem=%ld\n",indexPath.row);
     TQLViewContorller * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
+    cell.configTQLVCBlock = self.configTQLVCBlock;
     [cell cellForItem:indexPath.row];
     cell.mjRefreshColor = self.mjRefreshColor;
     cell.currentVC = self;
