@@ -8,7 +8,7 @@
 #import "TQLCollectionViewCell+DZNEmptyDataSet.h"
 #import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
 #import <objc/runtime.h>
-
+#import "TQLClassifyScrollVC_Header.h"
 static  NSString * const DefaultErrorText =@"加载失败,点击重新加载";
 static  NSString * const DefaultNodataText =@"没有内容~";
 
@@ -154,12 +154,17 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
         imgUrl = @"TQL_NoData_icon";
         if (self.dataStatusNoData_img && self.dataStatusNoData_img.length > 0) {
             imgUrl = self.dataStatusNoData_img;
+        }else{
+            return TQLClassifyScrollImage(imgUrl);
         }
-        return [UIImage imageNamed:imgUrl];
+        UIImage *img = [UIImage imageNamed:imgUrl];
+        return img;
     } else if ([self.dataStatusType integerValue] == CCDataStatusError) {
-        imgUrl = @"unusual-badmood";
+        imgUrl = @"TQL_error";
         if (self.dataStatusError_img && self.dataStatusError_img.length > 0) {
             imgUrl = self.dataStatusError_img;
+        }else{
+            return TQLClassifyScrollImage(imgUrl);
         }
         return [UIImage imageNamed:imgUrl];
     }else if ([self.dataStatusType integerValue] == CCDataStatusNoKnown) {

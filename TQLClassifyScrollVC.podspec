@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "TQLClassifyScrollVC"
-  s.version      = "0.0.8"
+  s.version      = "0.0.9"
   s.summary      = "多tab 控制器."
   s.homepage     = "https://github.com/TianQiLi/TQLClassifyScrollVC"
   s.license      = "MIT"
@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
 s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git", :tag => "#{s.version}"}
 
   s.source_files  =  "TQLClassifyScrollVC/*.{h,m}"
-  s.resources = "TQLClassifyScrollVC/Resources/*.png","TQLClassifyScrollVC/Resources/*.xcassets"
+  s.resources = "TQLClassifyScrollVC/Resources/*.png","TQLClassifyScrollVC/Resources/*.bundle"
   s.requires_arc = true
   s.dependency "Masonry"
   s.dependency "DZNEmptyDataSet"
