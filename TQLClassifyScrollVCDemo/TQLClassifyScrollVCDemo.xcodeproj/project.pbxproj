@@ -251,18 +251,11 @@
 			files = (
 			);
 			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo-resources.sh",
-				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
-				"${PODS_ROOT}/TQLClassifyScrollVC/TQLClassifyScrollVC/Resources/Media.xcassets",
+				"${PODS_ROOT}/Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
-			);
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Assets.car",
+				"${PODS_ROOT}/Target Support Files/Pods-TQLClassifyScrollVCDemo/Pods-TQLClassifyScrollVCDemo-resources-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

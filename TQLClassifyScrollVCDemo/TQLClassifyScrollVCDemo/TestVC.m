@@ -27,7 +27,6 @@
     self.tableView.separatorColor = [UIColor redColor];
     self.dataStatusEmptyBGColor = @"0xf4f6f9";
     self.verticalOffset = @(-30);
-    self.dataStatusNoData_img = @"qa_noquestion";
     self.dataStatusNoData_text_fontSize = @(14);
 }
 
@@ -44,7 +43,8 @@
     if (1) {
         //接口返回成功获取到了
         [NSThread sleepForTimeInterval:1.5];
-        self.successBlock(@[@"11",@"22",@"33",@"44",@"22",@"22"]);
+//        self.successBlock(@[@"11",@"22",@"33",@"44",@"22",@"22"]);
+        self.successBlock(@[]);
     }else{
         //接口返回失败
         self.failureBlock(nil);
