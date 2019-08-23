@@ -26,7 +26,7 @@
 
 # pod 依赖
   pod 'TQLClassifyScrollVC'
-### 当前更新到0.0.6 版本
+### 当前更新到0.0.9 版本
 
 
 
