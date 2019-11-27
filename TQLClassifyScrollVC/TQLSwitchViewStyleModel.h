@@ -54,6 +54,9 @@ typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
 @property (nonatomic, assign) UIEdgeInsets scrollViewItemEdge;//TQLSwitchViewWidthStyleFlexible 时有效
 /* 默认值5：元素间距*/
 @property (nonatomic, assign) NSInteger scrollViewItemInterMargin;//TQLSwitchViewWidthStyleFlexible 时有效
+/** super scrollView maxOffsetY  */
+@property (nonatomic, assign) NSInteger maxOffsetY;
+
 
 
 - (id)initSwitchButtonStyle:(UIColor *)colorNormal selectedColor:(UIColor *)colorSelected flagColor:(UIColor *)flagColor titleBtnFont:(UIFont *)fontBtn flagViewWidth:(CGSize)flagSize bottomLineColor:(UIColor *)bottomLineColor bottonLineHidden:(BOOL)hidden switchViewRect:(CGRect)switchViewRect;//弃用了

@@ -239,8 +239,28 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
         if (point.x < 40 && point.x >= 0) {
             self.currentVC.collection.scrollEnabled = NO;
         }else
-        self.currentVC.collection.scrollEnabled = YES;
+            self.currentVC.collection.scrollEnabled = YES;
     }
+    
+//    if ([self.currentVC.view.superview isKindOfClass:[UIScrollView class]]) {
+//        NSArray * arrayScrollView = [self getScrollViewSuper];
+//        __block BOOL canHandle = YES;
+//        [arrayScrollView enumerateObjectsUsingBlock:^(UIScrollView * superScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
+//            NSInteger maxScrollView = superScrollView.contentSize.height - superScrollView.frame.size.height;
+//            if (self.currentVC.switchViewStyle.maxOffsetY) {
+//                maxScrollView = self.currentVC.switchViewStyle.maxOffsetY;
+//            }
+//            if (superScrollView.contentOffset.y < maxScrollView) {
+//                canHandle =  NO;
+//                *stop = YES;
+//            }
+//        }];
+//
+//        if (!canHandle) {
+//            return canHandle;
+//        }
+//    }
+    
     return [super pointInside:point withEvent:event];
 }
 
@@ -262,12 +282,15 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
                 if (needScroll) {
                     [scrollView setContentOffset:CGPointZero animated:NO];
                 }
-                
+
                 return;
             }
         }else{
             [arrayScrollView enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIScrollView * superScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSInteger maxScrollView = superScrollView.contentSize.height - superScrollView.frame.size.height;
+                if (self.currentVC.switchViewStyle.maxOffsetY) {
+                    maxScrollView = self.currentVC.switchViewStyle.maxOffsetY;
+                }
                 if (superScrollView.contentOffset.y < maxScrollView) {
                     NSInteger offsetY = MIN(superScrollView.contentOffset.y - translate.y, maxScrollView);
                     [superScrollView setContentOffset:CGPointMake(0, offsetY) animated:NO];
@@ -285,7 +308,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 - (NSArray *)getScrollViewSuper{
     UIScrollView * scrollView = nil;
     NSMutableArray * array = [NSMutableArray new];
-    UIView * superView = self.superview;
+    UIView * superView = self.currentVC.view.superview;
     while (superView) {
         if ([superView isMemberOfClass:[UIScrollView class]] || [superView isMemberOfClass:[UICollectionView class]] || [superView isMemberOfClass:[UITableView class]]) {
             [array addObject:superView];

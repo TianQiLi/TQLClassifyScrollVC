@@ -7,7 +7,7 @@
 //
 
 #import "TQLSwitchViewTool.h"
-#import "TQLClassifyScrollVC_Header.h"
+//#import "TQLSwitchViewStyleModel.h"
 #import <Masonry/Masonry.h>
 @interface TQLSwitchViewTool (){
     TQLSwitchViewStyleModel *_switchViewStyle;

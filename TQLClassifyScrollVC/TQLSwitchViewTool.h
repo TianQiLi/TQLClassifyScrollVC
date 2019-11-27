@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "TQLRedBadgeBttton.h"
-
+#import "TQLSwitchViewStyleModel.h"
 typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index);//index:1...n
 
 
-@class TQLSwitchViewStyleModel;
+//@class TQLSwitchViewStyleModel;
 
 @protocol TQLSwitchViewToolDelegate <NSObject>
 - (void)clickButton:(NSInteger)index;//1...n
