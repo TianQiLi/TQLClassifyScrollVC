@@ -73,6 +73,10 @@ extern NSString * const CellSelectedNotification;
 - (void)loadMoreData;
 /*默认采用row:0-n 作为key ;可以重写改方法，针对用于一个row 对应不同数据的情况*/
 - (NSString *)keyForCurrentData;
+/**
+ * 删除数组中的某个对象
+ */
+- (BOOL)deleteObjFromArrayData:(NSInteger)index needReload:(BOOL)needReload;
 
 - (TQLRedBadgeBttton *)currentSwitchBtn;
 - (NSString *)currentSwitchItem;

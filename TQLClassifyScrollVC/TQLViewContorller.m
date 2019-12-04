@@ -343,6 +343,35 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     return [NSString stringWithFormat:@"%ld",self.row];
 }
 
+- (BOOL)deleteObjFromArrayData:(NSInteger)index needReload:(BOOL)needReload
+{
+     //读取当前所有的数据
+     NSString * keyForData = [self keyForCurrentData];
+     NSMutableArray * arrayReslust = [self.dataForRowArray objectForKey:keyForData];
+     arrayReslust =  arrayReslust ? arrayReslust :@[].mutableCopy;
+    
+     if (index < arrayReslust.count) {
+         [arrayReslust removeObjectAtIndex:index];
+         //TODO:保存到字典里面
+         [self.dataForRowArray setObject:arrayReslust forKey:keyForData];
+         //每次操作完成，要更新数组
+         self.arrayData = arrayReslust.copy;
+         NSLog(@"write array to dic,数组个数Row=%ld,count=%ld\n",self.row,self.arrayData.count);
+         if (!needReload) {
+             return YES;
+         }
+         if (self.isTableViewContoller) {
+             [self.tableView reloadData];
+         }else{
+             [self.subCollectionView reloadData];
+         }
+         return YES;
+
+     }
+    return NO;
+}
+
+
 #pragma mark -- 当前的分类按钮
 - (TQLRedBadgeBttton *)currentSwitchBtn{
     return self.switchToolBtnArray[self.row];

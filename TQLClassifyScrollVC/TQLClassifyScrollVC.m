@@ -49,9 +49,9 @@ static NSInteger heightCollection = 0;
 //+ (void)setNavAppearce:(UINavigationController *)nav isHidden:(BOOL)hidden{
 //
 //    if (hidden) {
-//        [nav.navigationBar setShadowImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"ffffff"]]];
+//        [nav.navigationBar setShadowImage:[UIImagehq_imageWithColor:[UIColor colorWithHexString:@"ffffff"]]];
 //    }else
-//        [nav.navigationBar setShadowImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"efeff0"]]];
+//        [nav.navigationBar setShadowImage:[UIImagehq_imageWithColor:[UIColor colorWithHexString:@"efeff0"]]];
 //}
 
 - (void)viewWillAppear:(BOOL)animated{
