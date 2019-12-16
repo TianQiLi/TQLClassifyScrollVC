@@ -86,5 +86,5 @@ extern NSString * const CellSelectedNotification;
 - (TQLRedBadgeBttton *)currentSwitchBtn;
 - (NSString *)currentSwitchItem;
 
-- (void)cs_reciveMemoryWarningNotification:(NSNotification *)noti;
+- (void)sc_reciveMemoryWarningNotification:(NSNotification *)noti;
 @end

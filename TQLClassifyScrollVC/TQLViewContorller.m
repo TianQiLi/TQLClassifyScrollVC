@@ -170,10 +170,10 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
 - (void)viewDidLoad{
     [super viewDidLoad];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cs_reciveMemoryWarningNotification:) name:TQLCS_ReceiveMemoryWarningNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sc_reciveMemoryWarningNotification:) name:TQLCS_ReceiveMemoryWarningNotification object:nil];
 }
 
-- (void)cs_reciveMemoryWarningNotification:(NSNotification *)noti
+- (void)sc_reciveMemoryWarningNotification:(NSNotification *)noti
 {
      //可重写
     if(self.currentVC.memoryAutoClear){
