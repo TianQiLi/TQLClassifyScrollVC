@@ -12,6 +12,7 @@
 @class TQLViewContorller;
 
 extern NSString * const SwitchBttonClickNotification;
+extern NSString * const TQLCS_ReceiveMemoryWarningNotification;
 typedef void(^DissmissForTQLClassifyVC) (BOOL needUpdate,NSDictionary * extDic);
 
 typedef void(^ViewLoadBlock) ();
@@ -47,6 +48,9 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 @property (nonatomic, copy) ViewLoadBlock viewDidDisappearBlock;
 /** 配置自定义的c控制器：比如传参*/
 @property (nonatomic, copy) ConfigTQLViewContorllerBlock configTQLVCBlock;
+/*内存警告是否自动处理*/
+@property (nonatomic, assign) BOOL memoryAutoClear;
+
 
 /** 监听屏幕旋转刷新:默认为NO */
 @property (nonatomic, assign) BOOL enableRotate;

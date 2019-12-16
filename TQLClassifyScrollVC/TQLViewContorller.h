@@ -78,6 +78,13 @@ extern NSString * const CellSelectedNotification;
  */
 - (BOOL)deleteObjFromArrayData:(NSInteger)index needReload:(BOOL)needReload;
 
+/**
+ * 删除页面row对应的数组
+ */
+- (BOOL)deleteArrayData;
+
 - (TQLRedBadgeBttton *)currentSwitchBtn;
 - (NSString *)currentSwitchItem;
+
+- (void)cs_reciveMemoryWarningNotification:(NSNotification *)noti;
 @end

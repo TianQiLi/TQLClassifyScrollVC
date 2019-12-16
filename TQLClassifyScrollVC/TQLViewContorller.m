@@ -18,6 +18,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 @implementation TQLViewContorller
 - (void)dealloc{
     NSLog(@"%s",__func__);
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:TQLCS_ReceiveMemoryWarningNotification object:nil];
 }
 
 - (id)initWithFrame:(CGRect)frame{
@@ -169,6 +170,15 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
 - (void)viewDidLoad{
     [super viewDidLoad];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cs_reciveMemoryWarningNotification:) name:TQLCS_ReceiveMemoryWarningNotification object:nil];
+}
+
+- (void)cs_reciveMemoryWarningNotification:(NSNotification *)noti
+{
+     //可重写
+    if(self.currentVC.memoryAutoClear){
+        [self deleteArrayData];
+    }
 }
 
 - (void)setEndRefresh:(NSArray *)array{
@@ -345,6 +355,9 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
 - (BOOL)deleteObjFromArrayData:(NSInteger)index needReload:(BOOL)needReload
 {
+    if ((index + 1) == self.currentSwitchBtnIndex) {
+        return NO;
+    }
      //读取当前所有的数据
      NSString * keyForData = [self keyForCurrentData];
      NSMutableArray * arrayReslust = [self.dataForRowArray objectForKey:keyForData];
@@ -369,6 +382,16 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
      }
     return NO;
+}
+
+- (BOOL)deleteArrayData
+{
+    NSString * keyForData = [self keyForCurrentData];
+    NSMutableArray * arrayReslust = [self.dataForRowArray objectForKey:keyForData];
+    arrayReslust =  arrayReslust ? arrayReslust :@[].mutableCopy;
+    [arrayReslust removeAllObjects];
+    [self.dataForRowArray setObject:arrayReslust forKey:keyForData];
+    
 }
 
 

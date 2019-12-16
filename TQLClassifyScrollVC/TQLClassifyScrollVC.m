@@ -9,6 +9,7 @@
 #import "TQLClassifyScrollVC.h"
 #import "TQLClassifyScrollVC_Header.h"
 NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
+NSString * const TQLCS_ReceiveMemoryWarningNotification = @"TQLCS_ReceiveMemoryWarningNotification";
 
 static NSInteger heightCollection = 0;
 @interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate>
@@ -138,6 +139,7 @@ static NSInteger heightCollection = 0;
         _enableScollForSwitchClick = NO;
         _enableRotate = NO;
         _orignalRect = frame;
+        _memoryAutoClear = YES;
     }
     return  self;
 }
@@ -409,6 +411,8 @@ static NSInteger heightCollection = 0;
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    NSLog(@"%s",__func__);
+    [[NSNotificationCenter defaultCenter] postNotificationName:TQLCS_ReceiveMemoryWarningNotification object:nil];
 }
 
 #pragma mark --TQLSwitchViewToolDelegate
