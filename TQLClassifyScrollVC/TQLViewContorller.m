@@ -384,7 +384,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     return NO;
 }
 
-- (BOOL)deleteArrayData
+- (void)deleteArrayData
 {
     NSString * keyForData = [self keyForCurrentData];
     NSMutableArray * arrayReslust = [self.dataForRowArray objectForKey:keyForData];

@@ -81,7 +81,7 @@ extern NSString * const CellSelectedNotification;
 /**
  * 删除页面row对应的数组
  */
-- (BOOL)deleteArrayData;
+- (void)deleteArrayData;
 
 - (TQLRedBadgeBttton *)currentSwitchBtn;
 - (NSString *)currentSwitchItem;
