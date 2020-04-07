@@ -141,11 +141,35 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
 #pragma mark --DZNEmptyDataSetDelegate
 - (UIColor *)backgroundColorForEmptyDataSet:(UIScrollView *)scrollView
 {
+    UIColor * color = nil;
     if (self.dataStatusEmptyBGColor) {
-        return [[self class] colorWithHexString:self.dataStatusEmptyBGColor];
+        color = [[self class] colorWithHexString:self.dataStatusEmptyBGColor];
     }
-    return [[self class] colorWithHexString:@"0xf4f6f9"];
+    color =  [[self class] colorWithHexString:@"0xf4f6f9"];
+    
+    return [[self class] tq_LightColor:color DarkColor:[[self class] colorWithHexString:@"0x919191"]];
+    
 }
+
++ (UIColor *)tq_LightColor:(UIColor *)lightColor DarkColor:(UIColor *)darkColor
+{
+    UIColor *dyColor;
+    if (@available(iOS 13.0, *)) {
+        dyColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull trainCollection) {
+            if ([trainCollection userInterfaceStyle] == UIUserInterfaceStyleDark) {
+                return darkColor;
+            }
+            else {
+                return lightColor;
+            }
+        }];
+    } else {
+        dyColor = lightColor;
+    }
+    
+    return dyColor;
+}
+
 
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
 {
