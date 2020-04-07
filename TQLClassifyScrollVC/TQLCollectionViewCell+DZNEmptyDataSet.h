@@ -31,4 +31,11 @@ typedef NS_ENUM(NSInteger, CCDataAPIStatusType) {
 @property (nullable,nonatomic,copy) NSString * dataStatusTextColor;//默认文字颜色
 
 @property (nullable,nonatomic,copy) NSString * dataStatusEmptyBGColor;//默认背景颜色
+
++ (UIColor *)tq_LightColor:(UIColor *)lightColor DarkColor:(UIColor *)darkColor;
+//+ (UIColor *)tq_DefaultLightColor:(UIColor *)lightColor;
+
++ (UIColor *)tq_WhiteColor:(UIColor *)lightColor;
++ (UIColor *)tq_ViewBgColor:(UIColor *)lightColor;
++ (UIColor *)tq_CellBgColor:(UIColor *)lightColor;
 @end

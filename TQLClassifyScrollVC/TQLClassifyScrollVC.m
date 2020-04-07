@@ -219,10 +219,10 @@ static NSInteger heightCollection = 0;
         self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
     
     heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
-    
+     UIColor * colorWhite = [TQLCollectionViewCellBase tq_WhiteColor:[UIColor whiteColor]];
     if (self.switchViewStyle.switchViewY > 0) {
         _maskView = [[UIView alloc] initWithFrame:self.view.bounds];
-        [_maskView setBackgroundColor:[UIColor whiteColor]];
+        [_maskView setBackgroundColor:colorWhite];
         [self.view addSubview:_maskView];
         _tagG = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTapG:)];
         [_maskView addGestureRecognizer:_tagG];
@@ -236,12 +236,12 @@ static NSInteger heightCollection = 0;
     }
     
     if (self.viewBgColor) {
-         [_maskView setBackgroundColor:self.viewBgColor];
-         [self.view setBackgroundColor:self.viewBgColor];
-    }else
-        [self.view setBackgroundColor:[UIColor whiteColor]];
-   
-    
+         UIColor * color = [TQLCollectionViewCellBase tq_ViewBgColor:self.viewBgColor];
+         [_maskView setBackgroundColor:color];
+         [self.view setBackgroundColor:color];
+    }else{
+        [self.view setBackgroundColor:colorWhite];
+    }
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.automaticallyAdjustsScrollViewInsets = NO;
     _dataForRowArray = [NSMutableDictionary new];
@@ -250,9 +250,12 @@ static NSInteger heightCollection = 0;
     self.switchViewTool.arrayItem = _arrayItem;
     self.switchViewTool.delegate = self;
     if (self.switchViewBgColor) {
-        [_switchViewTool setBackgroundColor:self.switchViewBgColor];
-    }else
-        [_switchViewTool setBackgroundColor:[UIColor whiteColor]];
+        UIColor * color = [TQLCollectionViewCellBase tq_WhiteColor:self.switchViewBgColor];
+        [_switchViewTool setBackgroundColor:color];
+    }else{
+        [_switchViewTool setBackgroundColor:colorWhite];
+    }
+       
     [self.view addSubview:_switchViewTool];
     UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -272,9 +275,12 @@ static NSInteger heightCollection = 0;
     _collection.pagingEnabled = YES;
     _collection.showsVerticalScrollIndicator = NO;
     if (self.collectionBGColor) {
-         [_collection setBackgroundColor:self.collectionBGColor];
-    }else
-        [_collection setBackgroundColor:[UIColor whiteColor]];
+        UIColor * color = [TQLCollectionViewCellBase tq_CellBgColor:self.collectionBGColor];
+        [_collection setBackgroundColor:color];
+    }else{
+        [_collection setBackgroundColor:colorWhite];
+    }
+    
     [self.view addSubview:_collection];
   
     NSInteger max_count = MAX(self.classCustomArray.count, self.cellIdentifiterArray.count);

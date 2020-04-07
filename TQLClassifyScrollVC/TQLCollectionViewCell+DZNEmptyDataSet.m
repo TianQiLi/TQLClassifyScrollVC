@@ -144,16 +144,36 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
     UIColor * color = nil;
     if (self.dataStatusEmptyBGColor) {
         color = [[self class] colorWithHexString:self.dataStatusEmptyBGColor];
+    }else{
+        color =  [[self class] colorWithHexString:@"0xf4f6f9"];
     }
-    color =  [[self class] colorWithHexString:@"0xf4f6f9"];
     
-    return [[self class] tq_LightColor:color DarkColor:[[self class] colorWithHexString:@"0x919191"]];
+    return [[self class] tq_CellBgColor:color];
     
+}
+
++ (UIColor *)tq_WhiteColor:(UIColor *)lightColor
+{
+    return [[self class] tq_LightColor:lightColor DarkColor:[[self class] colorWithHexString:@"0x444444"]];
+}
+
++ (UIColor *)tq_CellBgColor:(UIColor *)lightColor
+{
+   return [[self class] tq_LightColor:lightColor DarkColor:[[self class] colorWithHexString:@"0x444444"]];
+}
+
++ (UIColor *)tq_ViewBgColor:(UIColor *)lightColor
+{
+    
+    return [[self class] tq_LightColor:lightColor DarkColor:[[self class] colorWithHexString:@"0x333333"]];
 }
 
 + (UIColor *)tq_LightColor:(UIColor *)lightColor DarkColor:(UIColor *)darkColor
 {
     UIColor *dyColor;
+    if (!darkColor) {
+        darkColor = [[self class] colorWithHexString:@"0x444444"];
+    }
     if (@available(iOS 13.0, *)) {
         dyColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull trainCollection) {
             if ([trainCollection userInterfaceStyle] == UIUserInterfaceStyleDark) {
