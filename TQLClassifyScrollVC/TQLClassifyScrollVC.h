@@ -73,6 +73,9 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 - (void)setMJRefreshBgColor:(UIColor *)mjRefreshColor;
 
 - (void)setOrignalRect:(CGRect)orignalRect;
+/*更新分类标签数组,会更新相应UI展示*/
+- (void)updateItemArray:(NSArray *)array;
+
 /** 1-n
  * @param  isDefault = yes 表示首次初始化
  **/

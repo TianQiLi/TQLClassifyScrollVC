@@ -166,6 +166,13 @@ static NSInteger heightCollection = 0;
     [self.collection reloadData];
 }
 
+- (void)updateItemArray:(NSArray *)array
+{
+    _arrayItem = array;
+    self.switchViewTool.arrayItem = array;
+    [self.collection reloadData];
+}
+
 - (TQLSwitchViewTool *)switchViewTool{
     if (!_switchViewTool) {
         _switchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, self.switchViewStyle.switchViewY, self.view.frame.size.width,self.switchViewStyle.switchViewHeight)switchViewStyle:self.switchViewStyle];
