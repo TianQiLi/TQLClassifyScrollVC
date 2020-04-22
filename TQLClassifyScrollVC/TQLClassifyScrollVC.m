@@ -168,9 +168,13 @@ static NSInteger heightCollection = 0;
 
 - (void)updateItemArray:(NSArray *)array
 {
+    NSInteger lastIndex = self.switchViewTool.currentIndex;
     _arrayItem = array;
     self.switchViewTool.arrayItem = array;
     [self.collection reloadData];
+    if (lastIndex <= array.count) {
+        self.switchViewTool.currentIndex = lastIndex;
+    }
 }
 
 - (TQLSwitchViewTool *)switchViewTool{
