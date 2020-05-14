@@ -48,6 +48,9 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 @property (nonatomic, copy) ViewLoadBlock viewDidDisappearBlock;
 /** 配置自定义的c控制器：比如传参*/
 @property (nonatomic, copy) ConfigTQLViewContorllerBlock configTQLVCBlock;
+
+/** 标签按钮点击回调:index= 1....n */
+@property (nonatomic, copy) void (^ClickItemEventBlock)(NSInteger currentIndex,NSInteger lastIndex);
 /*内存警告是否自动处理*/
 @property (nonatomic, assign) BOOL memoryAutoClear;
 
@@ -92,6 +95,7 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 - (void)removeAllData;
 
 - (NSInteger)currentSwitchBtnIndex;
+
 /* remove view */
 - (void)removeFromSuperViewWithAnimation:(void(^)())block;
 /* 动画*/

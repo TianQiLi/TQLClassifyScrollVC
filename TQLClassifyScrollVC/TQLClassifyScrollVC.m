@@ -435,9 +435,14 @@ static NSInteger heightCollection = 0;
 #pragma mark --TQLSwitchViewToolDelegate
 - (void)clickButton:(NSInteger)index{
     TQLViewContorller * cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForRow:(_currentSwitchBtnIndex - 1) inSection:0]];
+    
+    if (self.ClickItemEventBlock) {
+        self.ClickItemEventBlock(index,_currentSwitchBtnIndex);
+    }
     if ([cell ignoreSwitchBtnEvent]) {
         return;
     }
+  
 
     _currentSwitchBtnIndex = index;
     [self staticsCourseType:index];
