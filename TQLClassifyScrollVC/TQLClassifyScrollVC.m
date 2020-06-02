@@ -147,8 +147,25 @@ static NSInteger heightCollection = 0;
         _enableRotate = NO;
         _orignalRect = frame;
         _memoryAutoClear = YES;
+        
+        _enableRotate = NO;
+        NSString * device = [UIDevice currentDevice].model;
+        if ([[self class] currentDeviceIsIpad_tq]) {
+            _enableRotate = YES;
+        }
     }
     return  self;
+}
+
++ (BOOL)currentDeviceIsIpad_tq
+{
+    // 仅考虑iPhone/iPod或iPad
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return YES;
+ 
+    } else {
+        return NO;
+    }
 }
 
 - (TQLSwitchViewStyleModel *)switchViewStyle{
@@ -373,7 +390,7 @@ static NSInteger heightCollection = 0;
 }
 
 -(void)reLayoutCollectionView:(NSNotification *)notification {
-    if (!_enableRotate) {
+    if (_enableRotate) {
         [self updateFlexiableCellSizeForRotate];
     }
 }
