@@ -9,8 +9,8 @@ target 'TQLClassifyScrollVCDemo' do
   # use_frameworks!
 
   # Pods for TQLClassifyScrollVCDemo
-  pod 'TQLClassifyScrollVC'
+  #pod 'TQLClassifyScrollVC' , '0.0.18'
    
- #pod 'TQLClassifyScrollVC', :path =>'./TQLClassifyScrollVC'
+ pod 'TQLClassifyScrollVC', :path =>'./TQLClassifyScrollVC'
 
 end

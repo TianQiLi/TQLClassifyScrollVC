@@ -25,7 +25,7 @@ static NSInteger heightCollection = 0;
 
 
 @property (nonatomic, assign) NSInteger currentSwitchBtnIndex;//1...n
-@property (nonatomic) CGRect orignalRect;
+
 
 
 /*selfBGStyle-option*/
@@ -41,6 +41,13 @@ static NSInteger heightCollection = 0;
 /** tap */
 @property (nonatomic, strong) UITapGestureRecognizer *tagG;
 
+#pragma mark  frame 处理
+@property (nonatomic) CGRect orignalRect;
+@property (nonatomic) CGSize flexCellSize;
+/*page cell 上下的绝对间距*/
+@property (nonatomic) CGFloat topAndBottomFixedForSlideCell;
+/*page cell 左右的绝对间距*/
+@property (nonatomic) CGFloat leftAndRightFixedForSlideCell;
 
 
 @end
@@ -163,6 +170,38 @@ static NSInteger heightCollection = 0;
         self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
     
     heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
+    [self updateFixedMargin];
+    [self.collection reloadData];
+}
+
+- (void)updateFixedMargin
+{
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    _topAndBottomFixedForSlideCell = screenSize.height- heightCollection;
+    _leftAndRightFixedForSlideCell = screenSize.width - self.orignalRect.size.width;
+    _flexCellSize = CGSizeMake(self.orignalRect.size.width, heightCollection);
+}
+
+- (void)updateFlexiableCellSizeForRotate
+{
+    CGFloat widthCell = 0;
+    CGFloat heightCell = 0;
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    CGFloat widthSc = 0;
+    CGFloat heightSc = 0;
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+        widthSc = MAX(screenSize.width, screenSize.height);
+        heightSc = MIN(screenSize.width, screenSize.height);
+    }else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
+        widthSc = MIN(screenSize.width, screenSize.height);
+        heightSc = MAX(screenSize.width, screenSize.height);
+    }else {
+        return;
+    }
+    widthCell = MAX(0, widthSc - _leftAndRightFixedForSlideCell);
+    heightCell = MAX(0, heightSc - _topAndBottomFixedForSlideCell);
+    _flexCellSize = CGSizeMake(widthCell, heightCell);
     [self.collection reloadData];
 }
 
@@ -230,6 +269,8 @@ static NSInteger heightCollection = 0;
         self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
     
     heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
+    [self updateFixedMargin];
+    
      UIColor * colorWhite = [TQLCollectionViewCellBase tq_WhiteColor:[UIColor whiteColor]];
     if (self.switchViewStyle.switchViewY > 0) {
         _maskView = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -332,8 +373,8 @@ static NSInteger heightCollection = 0;
 }
 
 -(void)reLayoutCollectionView:(NSNotification *)notification {
-    if (_enableRotate) {
-        [self.collection reloadData];
+    if (!_enableRotate) {
+        [self updateFlexiableCellSizeForRotate];
     }
 }
 
@@ -342,12 +383,7 @@ static NSInteger heightCollection = 0;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-//    return CGSizeMake(_collection.frame.size.width,heightCollection);
-    return CGSizeMake(_collection.frame.size.width,_collection.frame.size.height);
-//    if (_orignalRect.size.height) {
-//        return CGSizeMake(_orignalRect.size.width, _orignalRect.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY);
-//    }
-//    return CGSizeMake(_collection.frame.size.width, _collection.frame.size.height);
+    return _flexCellSize;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{

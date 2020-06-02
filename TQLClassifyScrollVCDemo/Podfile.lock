@@ -2,16 +2,16 @@ PODS:
   - DZNEmptyDataSet (1.8.1)
   - Masonry (1.1.0)
   - MJRefresh (2.5.0)
-  - TQLClassifyScrollVC (0.0.8):
+  - TQLClassifyScrollVC (0.0.18):
     - DZNEmptyDataSet
     - Masonry
     - MJRefresh (~> 2.0)
 
 DEPENDENCIES:
-  - TQLClassifyScrollVC
+  - TQLClassifyScrollVC (= 0.0.18)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - DZNEmptyDataSet
     - Masonry
     - MJRefresh
@@ -21,8 +21,8 @@ SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: 4bce3b592ae052ff89473b2907278bf8a80abdd3
-  TQLClassifyScrollVC: f626d5db9f4160dc72256bcc67b55cad25add960
+  TQLClassifyScrollVC: b45a477c782f77a44a13705e860bd2a4ccd72ac3
 
-PODFILE CHECKSUM: 3858cd9037435452100cb5ed22f3e09079c0a22e
+PODFILE CHECKSUM: ad2b8e451b0f1d7af98327ed28138d8ec3ded37b
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.9.1
