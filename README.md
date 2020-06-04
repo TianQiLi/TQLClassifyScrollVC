@@ -1,3 +1,11 @@
+# 更新日志
+0.0.20 支持屏幕旋转适配
+
+
+
+ 
+
+
 # TQLClassifyScrollVCDemo
 1. 支持多个控制器的滚动切换，采用了collection作为容器提供左右交互需要
 2. 重写TQLViewContorller 实现需要的控制器页面
