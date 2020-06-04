@@ -204,18 +204,18 @@ static NSInteger heightCollection = 0;
     CGFloat widthCell = 0;
     CGFloat heightCell = 0;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    CGFloat widthSc = TQLScreenBound().width;
-    CGFloat heightSc = TQLScreenBound().height;
-//    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-//    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
-//        widthSc = MAX(screenSize.width, screenSize.height);
-//        heightSc = MIN(screenSize.width, screenSize.height);
-//    }else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
-//        widthSc = MIN(screenSize.width, screenSize.height);
-//        heightSc = MAX(screenSize.width, screenSize.height);
-//    }else {
-//        return;
-//    }
+    CGFloat widthSc = 0;
+    CGFloat heightSc = 0;
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+        widthSc = MAX(screenSize.width, screenSize.height);
+        heightSc = MIN(screenSize.width, screenSize.height);
+    }else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
+        widthSc = MIN(screenSize.width, screenSize.height);
+        heightSc = MAX(screenSize.width, screenSize.height);
+    }else {
+        return;
+    }
     widthCell = MAX(0, widthSc - _leftAndRightFixedForSlideCell);
     heightCell = MAX(0, heightSc - _topAndBottomFixedForSlideCell);
     _flexCellSize = CGSizeMake(widthCell, heightCell);
@@ -253,7 +253,9 @@ static NSInteger heightCollection = 0;
     } completion:^(BOOL finished) {
         self.switchViewTool.transform = CGAffineTransformIdentity;
         self.collection.transform = CGAffineTransformIdentity;
+        [self removeFromParentViewController];
         [self.view removeFromSuperview];
+        [self didMoveToParentViewController:nil];
         if (block) {
             block();
         }
@@ -412,10 +414,10 @@ static NSInteger heightCollection = 0;
     }
 //    NSLog(@"cellForItem=%ld\n",indexPath.row);
     TQLViewContorller * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
+    cell.currentVC = self;
     cell.configTQLVCBlock = self.configTQLVCBlock;
     [cell cellForItem:indexPath.row];
     cell.mjRefreshColor = self.mjRefreshColor;
-    cell.currentVC = self;
     cell.paraDic = self.paramaterDic;
     cell.dataForRowArray = self.dataForRowArray;
     cell.pageForIndex = self.pageForIndex;
@@ -571,3 +573,4 @@ static NSInteger heightCollection = 0;
 */
 
 @end
+
