@@ -3,8 +3,7 @@
 
 
 
-# 安装方式
-pod 'TQLClassifyScrollVC'
+ 
 
 
 # TQLClassifyScrollVCDemo
