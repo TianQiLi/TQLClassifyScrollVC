@@ -397,6 +397,16 @@ static NSInteger heightCollection = 0;
     }
 }
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator API_AVAILABLE(ios(8.0))
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    CGFloat _offsetX = size.width * (_currentSwitchBtnIndex - 1);
+    _offsetX = MAX(0, _offsetX);
+    _offsetX = MIN(_collection.contentSize.width, _offsetX);
+    CGFloat _offsetY = _collection.contentOffset.y;
+    self.collection.contentOffset = CGPointMake(_offsetX, _offsetY);
+}
+
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return _arrayItem.count;
 }
@@ -573,4 +583,5 @@ static NSInteger heightCollection = 0;
 */
 
 @end
+
 
