@@ -49,6 +49,8 @@ static NSInteger heightCollection = 0;
 /*page cell 左右的绝对间距*/
 @property (nonatomic) CGFloat leftAndRightFixedForSlideCell;
 
+/** viewdidload 是否执行过 */
+@property (nonatomic, assign) BOOL viewMethodLoaded;
 
 @end
 
@@ -145,6 +147,7 @@ static NSInteger heightCollection = 0;
         _currentSwitchBtnIndex = 1;
         _enableScollForSwitchClick = NO;
         _enableRotate = NO;
+        _viewMethodLoaded = NO;
         
         if (!CGRectIsEmpty(frame)) {
             _orignalRect = frame;
@@ -183,15 +186,20 @@ static NSInteger heightCollection = 0;
     _bottomMargin = bottomMargin;
 }
 
-- (void)setOrignalRect:(CGRect)orignalRect{
-    _orignalRect = orignalRect;
-    if (!CGRectIsEmpty(_orignalRect)) {
-        self.view.frame = _orignalRect;
+- (void)reSetOrignalRect:(CGRect)orignalRect{
+    if (_viewMethodLoaded) {
+        if (!CGRectIsEmpty(_orignalRect)) {
+            self.view.frame = _orignalRect;
+        }else{
+            return;
+        }
+        _orignalRect = orignalRect;
+        heightCollection = MAX(_orignalRect.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY, 0);
+        [self updateFixedMargin];
+        [self.collection reloadData];
+    }else{
+        _orignalRect = orignalRect;
     }
- 
-    heightCollection = MAX(self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY, 0);
-    [self updateFixedMargin];
-    [self.collection reloadData];
 }
 
 - (void)updateFixedMargin
@@ -285,6 +293,7 @@ static NSInteger heightCollection = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    _viewMethodLoaded = YES;
     if (!CGRectIsEmpty(_orignalRect)) {
         self.view.frame = _orignalRect;
     }else{
