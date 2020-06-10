@@ -145,7 +145,11 @@ static NSInteger heightCollection = 0;
         _currentSwitchBtnIndex = 1;
         _enableScollForSwitchClick = NO;
         _enableRotate = NO;
-        _orignalRect = frame;
+        
+        if (!CGRectIsEmpty(frame)) {
+            _orignalRect = frame;
+        }
+        
         _memoryAutoClear = YES;
         
         _enableRotate = NO;
@@ -181,12 +185,11 @@ static NSInteger heightCollection = 0;
 
 - (void)setOrignalRect:(CGRect)orignalRect{
     _orignalRect = orignalRect;
-    if (_orignalRect.size.width > 0) {
-        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, _orignalRect.size.width, _orignalRect.size.height);
-    }else
-        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
-    
-    heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
+    if (!CGRectIsEmpty(_orignalRect)) {
+        self.view.frame = _orignalRect;
+    }
+ 
+    heightCollection = MAX(self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY, 0);
     [self updateFixedMargin];
     [self.collection reloadData];
 }
@@ -196,7 +199,7 @@ static NSInteger heightCollection = 0;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     _topAndBottomFixedForSlideCell = screenSize.height- heightCollection;
     _leftAndRightFixedForSlideCell = screenSize.width - self.orignalRect.size.width;
-    _flexCellSize = CGSizeMake(self.orignalRect.size.width, heightCollection);
+    _flexCellSize = CGSizeMake(MAX(self.orignalRect.size.width, 0), MAX(heightCollection, 0));
 }
 
 - (void)updateFlexiableCellSizeForRotate
@@ -282,12 +285,13 @@ static NSInteger heightCollection = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    if (_orignalRect.size.width > 0) {
-      self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, _orignalRect.size.width, _orignalRect.size.height);
-    }else
-        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
+    if (!CGRectIsEmpty(_orignalRect)) {
+        self.view.frame = _orignalRect;
+    }else{
+        _orignalRect = self.view.frame;
+    }
     
-    heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
+    heightCollection = MAX(self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY, 0);
     [self updateFixedMargin];
     
      UIColor * colorWhite = [TQLCollectionViewCellBase tq_WhiteColor:[UIColor whiteColor]];
@@ -412,6 +416,9 @@ static NSInteger heightCollection = 0;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    if (_flexCellSize.width < 0 || _flexCellSize.height < 0) {
+        return _collection.bounds.size;
+    }
     return _flexCellSize;
 }
 
