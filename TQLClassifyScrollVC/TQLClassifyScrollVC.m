@@ -12,7 +12,7 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 NSString * const TQLCS_ReceiveMemoryWarningNotification = @"TQLCS_ReceiveMemoryWarningNotification";
 
 static NSInteger heightCollection = 0;
-@interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate>
+@interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate,UIContentContainer>
 @property (nonatomic, strong) UICollectionView * collection;
 @property (nonatomic, strong) TQLSwitchViewTool * switchViewTool;
 @property (nonatomic, strong) NSArray * arrayItem;
@@ -49,8 +49,6 @@ static NSInteger heightCollection = 0;
 /*page cell 左右的绝对间距*/
 @property (nonatomic) CGFloat leftAndRightFixedForSlideCell;
 
-/** viewdidload 是否执行过 */
-@property (nonatomic, assign) BOOL viewMethodLoaded;
 
 @end
 
@@ -81,6 +79,13 @@ static NSInteger heightCollection = 0;
     }
     if (self.viewDidAppearBlock) {
         self.viewDidAppearBlock();
+    }
+    
+    //修正，其他页面的旋转
+    if (self.flexCellSize.width > 0 && self.flexCellSize.width != self.collection.bounds.size.width) {
+        CGFloat heightCell = MAX(0, TQLScreenBound().height - _topAndBottomFixedForSlideCell);
+        _flexCellSize = CGSizeMake(self.collection.bounds.size.width, heightCell);
+        [self.collection reloadData];
     }
 }
 
@@ -147,16 +152,10 @@ static NSInteger heightCollection = 0;
         _currentSwitchBtnIndex = 1;
         _enableScollForSwitchClick = NO;
         _enableRotate = NO;
-        _viewMethodLoaded = NO;
-        
-        if (!CGRectIsEmpty(frame)) {
-            _orignalRect = frame;
-        }
-        
+        _orignalRect = frame;
         _memoryAutoClear = YES;
         
         _enableRotate = NO;
-        NSString * device = [UIDevice currentDevice].model;
         if ([[self class] currentDeviceIsIpad_tq]) {
             _enableRotate = YES;
         }
@@ -186,20 +185,16 @@ static NSInteger heightCollection = 0;
     _bottomMargin = bottomMargin;
 }
 
-- (void)reSetOrignalRect:(CGRect)orignalRect{
-    if (_viewMethodLoaded) {
-        if (!CGRectIsEmpty(_orignalRect)) {
-            self.view.frame = _orignalRect;
-        }else{
-            return;
-        }
-        _orignalRect = orignalRect;
-        heightCollection = MAX(_orignalRect.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY, 0);
-        [self updateFixedMargin];
-        [self.collection reloadData];
-    }else{
-        _orignalRect = orignalRect;
-    }
+- (void)setOrignalRect:(CGRect)orignalRect{
+    _orignalRect = orignalRect;
+    if (_orignalRect.size.width > 0) {
+        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, _orignalRect.size.width, _orignalRect.size.height);
+    }else
+        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
+    
+    heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
+    [self updateFixedMargin];
+    [self.collection reloadData];
 }
 
 - (void)updateFixedMargin
@@ -207,31 +202,14 @@ static NSInteger heightCollection = 0;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     _topAndBottomFixedForSlideCell = screenSize.height- heightCollection;
     _leftAndRightFixedForSlideCell = screenSize.width - self.orignalRect.size.width;
-    _flexCellSize = CGSizeMake(MAX(self.orignalRect.size.width, 0), MAX(heightCollection, 0));
+    CGFloat width = MIN(self.orignalRect.size.width, [UIApplication sharedApplication].keyWindow.frame.size.width);
+    _flexCellSize = CGSizeMake(width, heightCollection);
 }
 
-- (void)updateFlexiableCellSizeForRotate
-{
-    CGFloat widthCell = 0;
-    CGFloat heightCell = 0;
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    CGFloat widthSc = 0;
-    CGFloat heightSc = 0;
-    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
-    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
-        widthSc = MAX(screenSize.width, screenSize.height);
-        heightSc = MIN(screenSize.width, screenSize.height);
-    }else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
-        widthSc = MIN(screenSize.width, screenSize.height);
-        heightSc = MAX(screenSize.width, screenSize.height);
-    }else {
-        return;
-    }
-    widthCell = MAX(0, widthSc - _leftAndRightFixedForSlideCell);
-    heightCell = MAX(0, heightSc - _topAndBottomFixedForSlideCell);
-    _flexCellSize = CGSizeMake(widthCell, heightCell);
-    [self.collection reloadData];
-}
+//- (void)updateFlexiableCellSizeForRotate
+//{
+//
+//}
 
 - (void)updateItemArray:(NSArray *)array
 {
@@ -293,14 +271,12 @@ static NSInteger heightCollection = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    _viewMethodLoaded = YES;
-    if (!CGRectIsEmpty(_orignalRect)) {
-        self.view.frame = _orignalRect;
-    }else{
-        _orignalRect = self.view.frame;
-    }
+    if (_orignalRect.size.width > 0) {
+      self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, _orignalRect.size.width, _orignalRect.size.height);
+    }else
+        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
     
-    heightCollection = MAX(self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY, 0);
+    heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
     [self updateFixedMargin];
     
      UIColor * colorWhite = [TQLCollectionViewCellBase tq_WhiteColor:[UIColor whiteColor]];
@@ -391,7 +367,7 @@ static NSInteger heightCollection = 0;
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLayoutCollectionView:) name:UIDeviceOrientationDidChangeNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLayoutCollectionView:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
     if (_currentSwitchBtnIndex > 1) {
         self.switchViewTool.currentIndex = self.currentSwitchBtnIndex;
@@ -405,19 +381,27 @@ static NSInteger heightCollection = 0;
 }
 
 -(void)reLayoutCollectionView:(NSNotification *)notification {
-    if (_enableRotate) {
-        [self updateFlexiableCellSizeForRotate];
-    }
+//    if (_enableRotate) {
+//        [self updateFlexiableCellSizeForRotate];
+//    }
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator API_AVAILABLE(ios(8.0))
 {
     [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    CGFloat _offsetX = size.width * (_currentSwitchBtnIndex - 1);
-    _offsetX = MAX(0, _offsetX);
-    _offsetX = MIN(_collection.contentSize.width, _offsetX);
-    CGFloat _offsetY = _collection.contentOffset.y;
-    self.collection.contentOffset = CGPointMake(_offsetX, _offsetY);
+    
+    if (self.enableRotate) {
+        CGFloat _offsetX = size.width * (_currentSwitchBtnIndex - 1);
+        _offsetX = MAX(0, _offsetX);
+        _offsetX = MIN(_collection.contentSize.width, _offsetX);
+        CGFloat _offsetY = _collection.contentOffset.y;
+        self.collection.contentOffset = CGPointMake(_offsetX, _offsetY);
+        
+        CGFloat heightCell = MAX(0, TQLScreenBound().height - _topAndBottomFixedForSlideCell);
+        _flexCellSize = CGSizeMake(size.width, heightCell);
+        [self.collection reloadData];
+    }
+    
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -425,9 +409,6 @@ static NSInteger heightCollection = 0;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    if (_flexCellSize.width < 0 || _flexCellSize.height < 0) {
-        return _collection.bounds.size;
-    }
     return _flexCellSize;
 }
 
@@ -588,6 +569,7 @@ static NSInteger heightCollection = 0;
  
 }
 
+ 
 /*
 #pragma mark - Navigation
 

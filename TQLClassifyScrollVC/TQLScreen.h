@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
- static CGSize TQLScreenBound()
+
+static inline CGSize TQLScreenBound()
 {
     CGFloat widthCell = 0;
     CGFloat heightCell = 0;
@@ -26,3 +27,40 @@
     }
     return CGSizeMake(widthSc,heightSc);
 }
+
+
+ static inline CGSize TQLCurrentVCBound()
+{
+    CGFloat widthCell = 0;
+    CGFloat heightCell = 0;
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    CGSize windowSize = [UIApplication sharedApplication].keyWindow.bounds.size;
+    if ((screenSize.height == windowSize.height && screenSize.width == windowSize.width) || (screenSize.width == windowSize.height && screenSize.height == windowSize.width)) {
+        return CGSizeMake(TQLScreenBound().width, TQLScreenBound().height);
+    }else{
+        if (screenSize.height == windowSize.height) {//方向相同
+            widthCell = screenSize.width;
+            heightCell = screenSize.height;
+        }else if (screenSize.height == windowSize.width) {//方向不同
+            widthCell = screenSize.width;
+            heightCell = screenSize.height;
+        }
+        
+        CGFloat widthSc = 0;
+        CGFloat heightSc = 0;
+        UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+        if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight) {
+            widthSc = windowSize.width;
+            heightSc = MIN(screenSize.width, screenSize.height);
+        }else if (orientation == UIDeviceOrientationPortrait || orientation == UIDeviceOrientationPortraitUpsideDown) {
+            widthSc = windowSize.width;
+            heightSc = MAX(screenSize.width, screenSize.height);
+        }else {
+            return windowSize;
+        }
+        return CGSizeMake(widthSc,heightSc);
+    }
+}
+
+
+
