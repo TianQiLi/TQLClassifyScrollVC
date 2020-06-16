@@ -82,7 +82,7 @@ static NSInteger heightCollection = 0;
     }
     
     //修正，其他页面的旋转
-    if (self.flexCellSize.width > 0 && self.flexCellSize.width != self.collection.bounds.size.width) {
+    if (self.enableRotate && self.flexCellSize.width > 0 && self.flexCellSize.width != self.collection.bounds.size.width) {
         CGFloat heightCell = MAX(0, TQLScreenBound().height - _topAndBottomFixedForSlideCell);
         _flexCellSize = CGSizeMake(self.collection.bounds.size.width, heightCell);
         [self.collection reloadData];
