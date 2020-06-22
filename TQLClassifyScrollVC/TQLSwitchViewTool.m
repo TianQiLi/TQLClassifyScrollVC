@@ -105,7 +105,7 @@
     [self clearSubView];
     _arrayItem = arrayItem ? arrayItem : @[];
     
-    NSMutableArray * results = @{}.mutableCopy;
+    NSMutableArray * results = @[].mutableCopy;
     NSInteger maxLength = self.switchViewStyle.maxItemNameLength;
     if (maxLength > 0) {
         [_arrayItem enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL * _Nonnull stop) {
