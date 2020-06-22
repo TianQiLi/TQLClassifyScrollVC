@@ -17,7 +17,6 @@
 #import "TQLRedBadgeBttton.h"
 #import <Masonry/Masonry.h>
 #import "TQLProtocolHeader.h"
-#import "TQLScreen.h"
 
 
 #define TQLClassifyScrollBundle_Name @"TQLClassifyScroll.bundle"

@@ -9,8 +9,9 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
-    TQLSwitchViewWidthStyleScreen = 0,//屏幕宽度
-    TQLSwitchViewWidthStyleFlexible = 1//自由:根据文字长度长度自动计算的
+    TQLSwitchViewWidthStyleScreen = 0,          //屏幕宽度
+    TQLSwitchViewWidthStyleFlexible = 1,        //自由:根据文字长度长度自动计算的
+    TQLSwitchViewWidthStyleFixedButtonWidth = 2 //固定按钮宽度
 };
 
 
@@ -19,6 +20,9 @@ typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
 /** font */
 @property (nonatomic, strong,readonly) UIFont *selectedBtn_Font;
 @property (nonatomic, strong,readonly) UIFont *normalBtn_Font;
+/*文字最大长度-默认0 不处理 */
+@property (nonatomic, assign) NSInteger maxItemNameLength;
+
 /*option */
 @property (nonatomic, strong) UIColor *colorNormal;
 /*option */
@@ -54,6 +58,9 @@ typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
 @property (nonatomic, assign) UIEdgeInsets scrollViewItemEdge;//TQLSwitchViewWidthStyleFlexible 时有效
 /* 默认值5：元素间距*/
 @property (nonatomic, assign) NSInteger scrollViewItemInterMargin;//TQLSwitchViewWidthStyleFlexible 时有效
+
+@property (nonatomic, assign) NSInteger buttonItemWidth;//TQLSwitchViewWidthStyleFlexible 时有效
+
 /** super scrollView maxOffsetY  */
 @property (nonatomic, assign) NSInteger maxOffsetY;
 

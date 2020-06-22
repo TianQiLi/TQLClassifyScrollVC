@@ -12,7 +12,7 @@ NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 NSString * const TQLCS_ReceiveMemoryWarningNotification = @"TQLCS_ReceiveMemoryWarningNotification";
 
 static NSInteger heightCollection = 0;
-@interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate,UIContentContainer>
+@interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate>
 @property (nonatomic, strong) UICollectionView * collection;
 @property (nonatomic, strong) TQLSwitchViewTool * switchViewTool;
 @property (nonatomic, strong) NSArray * arrayItem;
@@ -25,7 +25,7 @@ static NSInteger heightCollection = 0;
 
 
 @property (nonatomic, assign) NSInteger currentSwitchBtnIndex;//1...n
-
+@property (nonatomic) CGRect orignalRect;
 
 
 /*selfBGStyle-option*/
@@ -41,13 +41,6 @@ static NSInteger heightCollection = 0;
 /** tap */
 @property (nonatomic, strong) UITapGestureRecognizer *tagG;
 
-#pragma mark  frame 处理
-@property (nonatomic) CGRect orignalRect;
-@property (nonatomic) CGSize flexCellSize;
-/*page cell 上下的绝对间距*/
-@property (nonatomic) CGFloat topAndBottomFixedForSlideCell;
-/*page cell 左右的绝对间距*/
-@property (nonatomic) CGFloat leftAndRightFixedForSlideCell;
 
 
 @end
@@ -79,13 +72,6 @@ static NSInteger heightCollection = 0;
     }
     if (self.viewDidAppearBlock) {
         self.viewDidAppearBlock();
-    }
-    
-    //修正，其他页面的旋转
-    if (self.enableRotate && self.flexCellSize.width > 0 && self.flexCellSize.width != self.collection.bounds.size.width) {
-        CGFloat heightCell = MAX(0, TQLScreenBound().height - _topAndBottomFixedForSlideCell);
-        _flexCellSize = CGSizeMake(self.collection.bounds.size.width, heightCell);
-        [self.collection reloadData];
     }
 }
 
@@ -154,24 +140,8 @@ static NSInteger heightCollection = 0;
         _enableRotate = NO;
         _orignalRect = frame;
         _memoryAutoClear = YES;
-        
-        _enableRotate = NO;
-        if ([[self class] currentDeviceIsIpad_tq]) {
-            _enableRotate = YES;
-        }
     }
     return  self;
-}
-
-+ (BOOL)currentDeviceIsIpad_tq
-{
-    // 仅考虑iPhone/iPod或iPad
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        return YES;
- 
-    } else {
-        return NO;
-    }
 }
 
 - (TQLSwitchViewStyleModel *)switchViewStyle{
@@ -193,23 +163,8 @@ static NSInteger heightCollection = 0;
         self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
     
     heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
-    [self updateFixedMargin];
     [self.collection reloadData];
 }
-
-- (void)updateFixedMargin
-{
-    CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    _topAndBottomFixedForSlideCell = screenSize.height- heightCollection;
-    _leftAndRightFixedForSlideCell = screenSize.width - self.orignalRect.size.width;
-    CGFloat width = MIN(self.orignalRect.size.width, [UIApplication sharedApplication].keyWindow.frame.size.width);
-    _flexCellSize = CGSizeMake(width, heightCollection);
-}
-
-//- (void)updateFlexiableCellSizeForRotate
-//{
-//
-//}
 
 - (void)updateItemArray:(NSArray *)array
 {
@@ -242,9 +197,7 @@ static NSInteger heightCollection = 0;
     } completion:^(BOOL finished) {
         self.switchViewTool.transform = CGAffineTransformIdentity;
         self.collection.transform = CGAffineTransformIdentity;
-        [self removeFromParentViewController];
         [self.view removeFromSuperview];
-        [self didMoveToParentViewController:nil];
         if (block) {
             block();
         }
@@ -277,8 +230,6 @@ static NSInteger heightCollection = 0;
         self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
     
     heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
-    [self updateFixedMargin];
-    
      UIColor * colorWhite = [TQLCollectionViewCellBase tq_WhiteColor:[UIColor whiteColor]];
     if (self.switchViewStyle.switchViewY > 0) {
         _maskView = [[UIView alloc] initWithFrame:self.view.bounds];
@@ -367,7 +318,7 @@ static NSInteger heightCollection = 0;
     [self.view setNeedsLayout];
     [self.view layoutIfNeeded];
     
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLayoutCollectionView:) name:UIDeviceOrientationDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reLayoutCollectionView:) name:UIDeviceOrientationDidChangeNotification object:nil];
     
     if (_currentSwitchBtnIndex > 1) {
         self.switchViewTool.currentIndex = self.currentSwitchBtnIndex;
@@ -381,27 +332,9 @@ static NSInteger heightCollection = 0;
 }
 
 -(void)reLayoutCollectionView:(NSNotification *)notification {
-//    if (_enableRotate) {
-//        [self updateFlexiableCellSizeForRotate];
-//    }
-}
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator API_AVAILABLE(ios(8.0))
-{
-    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
-    
-    if (self.enableRotate) {
-        CGFloat _offsetX = size.width * (_currentSwitchBtnIndex - 1);
-        _offsetX = MAX(0, _offsetX);
-        _offsetX = MIN(_collection.contentSize.width, _offsetX);
-        CGFloat _offsetY = _collection.contentOffset.y;
-        self.collection.contentOffset = CGPointMake(_offsetX, _offsetY);
-        
-        CGFloat heightCell = MAX(0, TQLScreenBound().height - _topAndBottomFixedForSlideCell);
-        _flexCellSize = CGSizeMake(size.width, heightCell);
+    if (_enableRotate) {
         [self.collection reloadData];
     }
-    
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
@@ -409,7 +342,12 @@ static NSInteger heightCollection = 0;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
-    return _flexCellSize;
+//    return CGSizeMake(_collection.frame.size.width,heightCollection);
+    return CGSizeMake(_collection.frame.size.width,_collection.frame.size.height);
+//    if (_orignalRect.size.height) {
+//        return CGSizeMake(_orignalRect.size.width, _orignalRect.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY);
+//    }
+//    return CGSizeMake(_collection.frame.size.width, _collection.frame.size.height);
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -421,10 +359,10 @@ static NSInteger heightCollection = 0;
     }
 //    NSLog(@"cellForItem=%ld\n",indexPath.row);
     TQLViewContorller * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
-    cell.currentVC = self;
     cell.configTQLVCBlock = self.configTQLVCBlock;
     [cell cellForItem:indexPath.row];
     cell.mjRefreshColor = self.mjRefreshColor;
+    cell.currentVC = self;
     cell.paraDic = self.paramaterDic;
     cell.dataForRowArray = self.dataForRowArray;
     cell.pageForIndex = self.pageForIndex;
@@ -569,7 +507,6 @@ static NSInteger heightCollection = 0;
  
 }
 
- 
 /*
 #pragma mark - Navigation
 
@@ -581,5 +518,3 @@ static NSInteger heightCollection = 0;
 */
 
 @end
-
-

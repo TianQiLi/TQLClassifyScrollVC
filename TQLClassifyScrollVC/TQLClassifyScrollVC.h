@@ -55,7 +55,7 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 @property (nonatomic, assign) BOOL memoryAutoClear;
 
 
-/** 监听屏幕旋转刷新:iphone默认为NO, ipad 默认是YES */
+/** 监听屏幕旋转刷新:默认为NO */
 @property (nonatomic, assign) BOOL enableRotate;
 @property (nonatomic, copy) void(^blockForDealloc)();
 

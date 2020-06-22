@@ -105,6 +105,20 @@
     [self clearSubView];
     _arrayItem = arrayItem ? arrayItem : @[];
     
+    NSMutableArray * results = @{}.mutableCopy;
+    NSInteger maxLength = self.switchViewStyle.maxItemNameLength;
+    if (maxLength > 0) {
+        [_arrayItem enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSString * sufix = nil;
+            if (name.length > maxLength) {
+                name = [name substringWithRange:NSMakeRange(0, MIN(name.length, maxLength))];
+                name = [name stringByAppendingString:@"..."];
+            }
+            [results addObject:name];
+        }];
+        _arrayItem = results.copy;
+    }
+
     [self loadSubView];
 }
 
@@ -128,7 +142,7 @@
     NSInteger countItem = self.arrayItem.count;
     NSInteger marginLeft = self.switchViewStyle.scrollViewItemEdge.left;
     NSInteger buttonHeight = self.scrollView.frame.size.height - self.switchViewStyle.itemOffset.y;
-    for (id obj in self.arrayItem) {
+    for (NSString *obj in self.arrayItem) {
         TQLRedBadgeBttton * button  = [TQLRedBadgeBttton buttonWithType:UIButtonTypeCustom];
         [button setTitle:obj forState:UIControlStateNormal];
         NSInteger textWidth = 0;
@@ -157,7 +171,24 @@
             }
             
             [button setFrame:CGRectMake(lastBtnx,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
-            lastBtnx = CGRectGetMinX(button.frame) + CGRectGetWidth(button.frame);
+            lastBtnx = CGRectGetMaxX(button.frame);
+        }else if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFixedButtonWidth) {
+              [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
+            if (self.switchViewStyle.buttonItemWidth) {
+                btnWidth = self.switchViewStyle.buttonItemWidth + self.switchViewStyle.scrollViewItemInterMargin;
+            }else{
+                btnWidth = obj.length * self.switchViewStyle.selectedBtn_Font.pointSize;
+            }
+            
+            [button setFrame:CGRectMake(lastBtnx,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
+            lastBtnx = CGRectGetMaxX(button.frame);
+            
+            if ((index + 1) == countItem){//last
+                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
+                NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
+                [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
+            }
+
         }else{
             [button setFrame:CGRectMake(marginLeft + index * btnWidth,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
             [button.titleLabel setTextAlignment:NSTextAlignmentCenter];//默认
@@ -257,7 +288,7 @@
             frame.origin.x = lastBtnx;
             frame.size.width = btnWidth;
             [button setFrame:frame];
-            lastBtnx = CGRectGetMinX(button.frame) + CGRectGetWidth(button.frame);
+            lastBtnx = CGRectGetMaxX(button.frame);
         }
         index ++;
     }
