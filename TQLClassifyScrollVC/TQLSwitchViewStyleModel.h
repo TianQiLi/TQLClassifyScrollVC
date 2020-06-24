@@ -9,8 +9,8 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
-    TQLSwitchViewWidthStyleScreen = 0,//屏幕宽度
-    TQLSwitchViewWidthStyleFlexible = 1//自由:根据文字长度长度自动计算的
+    TQLSwitchViewWidthStyleScreen = 0, //屏幕宽度
+    TQLSwitchViewWidthStyleFlexible = 1, //自由:根据文字长度长度自动计算的
     TQLSwitchViewWidthStyleFixedButtonWidth = 2 //固定按钮宽度
 };
 
