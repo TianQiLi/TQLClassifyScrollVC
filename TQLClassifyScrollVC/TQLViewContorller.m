@@ -134,7 +134,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
             
             //每次操作完成，要更新数组
             strongSelf.arrayData = arrayReslust.copy;
-            NSLog(@"write array to dic,数组个数Row=%ld,count=%ld\n",strongSelf.row,strongSelf.arrayData.count);
+            NSLog(@"write array to dic,数组个数Row=%ld,count=%ld\n",strongSelf.row,(long)strongSelf.arrayData.count);
             if (strongSelf.isTableViewContoller) {
                 [strongSelf.tableView reloadData];
             }else{
@@ -350,7 +350,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 }
 
 - (NSString *)keyForCurrentData{
-    return [NSString stringWithFormat:@"%ld",self.row];
+    return [NSString stringWithFormat:@"%zd",self.row];
 }
 
 - (BOOL)deleteObjFromArrayData:(NSInteger)index needReload:(BOOL)needReload
@@ -369,7 +369,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
          [self.dataForRowArray setObject:arrayReslust forKey:keyForData];
          //每次操作完成，要更新数组
          self.arrayData = arrayReslust.copy;
-         NSLog(@"write array to dic,数组个数Row=%ld,count=%ld\n",self.row,self.arrayData.count);
+         NSLog(@"write array to dic,数组个数Row=%zd,count=%ld\n",self.row,self.arrayData.count);
          if (!needReload) {
              return YES;
          }

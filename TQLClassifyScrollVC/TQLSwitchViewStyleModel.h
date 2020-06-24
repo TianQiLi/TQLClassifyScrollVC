@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
     TQLSwitchViewWidthStyleFixedButtonWidth = 2 //固定按钮宽度
 };
 
-
+NS_ASSUME_NONNULL_BEGIN
 @interface TQLSwitchViewStyleModel : NSObject
 /*switchButtonStyle-option*/
 /** font */
@@ -71,3 +71,5 @@ typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
 - (id)initSwitchButtonStyle:(UIColor *)colorNormal selectedColor:(UIColor *)colorSelected flagColor:(UIColor *)flagColor titleNormalBtnFont:(UIFont *)normalFontBtn selectedNormalBtnFont:(UIFont *)selectedFontBtn flagViewWidth:(CGSize)flagSize bottomLineColor:(UIColor *)bottomLineColor bottonLineHidden:(BOOL)hidden switchViewRect:(CGRect)switchViewRect;
 
 @end
+
+NS_ASSUME_NONNULL_END

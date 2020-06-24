@@ -17,6 +17,8 @@ typedef NS_ENUM(NSInteger, CCDataAPIStatusType) {
     
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface TQLCollectionViewCellBase (DZNEmptyDataSet)
 @property (nullable,nonatomic,strong) NSNumber* dataStatusType;//记录接口返回状态
 @property (nullable,nonatomic,strong) NSNumber* dataStatusNoData_text_fontSize;//字体大小
@@ -39,3 +41,5 @@ typedef NS_ENUM(NSInteger, CCDataAPIStatusType) {
 + (UIColor *)tq_ViewBgColor:(UIColor *)lightColor;
 + (UIColor *)tq_CellBgColor:(UIColor *)lightColor;
 @end
+
+NS_ASSUME_NONNULL_END

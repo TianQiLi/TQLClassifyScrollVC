@@ -109,7 +109,6 @@
     NSInteger maxLength = self.switchViewStyle.maxItemNameLength;
     if (maxLength > 0) {
         [_arrayItem enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL * _Nonnull stop) {
-            NSString * sufix = nil;
             if (name.length > maxLength) {
                 name = [name substringWithRange:NSMakeRange(0, MIN(name.length, maxLength))];
                 name = [name stringByAppendingString:@"..."];
