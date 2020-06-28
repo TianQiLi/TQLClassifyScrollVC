@@ -49,6 +49,8 @@ static NSInteger heightCollection = 0;
 /*page cell 左右的绝对间距*/
 @property (nonatomic) CGFloat leftAndRightFixedForSlideCell;
 
+/** viewdidload 是否执行过 */
+@property (nonatomic, assign) BOOL viewMethodLoaded;
 
 @end
 
@@ -152,10 +154,14 @@ static NSInteger heightCollection = 0;
         _currentSwitchBtnIndex = 1;
         _enableScollForSwitchClick = NO;
         _enableRotate = NO;
-        _orignalRect = frame;
+        if (!CGRectIsEmpty(frame)) {
+            _orignalRect = frame;
+        }
         _memoryAutoClear = YES;
         
         _enableRotate = NO;
+        _viewMethodLoaded = NO;
+        
         if ([[self class] currentDeviceIsIpad_tq]) {
             _enableRotate = YES;
         }
@@ -186,15 +192,19 @@ static NSInteger heightCollection = 0;
 }
 
 - (void)setOrignalRect:(CGRect)orignalRect{
-    _orignalRect = orignalRect;
-    if (_orignalRect.size.width > 0) {
-        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, _orignalRect.size.width, _orignalRect.size.height);
-    }else
-        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
-    
-    heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
-    [self updateFixedMargin];
-    [self.collection reloadData];
+    if (_viewMethodLoaded) {
+        if (!CGRectIsEmpty(_orignalRect)) {
+            self.view.frame = _orignalRect;
+        }else{
+            return;
+        }
+        _orignalRect = orignalRect;
+        heightCollection = MAX(_orignalRect.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY, 0);
+        [self updateFixedMargin];
+        [self.collection reloadData];
+    }else{
+        _orignalRect = orignalRect;
+    }
 }
 
 - (void)updateFixedMargin
@@ -206,10 +216,6 @@ static NSInteger heightCollection = 0;
     _flexCellSize = CGSizeMake(width, heightCollection);
 }
 
-//- (void)updateFlexiableCellSizeForRotate
-//{
-//
-//}
 
 - (void)updateItemArray:(NSArray *)array
 {
@@ -271,12 +277,14 @@ static NSInteger heightCollection = 0;
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    if (_orignalRect.size.width > 0) {
-      self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, _orignalRect.size.width, _orignalRect.size.height);
-    }else
-        self.view.frame = CGRectMake(_orignalRect.origin.x, _orignalRect.origin.y, self.view.frame.size.width, _orignalRect.size.height);
+     _viewMethodLoaded = YES;
+    if (!CGRectIsEmpty(_orignalRect)) {
+        self.view.frame = _orignalRect;
+    }else{
+        _orignalRect = self.view.frame;
+    }
     
-    heightCollection = self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY;
+    heightCollection = MAX(self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY ,0);
     [self updateFixedMargin];
     
      UIColor * colorWhite = [TQLCollectionViewCellBase tq_WhiteColor:[UIColor whiteColor]];
