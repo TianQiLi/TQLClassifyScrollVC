@@ -52,6 +52,9 @@ static NSInteger heightCollection = 0;
 /** viewdidload 是否执行过 */
 @property (nonatomic, assign) BOOL viewMethodLoaded;
 
+//滚动是点击触发，还是滑动触发
+@property (nonatomic, assign) BOOL scrollFromClickEvent;
+
 @end
 
 @implementation TQLClassifyScrollVC
@@ -462,6 +465,11 @@ static NSInteger heightCollection = 0;
     return 0;
 }
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+     _scrollFromClickEvent = NO;
+}
+
 - (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
     CGPoint point  = *targetContentOffset;
     NSIndexPath * indexPath = [self.collection indexPathForItemAtPoint:point];
@@ -470,6 +478,7 @@ static NSInteger heightCollection = 0;
     if (!indexPath) {
         row = point.x/scrollView.frame.size.width;
     }
+    _scrollFromClickEvent = NO;
     _currentSwitchBtnIndex = row + 1;
     self.switchViewTool.currentIndex = _currentSwitchBtnIndex;
 }
@@ -505,7 +514,7 @@ static NSInteger heightCollection = 0;
 #pragma mark --TQLSwitchViewToolDelegate
 - (void)clickButton:(NSInteger)index{
     TQLViewContorller * cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForRow:(_currentSwitchBtnIndex - 1) inSection:0]];
-    
+    _scrollFromClickEvent = YES;
     if (self.ClickItemEventBlock) {
         self.ClickItemEventBlock(index,_currentSwitchBtnIndex);
     }
@@ -575,6 +584,11 @@ static NSInteger heightCollection = 0;
         [self clickButton:_switchViewTool.currentIndex];
     }
  
+}
+
+- (BOOL)scrollFromClickEvent
+{
+    return _scrollFromClickEvent;
 }
 
  

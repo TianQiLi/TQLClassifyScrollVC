@@ -96,6 +96,9 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 
 - (NSInteger)currentSwitchBtnIndex;
 
+//滚动是否是按钮点击触发，否则是滑动触发
+- (BOOL)scrollFromClickEvent;
+
 /* remove view */
 - (void)removeFromSuperViewWithAnimation:(void(^)())block;
 /* 动画*/

@@ -65,8 +65,14 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     NSNumber * page = self.pageForIndex[@(row)];
     _page = page? [page integerValue] : _pageFirst;
     
+    if (self.currentVC && [self.currentVC scrollFromClickEvent] && (_row + 1 != self.currentSwitchBtnIndex)) {
+        NSLog(@"不需要刷新-非显示cell");
+        return;
+    }
+    
     _arrayData = [self.dataForRowArray objectForKey:[self keyForCurrentData]];
     if (_arrayData.count == 0) {
+        [self.currentScrollView.mj_header endRefreshing];
         [self.currentScrollView.mj_header beginRefreshing];
     }else{
         if (self.isTableViewContoller) {
