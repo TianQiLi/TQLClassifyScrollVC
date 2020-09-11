@@ -325,34 +325,34 @@
     
     if (isSelect) {
         //TODO: 调整button 的位置
-//        NSInteger currentOffsetx = self.scrollView.contentOffset.x;
-//        NSInteger absluteX = 0;
-//        if (button.center.x < self.scrollView.bounds.size.width/2) {
-//            absluteX = CGRectGetMinX(button.frame) - currentOffsetx;
-//        }else{
-//            absluteX = CGRectGetMaxX(button.frame) - currentOffsetx;
-//        }
-//        
-//        if (absluteX > self.scrollView.frame.size.width) {//偏右
-//            absluteX = absluteX - self.scrollView.frame.size.width + button.bounds.size.width;
-//            NSInteger offsetx = MIN(currentOffsetx + absluteX + CGRectGetWidth(button.frame), self.scrollView.contentSize.width - self.scrollView.frame.size.width);
-//            [self.scrollView setContentOffset:CGPointMake(offsetx ,0) animated:YES];
-//        }else if (absluteX < CGRectGetWidth(button.frame)){//偏左
-//            NSInteger offsetx = currentOffsetx + absluteX;
-//            offsetx = MAX(offsetx - CGRectGetWidth(button.frame), 0);
-//            [self.scrollView setContentOffset:CGPointMake(offsetx,0) animated:YES];
-//        }else if (_scrollView.contentOffset.x < 0){
-//            [self.scrollView setContentOffset:CGPointMake(0,0) animated:YES];
-//        }
+        NSInteger currentOffsetx = self.scrollView.contentOffset.x;
+        NSInteger absluteX = 0;
+        if (button.center.x < self.scrollView.bounds.size.width/2) {
+            absluteX = CGRectGetMinX(button.frame) - currentOffsetx;
+        }else{
+            absluteX = CGRectGetMaxX(button.frame) - currentOffsetx;
+        }
+        
+        if (absluteX > self.scrollView.frame.size.width) {//偏右
+            absluteX = absluteX - self.scrollView.frame.size.width + button.bounds.size.width;
+            NSInteger offsetx = MIN(currentOffsetx + absluteX + CGRectGetWidth(button.frame), self.scrollView.contentSize.width - self.scrollView.frame.size.width);
+            [self.scrollView setContentOffset:CGPointMake(offsetx ,0) animated:YES];
+        }else if (absluteX < CGRectGetWidth(button.frame)){//偏左
+            NSInteger offsetx = currentOffsetx + absluteX;
+            offsetx = MAX(offsetx - CGRectGetWidth(button.frame), 0);
+            [self.scrollView setContentOffset:CGPointMake(offsetx,0) animated:YES];
+        }else if (_scrollView.contentOffset.x < 0){
+            [self.scrollView setContentOffset:CGPointMake(0,0) animated:YES];
+        }
         //统一居中处理
-        CGFloat offsetX = button.center.x-self.scrollView.bounds.size.width*0.5;
-        if (offsetX<0) {
-            offsetX = 0;
-        }
-        if (offsetX>(self.scrollView.contentSize.width-self.scrollView.bounds.size.width)) {
-            offsetX = (self.scrollView.contentSize.width-self.scrollView.bounds.size.width);
-        }
-        [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];
+//        CGFloat offsetX = button.center.x-self.scrollView.bounds.size.width*0.5;
+//        if (offsetX<0) {
+//            offsetX = 0;
+//        }
+//        if (offsetX>(self.scrollView.contentSize.width-self.scrollView.bounds.size.width)) {
+//            offsetX = (self.scrollView.contentSize.width-self.scrollView.bounds.size.width);
+//        }
+//        [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];
         
         //end-居中
         
@@ -438,4 +438,5 @@
 //
 //
 //@end
+
 
