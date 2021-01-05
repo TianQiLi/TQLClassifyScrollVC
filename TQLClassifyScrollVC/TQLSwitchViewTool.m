@@ -333,9 +333,10 @@
             absluteX = CGRectGetMaxX(button.frame) - currentOffsetx;
         }
         
-        if (absluteX > self.scrollView.frame.size.width) {//偏右
-            absluteX = absluteX - self.scrollView.frame.size.width + button.bounds.size.width;
-            NSInteger offsetx = MIN(currentOffsetx + absluteX + CGRectGetWidth(button.frame), self.scrollView.contentSize.width - self.scrollView.frame.size.width);
+        if (absluteX > self.scrollView.frame.size.width-self.switchViewStyle.scrollViewItemEdge.right) {//偏右
+           //            absluteX = absluteX - self.scrollView.frame.size.width + button.bounds.size.width;
+//            NSInteger offsetx = MIN(currentOffsetx + absluteX + CGRectGetWidth(button.frame), self.scrollView.contentSize.width - self.scrollView.frame.size.width);
+            NSInteger offsetx = MIN(CGRectGetMinX(button.frame), self.scrollView.contentSize.width - self.scrollView.frame.size.width);
             [self.scrollView setContentOffset:CGPointMake(offsetx ,0) animated:YES];
         }else if (absluteX < CGRectGetWidth(button.frame)){//偏左
             NSInteger offsetx = currentOffsetx + absluteX;
