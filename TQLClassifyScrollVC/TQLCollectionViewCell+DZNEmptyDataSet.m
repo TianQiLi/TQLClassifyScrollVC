@@ -9,10 +9,10 @@
 #import <DZNEmptyDataSet/UIScrollView+EmptyDataSet.h>
 #import <objc/runtime.h>
 #import "TQLClassifyScrollVC_Header.h"
-static  NSString * const DefaultErrorText =@"加载失败,点击重新加载";
-static  NSString * const DefaultNodataText =@"没有内容~";
+static  NSString * const DefaultErrorText =@"网络不给力,点击屏幕刷新";
+static  NSString * const DefaultNodataText =@"暂无内容";
 
-static  NSString * const DefaultUnKnowndataText =@"加载中~";
+static  NSString * const DefaultUnKnowndataText =@"努力加载中...";
 
 
 static char const * const DataStatusTypeKey = "DataStatusType";
@@ -152,6 +152,8 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
     
 }
 
+
+
 + (UIColor *)tq_WhiteColor:(UIColor *)lightColor
 {
     return [[self class] tq_LightColor:lightColor DarkColor:[[self class] colorWithHexString:@"0x444444"]];
@@ -190,6 +192,11 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
     return dyColor;
 }
 
+
+- (UIView *)tq_loadingViewForEmpty
+{
+    return nil;
+}
 
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
 {
@@ -235,10 +242,11 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
         }
     }
     else if ([self.dataStatusType integerValue] == CCDataStatusNoKnown){
-        text = self.dataStatusUnknown_text;
-        if (!text || text.length == 0) {
-            text = DefaultUnKnowndataText;
-        }
+//        text = self.dataStatusUnknown_text;
+//        if (!text || text.length == 0) {
+//            text = DefaultUnKnowndataText;
+//        }
+        text = @"";
     }else if ([self.dataStatusType integerValue] == CCDataStatusOk || [self.dataStatusType integerValue] == CCDataStatusIncompleteData){
         text = @"";
     }
@@ -268,6 +276,15 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
     return 0;
 }
 
+- (UIView *)customViewForEmptyDataSet:(UIScrollView *)scrollView
+{
+    if ([self.dataStatusType integerValue] == CCDataStatusNoKnown) {
+        return [self tq_loadingViewForEmpty];
+    }
+    return nil;
+}
+
+
 - (CGFloat)spaceHeightForEmptyDataSet:(UIScrollView *)scrollView{
     if (self.spaceHeight) {
         return [self.spaceHeight floatValue];
@@ -293,8 +310,7 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
                             blue:b / 255.0f
                            alpha:1.0f];
 }
- 
-
 
 
 @end
+

@@ -1,6 +1,6 @@
 //
 //  TQLCollectionViewCell.m
-//  
+//
 //
 //  Created by litianqi on 2017/9/5.
 //  Copyright © 2017年 edu24ol. All rights reserved.
@@ -73,7 +73,8 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     _arrayData = [self.dataForRowArray objectForKey:[self keyForCurrentData]];
     if (_arrayData.count == 0) {
         [self.currentScrollView.mj_header endRefreshing];
-        [self.currentScrollView.mj_header beginRefreshing];
+//        [self.currentScrollView.mj_header beginRefreshing];
+        [self loadTopData];
     }else{
         if (self.isTableViewContoller) {
             [self.tableView reloadData];
@@ -192,7 +193,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
         [self.currentScrollView.mj_header endRefreshing];
         if (!array || array.count == 0) {
             self.currentScrollView.mj_footer.alpha = 0;
-        } 
+        }
         else{
             self.currentScrollView.mj_footer.alpha = 1;
         }
@@ -412,3 +413,4 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
  
 
 @end
+

@@ -40,6 +40,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIColor *)tq_WhiteColor:(UIColor *)lightColor;
 + (UIColor *)tq_ViewBgColor:(UIColor *)lightColor;
 + (UIColor *)tq_CellBgColor:(UIColor *)lightColor;
+
+- (UIView *)tq_loadingViewForEmpty;
 @end
 
 NS_ASSUME_NONNULL_END
+
