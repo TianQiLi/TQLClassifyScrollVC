@@ -72,18 +72,24 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     
     _arrayData = [self.dataForRowArray objectForKey:[self keyForCurrentData]];
     if (_arrayData.count == 0) {
+        [self viewWillAppear:_row];
         [self.currentScrollView.mj_header endRefreshing];
-//        [self.currentScrollView.mj_header beginRefreshing];
-        [self loadTopData];
+        if (self.currentVC.switchViewStyle.needFistRefresh) {
+            [self.currentScrollView.mj_header beginRefreshing];
+        }else{
+            [self loadTopData];
+        }
+     
     }else{
         if (self.isTableViewContoller) {
             [self.tableView reloadData];
         }else{
             [self.subCollectionView reloadData];
         }
+        [self viewWillAppear:_row];
     }
     
-    [self viewWillAppear:_row];
+//    [self viewWillAppear:_row];
 }
 
 

@@ -16,6 +16,8 @@ typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
 
 NS_ASSUME_NONNULL_BEGIN
 @interface TQLSwitchViewStyleModel : NSObject
+//是否需要首次有下拉刷新的效果， 默认YES,前提是配置了下拉刷新特性
+@property (nonatomic, assign) BOOL needFistRefresh;
 /*switchButtonStyle-option*/
 /** font */
 @property (nonatomic, strong,readonly) UIFont *selectedBtn_Font;

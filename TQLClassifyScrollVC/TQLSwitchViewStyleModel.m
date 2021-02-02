@@ -19,6 +19,7 @@
         _switchViewY = 0;
         _needSequenceStatus = NO;
         _scrollViewItemInterMargin = 5;
+        _needFistRefresh = YES;
     }
     return self;
 }
