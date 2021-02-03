@@ -70,6 +70,10 @@
     return _tableView;
 }
 
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 0;
+}
 
 - (BOOL)isTableViewContoller{
     if (_tableView) {
