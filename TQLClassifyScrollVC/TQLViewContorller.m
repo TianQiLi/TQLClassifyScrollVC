@@ -76,7 +76,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
         [self.currentScrollView.mj_header endRefreshing];
         if (self.currentVC.switchViewStyle.needFistRefresh) {
             [self.currentScrollView.mj_header beginRefreshing];
-        }else{
+        }else if(self.enableHeaderRefresh){
             [self loadTopData];
         }
      
