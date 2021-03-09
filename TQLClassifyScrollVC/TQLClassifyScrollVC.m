@@ -546,11 +546,18 @@ static NSInteger heightCollection = 0;
             row_now++;
         }
         if (self.enableScollForSwitchClick && self.justTwoScrollForSwitchClick) {
-            [_collection scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row_now inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+            
+            UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:row_now];
+            [_collection setContentOffset:attributes.frame.origin animated:NO];///fix:ios 14 不会滚动问题
+//            [_collection scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row_now inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         }
   
     }
-    [_collection scrollToItemAtIndexPath:indexPathTo atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:_enableScollForSwitchClick];
+   
+    UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:indexPathTo];
+        [_collection setContentOffset:attributes.frame.origin animated:_enableScollForSwitchClick];///fix:ios 14 不会滚动问题
+    
+//    [_collection scrollToItemAtIndexPath:indexPathTo atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:_enableScollForSwitchClick];///ios 14有问题，不会滚动
     [[NSNotificationCenter defaultCenter] postNotificationName:SwitchBttonClickNotification object:@(_currentSwitchBtnIndex)];
 }
 
