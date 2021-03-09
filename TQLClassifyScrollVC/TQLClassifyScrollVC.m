@@ -547,7 +547,7 @@ static NSInteger heightCollection = 0;
         }
         if (self.enableScollForSwitchClick && self.justTwoScrollForSwitchClick) {
             
-            UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:row_now];
+            UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForRow:row_now inSection:0]];
             [_collection setContentOffset:attributes.frame.origin animated:NO];///fix:ios 14 不会滚动问题
 //            [_collection scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row_now inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
         }
