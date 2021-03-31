@@ -1,12 +1,17 @@
-# 更新日志
+
+
+
+#### 更新日志
+0.0.29.10 解决tableview 被回调方法无意初始化问题
+
+
 0.0.29-dev 解决ios14 scrollToItemAtIndexPath 滚动无效问题
 NSIndexPath * indexPathNow = [NSIndexPath indexPathForRow:row_now inSection:0];
             UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:indexPathNow];
                      
             [_collection setContentOffset:attributes.frame.origin animated:NO];///fix:ios 14 不会滚动问题
 
-
-# 更新日志
+ 
 0.0.20 支持屏幕旋转适配
 
 
