@@ -1,11 +1,11 @@
 
-##### 更新日志
+#### 更新日志
 0.0.29.11 分类视图控件做ipad 全屏适配
 
-##### 更新日志
+#### 更新日志
 0.0.29.10 解决tableview 被回调方法无意初始化问题
 
-##### 更新日志
+#### 更新日志
 0.0.29-dev 解决ios14 scrollToItemAtIndexPath 滚动无效问题
 NSIndexPath * indexPathNow = [NSIndexPath indexPathForRow:row_now inSection:0];
             UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:indexPathNow];
@@ -20,7 +20,7 @@ NSIndexPath * indexPathNow = [NSIndexPath indexPathForRow:row_now inSection:0];
  
 
 
-##### TQLClassifyScrollVCDemo
+#### TQLClassifyScrollVCDemo
 1. 支持多个控制器的滚动切换，采用了collection作为容器提供左右交互需要
 2. 重写TQLViewContorller 实现需要的控制器页面
    2.1  viewDidLoad 方法用于加载自定义的view 
@@ -46,16 +46,14 @@ NSIndexPath * indexPathNow = [NSIndexPath indexPathForRow:row_now inSection:0];
     
 }
 
-##### pod 依赖
+
+#### pod 依赖
   pod 'TQLClassifyScrollVC'
-##### 当前更新到0.0.29.11 版本
+#### 当前更新到0.0.29.11 版本
 
 
 
-
-
-
-##### demo:
+#### demo:
  
  
  NSInteger height = kScreen_Height - StatusBarAndNavgationBarHeight;
