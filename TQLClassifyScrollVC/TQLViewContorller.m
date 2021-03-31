@@ -82,11 +82,14 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
         }
      
     }else{
-        if (self.isTableViewContoller) {
-            [self.tableView reloadData];
-        }else{
-            [self.subCollectionView reloadData];
+        if (self.currentScrollView) {
+            if (self.isTableViewContoller) {
+                [self.tableView reloadData];
+            }else{
+                [self.subCollectionView reloadData];
+            }
         }
+       
         [self viewWillAppear:_row];
     }
     
@@ -149,13 +152,13 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
             //每次操作完成，要更新数组
             strongSelf.arrayData = arrayReslust.copy;
             NSLog(@"write array to dic,数组个数Row=%ld,count=%ld\n",strongSelf.row,(long)strongSelf.arrayData.count);
-            if (strongSelf.isTableViewContoller) {
-                [strongSelf.tableView reloadData];
-            }else{
-                [strongSelf.subCollectionView reloadData];
+            if (self.currentScrollView) {
+                if (strongSelf.isTableViewContoller) {
+                    [strongSelf.tableView reloadData];
+                }else{
+                    [strongSelf.subCollectionView reloadData];
+                }
             }
-            
-           
         };
         
     }
@@ -171,7 +174,10 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
             [strongSelf setEndRefresh:nil];
             if (strongSelf.arrayData.count == 0) {
                 strongSelf.dataStatusType = @(CCDataStatusNoData);
-                [strongSelf.tableView reloadData];
+                if (strongSelf.isTableViewContoller) {
+                    [strongSelf.tableView reloadData];
+                }
+                
             }
             else
                 strongSelf.dataStatusType = @(CCDataStatusIncompleteData);
@@ -420,4 +426,5 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
  
 
 @end
+
 
