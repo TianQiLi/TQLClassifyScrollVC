@@ -410,6 +410,7 @@ static NSInteger heightCollection = 0;
         
         CGFloat heightCell = MAX(0, TQLScreenBound().height - _topAndBottomFixedForSlideCell);
         _flexCellSize = CGSizeMake(size.width, heightCell);
+        [self.switchViewTool updateButtonFrameAfterRotate];
         [self.collection reloadData];
     }
     

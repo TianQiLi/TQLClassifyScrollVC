@@ -7,6 +7,8 @@
 //
 
 #import "TQLSwitchViewTool.h"
+#import "TQLScreen.h"
+
 //#import "TQLSwitchViewStyleModel.h"
 #import <Masonry/Masonry.h>
 @interface TQLSwitchViewTool (){
@@ -133,6 +135,63 @@
     }
 }
 
+- (void)updateButtonFrameAfterRotate
+{
+    //仅考虑ipad的横竖屏切换
+    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+        return;
+    }
+
+    if (self.switchViewStyle.scrollViewWidthStyle != TQLSwitchViewWidthStyleScreen) {
+        return;
+    }
+    
+    //只有根据屏幕宽度适配的才需要更新
+    NSInteger btnWidth = (TQLScreenBound().width - self.switchViewStyle.scrollViewItemEdge.left - self.switchViewStyle.scrollViewItemEdge.right) / self.arrayItem.count;
+    NSInteger index = 0;
+    NSInteger lastBtnx = self.switchViewStyle.scrollViewItemEdge.left;
+    NSInteger countItem = self.arrayItem.count;
+    NSInteger marginLeft = self.switchViewStyle.scrollViewItemEdge.left;
+    NSInteger buttonHeight = self.scrollView.frame.size.height - self.switchViewStyle.itemOffset.y;
+    
+    for (TQLRedBadgeBttton *button in self.buttonItemArray) {
+        [button setFrame:CGRectMake(marginLeft + index * btnWidth,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
+        index++;
+    }
+
+    //更新flagline的位置
+    index = self.currentIndex - 1;
+    if (index < 0 || index >= self.buttonItemArray.count) {
+        index = 0;
+    }
+    
+    UIButton *button = self.buttonItemArray[index];
+    [self updateFlagLineFrame:button];
+}
+
+- (void)updateFlagLineFrame:(UIButton *)button
+{
+    NSInteger btnTextWidth = button.titleLabel.text.length * self.switchViewStyle.selectedBtn_Font.pointSize;
+    CGRect frameFlag = self.flagLine.frame;
+    frameFlag.size.width = self.switchViewStyle.flagSize.width ? self.switchViewStyle.flagSize.width : btnTextWidth ;
+    frameFlag.size.height = self.switchViewStyle.flagSize.height ? self.switchViewStyle.flagSize.height : 2 ;
+    
+    if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
+        self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
+    }
+    else if(button.titleLabel.textAlignment == NSTextAlignmentLeft) {
+        NSInteger centerX = button.center.x;
+        if (centerX == 0) {
+            centerX = button.frame.origin.x + button.frame.size.width/2;
+        }
+        self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
+    }
+    else {
+        NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
+        self.flagLine.center = CGPointMake(button.frame.origin.x + button.frame.size.width - offsetx ,self.flagLine.center.y);
+    }
+}
+
 -(void)loadSubView{
     NSInteger btnWidth = (self.frame.size.width - self.switchViewStyle.scrollViewItemEdge.left - self.switchViewStyle.scrollViewItemEdge.right) / self.arrayItem.count;
     NSInteger index = 0;
@@ -196,28 +255,28 @@
         if (index == 0) {
             [button setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateNormal];
             [button.titleLabel setFont:self.switchViewStyle.selectedBtn_Font];
-            NSInteger btnTextWidth = button.titleLabel.text.length * self.switchViewStyle.selectedBtn_Font.pointSize;
-            
-            CGRect frameFlag = self.flagLine.frame;
-            frameFlag.size.width = self.switchViewStyle.flagSize.width ? self.switchViewStyle.flagSize.width : btnTextWidth ;
-            frameFlag.size.height = self.switchViewStyle.flagSize.height ? self.switchViewStyle.flagSize.height : 2 ;
-            
-            if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
-                self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
-            }else if(button.titleLabel.textAlignment == NSTextAlignmentLeft){
-                //                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame) - self.switchViewStyle.scrollViewItemInterMargin/2 ,self.flagLine.center.y);
-                //                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
-                NSInteger centerX = button.center.x;
-                if (centerX == 0) {
-                    centerX = button.frame.origin.x + button.frame.size.width/2;
-                }
-                
-                self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
-            }else{
-                NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
-                self.flagLine.center = CGPointMake(button.frame.origin.x + button.frame.size.width - offsetx ,self.flagLine.center.y);
-            }
-            
+            [self updateFlagLineFrame:button];
+//            NSInteger btnTextWidth = button.titleLabel.text.length * self.switchViewStyle.selectedBtn_Font.pointSize;
+//
+//            CGRect frameFlag = self.flagLine.frame;
+//            frameFlag.size.width = self.switchViewStyle.flagSize.width ? self.switchViewStyle.flagSize.width : btnTextWidth ;
+//            frameFlag.size.height = self.switchViewStyle.flagSize.height ? self.switchViewStyle.flagSize.height : 2 ;
+//
+//            if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
+//                self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
+//            }else if(button.titleLabel.textAlignment == NSTextAlignmentLeft){
+//                //                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame) - self.switchViewStyle.scrollViewItemInterMargin/2 ,self.flagLine.center.y);
+//                //                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
+//                NSInteger centerX = button.center.x;
+//                if (centerX == 0) {
+//                    centerX = button.frame.origin.x + button.frame.size.width/2;
+//                }
+//
+//                self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
+//            }else{
+//                NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
+//                self.flagLine.center = CGPointMake(button.frame.origin.x + button.frame.size.width - offsetx ,self.flagLine.center.y);
+//            }
         }
         else{
             [button setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];

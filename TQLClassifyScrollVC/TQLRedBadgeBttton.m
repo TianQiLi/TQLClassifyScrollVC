@@ -63,7 +63,7 @@
 
 - (void)setRedNum:(NSInteger)redNum{
     _redNum = redNum;
-    if (redNum == 0) {
+    if (redNum <= 0) {
         _lableNum.hidden = YES;
     }else
         _lableNum.hidden = NO;
