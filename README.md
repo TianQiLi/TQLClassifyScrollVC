@@ -46,16 +46,16 @@ NSIndexPath * indexPathNow = [NSIndexPath indexPathForRow:row_now inSection:0];
     
 }
 
-# pod 依赖
+##### pod 依赖
   pod 'TQLClassifyScrollVC'
-### 当前更新到0.0.9 版本
+##### 当前更新到0.0.29.11 版本
 
 
 
 
 
 
-# demo:
+##### demo:
  
  
  NSInteger height = kScreen_Height - StatusBarAndNavgationBarHeight;
