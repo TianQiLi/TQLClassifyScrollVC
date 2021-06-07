@@ -12,6 +12,29 @@
 typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index);//index:1...n
 
 
+typedef NS_ENUM(NSInteger,TQLSwitchImgAlignment)
+{
+    TQLSwitchImgAlignmentVerticalTop,
+    TQLSwitchImgAlignmentVerticalBottom,
+    TQLSwitchImgAlignmentHorizontalLeft,
+    TQLSwitchImgAlignmentHorizontalRight,
+    TQLSwitchImgAlignmentCenter
+    
+};
+
+@protocol TQLSwitchViewItemProtocal <NSObject>
+- (NSString *)itemName;
+- (UIImage *)itemImgNormal;
+- (UIImage *)itemImgSelected;
+- (CGSize)itemImgSelectedSize;
+- (CGSize)itemImgNormalSize;
+///图片距离问题的间距
+- (CGFloat)marginTitleForImg;
+
+- (TQLSwitchImgAlignment)itemImgAlinmgent;
+
+@end
+
 //@class TQLSwitchViewStyleModel;
 
 @protocol TQLSwitchViewToolDelegate <NSObject>
@@ -20,7 +43,7 @@ typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index
 @end
 
 @interface TQLSwitchViewTool : UIView
-@property (nonatomic, strong)NSArray * arrayItem;
+@property (nonatomic, copy)NSArray<id<TQLSwitchViewItemProtocal>> * arrayItem;
 @property (nonatomic, assign)NSInteger currentIndex;//默认1: 1...n
 @property (weak ,nonatomic) id<TQLSwitchViewToolDelegate>delegate;
 /** 是否需要圆角 */

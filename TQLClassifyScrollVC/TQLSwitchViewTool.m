@@ -110,12 +110,23 @@
     NSMutableArray * results = @[].mutableCopy;
     NSInteger maxLength = self.switchViewStyle.maxItemNameLength;
     if (maxLength > 0) {
-        [_arrayItem enumerateObjectsUsingBlock:^(NSString *name, NSUInteger idx, BOOL * _Nonnull stop) {
+        [_arrayItem enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL * _Nonnull stop) {
+           
+            NSString * name = @"";
+            if (![obj isKindOfClass:[NSString class]] && [obj respondsToSelector:@selector(itemName)]) {
+                name = [obj itemName];
+            }else if([obj isKindOfClass:[NSString class]]){
+                name =  obj;
+            }
+            
             if (name.length > maxLength) {
                 name = [name substringWithRange:NSMakeRange(0, MIN(name.length, maxLength))];
                 name = [name stringByAppendingString:@"..."];
             }
-            [results addObject:name];
+            if (name.length > 0) {
+                [results addObject:name];
+            }
+            
         }];
         _arrayItem = results.copy;
     }
@@ -192,6 +203,74 @@
     }
 }
 
++ (BOOL)isVertical:(TQLSwitchImgAlignment)type
+{
+    BOOL isVertical = NO;
+    switch (type) {
+        case TQLSwitchImgAlignmentVerticalTop:
+        case TQLSwitchImgAlignmentVerticalBottom:{
+            isVertical = YES;
+            break;
+        }
+        default:
+            break;
+    }
+    return isVertical;
+}
+
++ (CGFloat)getImgWidth:(id<TQLSwitchViewItemProtocal>)obj button:(TQLRedBadgeBttton *)button isSelected:(BOOL)isSelected
+{
+    if ([obj isKindOfClass:[NSString class]]) {
+        return 0;
+    }
+    BOOL haveImg = NO;
+    CGFloat imgWith = 0;
+    if ([obj respondsToSelector:@selector(itemImgNormal)] && [obj itemImgNormal]) {
+        haveImg = YES;
+        [button setImage:[obj itemImgNormal] forState:UIControlStateNormal];
+    }
+    
+    if ([obj respondsToSelector:@selector(itemImgSelected)] && [obj itemImgSelected]) {
+        haveImg = YES;
+        [button setImage:[obj itemImgSelected] forState:UIControlStateSelected];
+    }
+    
+    if (haveImg && [obj respondsToSelector:@selector(itemImgNormalSize)]) {
+        imgWith = [obj itemImgNormalSize].width;
+        if (isSelected && [obj respondsToSelector:@selector(itemImgSelectedSize)]) {
+            imgWith = [obj itemImgSelectedSize].width;
+        }
+        if ([obj respondsToSelector:@selector(itemImgAlinmgent)]) {
+            TQLSwitchImgAlignment type = [obj itemImgAlinmgent];
+            if ([[self class]isVertical:type]) {
+                imgWith = 0;
+            }
+            if ([obj respondsToSelector:@selector(marginTitleForImg)]) {
+                CGFloat margin  = [obj marginTitleForImg];
+                
+                if (type == TQLSwitchImgAlignmentHorizontalLeft) {
+                    [button setImageEdgeInsets:UIEdgeInsetsMake(0, margin, 0, 0)];
+                }else if (type == TQLSwitchImgAlignmentHorizontalRight) {
+                    [button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, margin)];
+                }else if (type == TQLSwitchImgAlignmentVerticalTop) {
+                    [button setImageEdgeInsets:UIEdgeInsetsMake(margin, 0, 0, 0)];
+                }else if (type == TQLSwitchImgAlignmentVerticalBottom) {
+                    [button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, margin, 0)];
+                }
+            }
+            
+        }
+        //图片间距
+        if (imgWith && [obj respondsToSelector:@selector(marginTitleForImg)]) {
+            imgWith += [obj marginTitleForImg];
+        }
+    }
+   
+    
+    return imgWith;
+    
+}
+
 -(void)loadSubView{
     NSInteger btnWidth = (self.frame.size.width - self.switchViewStyle.scrollViewItemEdge.left - self.switchViewStyle.scrollViewItemEdge.right) / self.arrayItem.count;
     NSInteger index = 0;
@@ -200,11 +279,21 @@
     NSInteger countItem = self.arrayItem.count;
     NSInteger marginLeft = self.switchViewStyle.scrollViewItemEdge.left;
     NSInteger buttonHeight = self.scrollView.frame.size.height - self.switchViewStyle.itemOffset.y;
-    for (NSString *obj in self.arrayItem) {
+    for (id<TQLSwitchViewItemProtocal> obj in self.arrayItem) {
+        NSString * name = @"";
+        if ([obj isKindOfClass:[NSString class]]) {
+            name = obj;
+        }else if ([obj respondsToSelector:@selector(itemName)]){
+            name = [obj itemName];
+        }
+    
         TQLRedBadgeBttton * button  = [TQLRedBadgeBttton buttonWithType:UIButtonTypeCustom];
-        [button setTitle:obj forState:UIControlStateNormal];
-        NSInteger textWidth = 0;
+        [button setTitle:name forState:UIControlStateNormal];
+         
+        CGFloat imgWith = [[self class] getImgWidth:obj button:button isSelected:NO];
+        ///TODO: 这里需要完善关于图片的布局问题，默认是左布局
         
+        NSInteger textWidth = 0;
         if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFlexible) {
             if (index == 0) {
                 textWidth = ceil(self.switchViewStyle.selectedBtn_Font.pointSize) * button.titleLabel.text.length;
@@ -214,18 +303,18 @@
             
             if (index == 0) {
                 [button.titleLabel setTextAlignment:NSTextAlignmentLeft];
-                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2;
+                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2 + imgWith;
                 [button setTitleEdgeInsets: UIEdgeInsetsMake(0, - self.switchViewStyle.scrollViewItemInterMargin/2, 0, 0)];
                 
             }else if ((index + 1) == countItem){//last
                 [button.titleLabel setTextAlignment:NSTextAlignmentRight];
-                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
+                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
             else{
                 [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
-                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
+                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
             }
             
             [button setFrame:CGRectMake(lastBtnx,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
@@ -235,14 +324,14 @@
             if (self.switchViewStyle.buttonItemWidth) {
                 btnWidth = self.switchViewStyle.buttonItemWidth + self.switchViewStyle.scrollViewItemInterMargin;
             }else{
-                btnWidth = obj.length * self.switchViewStyle.selectedBtn_Font.pointSize;
+                btnWidth = name.length * self.switchViewStyle.selectedBtn_Font.pointSize;
             }
             
             [button setFrame:CGRectMake(lastBtnx,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
             lastBtnx = CGRectGetMaxX(button.frame);
             
             if ((index + 1) == countItem){//last
-                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
+                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin ;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
@@ -256,27 +345,6 @@
             [button setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateNormal];
             [button.titleLabel setFont:self.switchViewStyle.selectedBtn_Font];
             [self updateFlagLineFrame:button];
-//            NSInteger btnTextWidth = button.titleLabel.text.length * self.switchViewStyle.selectedBtn_Font.pointSize;
-//
-//            CGRect frameFlag = self.flagLine.frame;
-//            frameFlag.size.width = self.switchViewStyle.flagSize.width ? self.switchViewStyle.flagSize.width : btnTextWidth ;
-//            frameFlag.size.height = self.switchViewStyle.flagSize.height ? self.switchViewStyle.flagSize.height : 2 ;
-//
-//            if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
-//                self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
-//            }else if(button.titleLabel.textAlignment == NSTextAlignmentLeft){
-//                //                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame) - self.switchViewStyle.scrollViewItemInterMargin/2 ,self.flagLine.center.y);
-//                //                 self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
-//                NSInteger centerX = button.center.x;
-//                if (centerX == 0) {
-//                    centerX = button.frame.origin.x + button.frame.size.width/2;
-//                }
-//
-//                self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
-//            }else{
-//                NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
-//                self.flagLine.center = CGPointMake(button.frame.origin.x + button.frame.size.width - offsetx ,self.flagLine.center.y);
-//            }
         }
         else{
             [button setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];
@@ -308,7 +376,7 @@
     }
 }
 
-- (void)updateButtonFrame:(NSInteger )selectedIndex{
+- (void)updateButtonFrame:(NSInteger)selectedIndex{
     selectedIndex -= 1;
     if (selectedIndex < 0) {
         return;
@@ -323,25 +391,31 @@
     for (UIButton * button in self.buttonItemArray) {
         if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFlexible) {
             NSInteger textWidth = 0;
+ 
+            id<TQLSwitchViewItemProtocal> obj = self.arrayItem[index];
+            CGFloat imgWith  = [[self class] getImgWidth:obj button:button isSelected:NO];
             if (index == selectedIndex) {
+                imgWith = [[self class] getImgWidth:obj button:button isSelected:YES];//选中
                 textWidth = ceil(self.switchViewStyle.selectedBtn_Font.pointSize) * button.titleLabel.text.length;
             }else{
                 textWidth = ceil(self.switchViewStyle.normalBtn_Font.pointSize) * button.titleLabel.text.length;
             }
             
             if (index == 0) {
-                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2;
+                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2 + imgWith;
                 [button.titleLabel setTextAlignment:NSTextAlignmentLeft];
             }else if ((index + 1) == countItem){//last
                 //                [button.titleLabel setTextAlignment:NSTextAlignmentRight];
-                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
+                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
             else{
                 //                [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
-                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin;
+                btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
             }
+          
+            btnWidth = btnWidth ;
             CGRect frame = button.frame;
             frame.origin.x = lastBtnx;
             frame.size.width = btnWidth;
@@ -426,14 +500,27 @@
             _flagLine.frame = frameFlag;
         }
         
+        NSInteger tag = button.tag -1;
+        id<TQLSwitchViewItemProtocal> obj = self.arrayItem[tag];
+        NSInteger offset = 0;
+        if (obj && [obj respondsToSelector:@selector(itemImgAlinmgent)]) {
+            TQLSwitchImgAlignment type = [obj itemImgAlinmgent];
+            if (type == TQLSwitchImgAlignmentHorizontalLeft) {
+                offset = [obj itemImgNormalSize].width/2;
+            }else if (type == TQLSwitchImgAlignmentHorizontalRight) {
+                offset = - [obj itemImgNormalSize].width/2;
+            }
+          
+        }
+     
         [UIView animateWithDuration:0.4 animations:^{
             if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
-                self.flagLine.center = CGPointMake(button.center.x,self.flagLine.center.y);
+                self.flagLine.center = CGPointMake(button.center.x + offset,self.flagLine.center.y);
             }else if (button.titleLabel.textAlignment == NSTextAlignmentLeft) {
-                self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
+                self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4 + offset,self.flagLine.center.y);
             }
             else{
-                self.flagLine.center = CGPointMake(button.center.x,self.flagLine.center.y);
+                self.flagLine.center = CGPointMake(button.center.x + offset,self.flagLine.center.y);
             }
             
         } completion:nil];

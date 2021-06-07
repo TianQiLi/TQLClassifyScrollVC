@@ -15,7 +15,7 @@ static NSInteger heightCollection = 0;
 @interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate,UIContentContainer>
 @property (nonatomic, strong) UICollectionView * collection;
 @property (nonatomic, strong) TQLSwitchViewTool * switchViewTool;
-@property (nonatomic, strong) NSArray * arrayItem;
+@property (nonatomic, strong) NSArray<id<TQLSwitchViewItemProtocal>> * arrayItem;
 @property (nonatomic, strong) NSArray *  classCustomArray;
 @property (nonatomic, strong) NSArray *cellIdentifiterArray;
 
