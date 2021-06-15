@@ -12,28 +12,6 @@
 typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index);//index:1...n
 
 
-typedef NS_ENUM(NSInteger,TQLSwitchImgAlignment)
-{
-    TQLSwitchImgAlignmentVerticalTop,
-    TQLSwitchImgAlignmentVerticalBottom,
-    TQLSwitchImgAlignmentHorizontalLeft,
-    TQLSwitchImgAlignmentHorizontalRight,
-    TQLSwitchImgAlignmentCenter
-    
-};
-
-@protocol TQLSwitchViewItemProtocal <NSObject>
-- (NSString *)itemName;
-- (UIImage *)itemImgNormal;
-- (UIImage *)itemImgSelected;
-- (CGSize)itemImgSelectedSize;
-- (CGSize)itemImgNormalSize;
-///图片距离问题的间距
-- (CGFloat)marginTitleForImg;
-
-- (TQLSwitchImgAlignment)itemImgAlinmgent;
-
-@end
 
 //@class TQLSwitchViewStyleModel;
 

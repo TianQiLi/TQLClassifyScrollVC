@@ -11,6 +11,8 @@
 
 //#import "TQLSwitchViewStyleModel.h"
 #import <Masonry/Masonry.h>
+
+
 @interface TQLSwitchViewTool (){
     TQLSwitchViewStyleModel *_switchViewStyle;
     
@@ -73,7 +75,6 @@
         self.flagLine = [[UIView alloc] initWithFrame:CGRectMake(20,self.frame.size.height-self.switchViewStyle.flagSize.height - self.switchViewStyle.flagBottom,self.switchViewStyle.flagSize.width ,self.switchViewStyle.flagSize.height)];
         [_flagLine setBackgroundColor:self.switchViewStyle.flagColor];
         [_scrollView addSubview:_flagLine];
-        
         if (self.switchViewStyle.flagCorner) {
             [self.flagLine.layer setMasksToBounds:YES];
             [self.flagLine.layer setCornerRadius:self.switchViewStyle.flagCorner];
@@ -180,27 +181,44 @@
     [self updateFlagLineFrame:button];
 }
 
-- (void)updateFlagLineFrame:(UIButton *)button
+- (void)updateFlagLineFrame:(TQLRedBadgeBttton *)button
 {
-    NSInteger btnTextWidth = button.titleLabel.text.length * self.switchViewStyle.selectedBtn_Font.pointSize;
-    CGRect frameFlag = self.flagLine.frame;
-    frameFlag.size.width = self.switchViewStyle.flagSize.width ? self.switchViewStyle.flagSize.width : btnTextWidth ;
-    frameFlag.size.height = self.switchViewStyle.flagSize.height ? self.switchViewStyle.flagSize.height : 2 ;
-    
-    if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
-        self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
-    }
-    else if(button.titleLabel.textAlignment == NSTextAlignmentLeft) {
-        NSInteger centerX = button.center.x;
-        if (centerX == 0) {
-            centerX = button.frame.origin.x + button.frame.size.width/2;
+    CGFloat centerX = CGRectGetMinX(button.frame) + CGRectGetMidX(button.titleLabel.frame);
+    if (button.titleLabel.frame.size.width == 0) {
+        centerX = CGRectGetMidX(button.frame);
+        if (button == _buttonItemArray.firstObject && button.titleLabel.textAlignment == NSTextAlignmentLeft) {
+            centerX = CGRectGetMinX(button.frame) + (button.titleLabel.text.length * button.titleLabel.font.pointSize)/2;
         }
-        self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
+        
+        if (button.currentImage) {
+            id<TQLSwitchViewItemProtocal > obj = self.arrayItem[button.tag-1];
+            centerX = centerX + [[self class] getImgWidth:obj button:button isSelected:button.selected];
+        }
     }
-    else {
-        NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
-        self.flagLine.center = CGPointMake(button.frame.origin.x + button.frame.size.width - offsetx ,self.flagLine.center.y);
-    }
+    
+    _flagLine.center = CGPointMake(centerX, self.flagLine.center.y);
+    return;
+//
+//    NSInteger btnTextWidth = button.titleLabel.text.length * self.switchViewStyle.selectedBtn_Font.pointSize;
+//    CGRect frameFlag = self.flagLine.frame;
+//    frameFlag.size.width = self.switchViewStyle.flagSize.width ? self.switchViewStyle.flagSize.width : btnTextWidth ;
+//    frameFlag.size.height = self.switchViewStyle.flagSize.height ? self.switchViewStyle.flagSize.height : 2 ;
+//
+//    if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
+//        self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
+//    }
+//    else if(button.titleLabel.textAlignment == NSTextAlignmentLeft) {
+//        NSInteger centerX = button.center.x;
+//        if (centerX == 0) {
+//            centerX = button.frame.origin.x + button.frame.size.width/2;
+//        }
+//
+//        self.flagLine.center = CGPointMake(centerX - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
+//    }
+//    else {
+//        NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
+//        self.flagLine.center = CGPointMake(button.frame.origin.x + button.frame.size.width - offsetx ,self.flagLine.center.y);
+//    }
 }
 
 + (BOOL)isVertical:(TQLSwitchImgAlignment)type
@@ -247,7 +265,6 @@
             }
             if ([obj respondsToSelector:@selector(marginTitleForImg)]) {
                 CGFloat margin  = [obj marginTitleForImg];
-                
                 if (type == TQLSwitchImgAlignmentHorizontalLeft) {
                     [button setImageEdgeInsets:UIEdgeInsetsMake(0, margin, 0, 0)];
                 }else if (type == TQLSwitchImgAlignmentHorizontalRight) {
@@ -262,13 +279,33 @@
         }
         //图片间距
         if (imgWith && [obj respondsToSelector:@selector(marginTitleForImg)]) {
-            imgWith += [obj marginTitleForImg];
+            imgWith += fabsf([obj marginTitleForImg]);
         }
     }
    
     
     return imgWith;
     
+}
+
+- (TQLRedBadgeBttton *)createButton:(id<TQLSwitchViewItemProtocal>)obj
+{
+    NSString * name = @"";
+    if ([obj isKindOfClass:[NSString class]]) {
+        name = obj;
+    }else if ([obj respondsToSelector:@selector(itemName)]){
+        name = [obj itemName];
+    }
+    
+    TQLRedBadgeBttton * button  = [TQLRedBadgeBttton buttonWithType:UIButtonTypeCustom];
+    [button setTitle:name forState:UIControlStateNormal];
+    [button setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateSelected];
+    [button setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];
+    [button.titleLabel setFont:self.switchViewStyle.selectedBtn_Font];
+    button.normalFont = self.switchViewStyle.normalBtn_Font;
+    button.selectedFont = self.switchViewStyle.selectedBtn_Font;
+    [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+    return button;
 }
 
 -(void)loadSubView{
@@ -280,33 +317,27 @@
     NSInteger marginLeft = self.switchViewStyle.scrollViewItemEdge.left;
     NSInteger buttonHeight = self.scrollView.frame.size.height - self.switchViewStyle.itemOffset.y;
     for (id<TQLSwitchViewItemProtocal> obj in self.arrayItem) {
-        NSString * name = @"";
-        if ([obj isKindOfClass:[NSString class]]) {
-            name = obj;
-        }else if ([obj respondsToSelector:@selector(itemName)]){
-            name = [obj itemName];
-        }
-    
-        TQLRedBadgeBttton * button  = [TQLRedBadgeBttton buttonWithType:UIButtonTypeCustom];
-        [button setTitle:name forState:UIControlStateNormal];
-         
+ 
+        TQLRedBadgeBttton * button  = [self createButton:obj];
+        [button setTag: ++index];
+        [_buttonItemArray addObject:button];
         CGFloat imgWith = [[self class] getImgWidth:obj button:button isSelected:NO];
         ///TODO: 这里需要完善关于图片的布局问题，默认是左布局
         
         NSInteger textWidth = 0;
         if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFlexible) {
-            if (index == 0) {
+            if (index == 1) {
                 textWidth = ceil(self.switchViewStyle.selectedBtn_Font.pointSize) * button.titleLabel.text.length;
             }else{
                 textWidth = ceil(self.switchViewStyle.normalBtn_Font.pointSize) * button.titleLabel.text.length;
             }
             
-            if (index == 0) {
+            if (index == 1) {
                 [button.titleLabel setTextAlignment:NSTextAlignmentLeft];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2 + imgWith;
-                [button setTitleEdgeInsets: UIEdgeInsetsMake(0, - self.switchViewStyle.scrollViewItemInterMargin/2, 0, 0)];
+                [button setTitleEdgeInsets: UIEdgeInsetsMake(0, -(self.switchViewStyle.scrollViewItemInterMargin/2 - imgWith), 0, 0)];
                 
-            }else if ((index + 1) == countItem){//last
+            }else if ((index) == countItem){//last
                 [button.titleLabel setTextAlignment:NSTextAlignmentRight];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
@@ -324,35 +355,34 @@
             if (self.switchViewStyle.buttonItemWidth) {
                 btnWidth = self.switchViewStyle.buttonItemWidth + self.switchViewStyle.scrollViewItemInterMargin;
             }else{
-                btnWidth = name.length * self.switchViewStyle.selectedBtn_Font.pointSize;
+                btnWidth = button.currentTitle.length * self.switchViewStyle.selectedBtn_Font.pointSize;
             }
             
             [button setFrame:CGRectMake(lastBtnx,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
             lastBtnx = CGRectGetMaxX(button.frame);
             
-            if ((index + 1) == countItem){//last
+            if ((index) == countItem){//last
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin ;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
 
         }else{
-            [button setFrame:CGRectMake(marginLeft + index * btnWidth,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
+            [button setFrame:CGRectMake(marginLeft + (index - 1) * btnWidth,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
             [button.titleLabel setTextAlignment:NSTextAlignmentCenter];//默认
         }
         
-        if (index == 0) {
-            [button setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateNormal];
-            [button.titleLabel setFont:self.switchViewStyle.selectedBtn_Font];
+        if (index == 1) {//首个
+            button.selected = YES;
+            [self layoutIfNeeded];
             [self updateFlagLineFrame:button];
+        }else{
+            button.selected = NO;
         }
-        else{
-            [button setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];
-            [button.titleLabel setFont:self.switchViewStyle.normalBtn_Font];
-        }
-        [button setTag: ++index];
-        [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
-        [_buttonItemArray addObject:button];
+         
+      
+      
+     
         [self.scrollView addSubview:button];
         
         
@@ -368,7 +398,7 @@
 -(void)clickButton:(id)sender{
     UIButton * button = (UIButton*)sender;
     NSInteger index = [button tag];
-    //    [self updateButtonFrame:index];
+  
     self.currentIndex = index;
     
     if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
@@ -389,12 +419,14 @@
     NSInteger btnWidth = 0,countItem = 0;
     NSInteger lastBtnx = self.switchViewStyle.scrollViewItemEdge.left;
     for (UIButton * button in self.buttonItemArray) {
+        button.selected = NO;
         if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFlexible) {
             NSInteger textWidth = 0;
  
             id<TQLSwitchViewItemProtocal> obj = self.arrayItem[index];
             CGFloat imgWith  = [[self class] getImgWidth:obj button:button isSelected:NO];
             if (index == selectedIndex) {
+                button.selected = YES;
                 imgWith = [[self class] getImgWidth:obj button:button isSelected:YES];//选中
                 textWidth = ceil(self.switchViewStyle.selectedBtn_Font.pointSize) * button.titleLabel.text.length;
             }else{
@@ -405,13 +437,11 @@
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2 + imgWith;
                 [button.titleLabel setTextAlignment:NSTextAlignmentLeft];
             }else if ((index + 1) == countItem){//last
-                //                [button.titleLabel setTextAlignment:NSTextAlignmentRight];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
             else{
-                //                [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
             }
           
@@ -455,7 +485,7 @@
     if (!button || ![button isKindOfClass:[UIButton class]]) {
         return;
     }
-    
+    button.selected = isSelect;
     if (isSelect) {
         //TODO: 调整button 的位置
         NSInteger currentOffsetx = self.scrollView.contentOffset.x;
@@ -478,59 +508,48 @@
         }else if (_scrollView.contentOffset.x < 0){
             [self.scrollView setContentOffset:CGPointMake(0,0) animated:YES];
         }
-        //统一居中处理
-//        CGFloat offsetX = button.center.x-self.scrollView.bounds.size.width*0.5;
-//        if (offsetX<0) {
-//            offsetX = 0;
-//        }
-//        if (offsetX>(self.scrollView.contentSize.width-self.scrollView.bounds.size.width)) {
-//            offsetX = (self.scrollView.contentSize.width-self.scrollView.bounds.size.width);
-//        }
-//        [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];
-        
-        //end-居中
-        
-        
+ 
         static NSInteger temp = 0;
-        NSInteger btnTextWidth = button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize;
+        NSInteger btnTextWidth = button.titleLabel.text.length * (button.selected ? self.switchViewStyle.selectedBtn_Font.pointSize :  self.switchViewStyle.normalBtn_Font.pointSize);
         if (temp != btnTextWidth) {
             temp = btnTextWidth;
             __block CGRect frameFlag = self.flagLine.frame;
             frameFlag.size.width = (self.switchViewStyle.flagSize.width ? self.switchViewStyle.flagSize.width : btnTextWidth) ;
             _flagLine.frame = frameFlag;
+            [self layoutIfNeeded];
         }
         
         NSInteger tag = button.tag -1;
-        id<TQLSwitchViewItemProtocal> obj = self.arrayItem[tag];
-        NSInteger offset = 0;
-        if (obj && [obj respondsToSelector:@selector(itemImgAlinmgent)]) {
-            TQLSwitchImgAlignment type = [obj itemImgAlinmgent];
-            if (type == TQLSwitchImgAlignmentHorizontalLeft) {
-                offset = [obj itemImgNormalSize].width/2;
-            }else if (type == TQLSwitchImgAlignmentHorizontalRight) {
-                offset = - [obj itemImgNormalSize].width/2;
-            }
-          
-        }
+//        id<TQLSwitchViewItemProtocal> obj = self.arrayItem[tag];
+//        NSInteger offset = 0;
+//        if (obj && [obj respondsToSelector:@selector(itemImgAlinmgent)]) {
+//            TQLSwitchImgAlignment type = [obj itemImgAlinmgent];
+//            if (type == TQLSwitchImgAlignmentHorizontalLeft) {
+//                offset = [obj itemImgNormalSize].width/2;
+//            }else if (type == TQLSwitchImgAlignmentHorizontalRight) {
+//                offset = - [obj itemImgNormalSize].width/2;
+//            }
+//
+//        }
      
+//        CGFloat centerX = button.center.x;
         [UIView animateWithDuration:0.4 animations:^{
-            if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
-                self.flagLine.center = CGPointMake(button.center.x + offset,self.flagLine.center.y);
-            }else if (button.titleLabel.textAlignment == NSTextAlignmentLeft) {
-                self.flagLine.center = CGPointMake(button.center.x - self.switchViewStyle.scrollViewItemInterMargin/4 + offset,self.flagLine.center.y);
-            }
-            else{
-                self.flagLine.center = CGPointMake(button.center.x + offset,self.flagLine.center.y);
-            }
+            [self updateFlagLineFrame:button];
+//            CGFloat centerX = CGRectGetMinX(button.frame) + CGRectGetMidX(button.titleLabel.frame);
+//             _flagLine.center = CGPointMake(centerX, self.flagLine.center.y);
+//            if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
+//                self.flagLine.center = CGPointMake(centerX + offset,self.flagLine.center.y);
+//            }else if (button.titleLabel.textAlignment == NSTextAlignmentLeft) {
+//                self.flagLine.center = CGPointMake(centerX - self.switchViewStyle.scrollViewItemInterMargin/4 + offset,self.flagLine.center.y);
+//            }
+//            else{
+//                self.flagLine.center = CGPointMake(centerX + offset,self.flagLine.center.y);
+//            }
             
         } completion:nil];
-        [button setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateNormal];
-        [button.titleLabel setFont:self.switchViewStyle.selectedBtn_Font];
+ 
     }
-    else{
-        [button setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];
-        [button.titleLabel setFont:self.switchViewStyle.normalBtn_Font];
-    }
+    
     
 }
 
@@ -539,51 +558,5 @@
     
 }
 @end
-
-//@implementation TQLSwitchViewButtonCollectionCell
-//
-//-(id)initWithFrame:(CGRect)frame{
-//    if (self = [super initWithFrame:frame]) {
-//        _swithchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, 0,[TQLSwitchViewTool contentSize].width, [TQLSwitchViewTool contentSize].height)];
-//        _swithchViewTool.delegate = self;
-//        [self.contentView addSubview:_swithchViewTool];
-//    }
-//    return self;
-//}
-//
-//#pragma mark -- SwitchViewButtonDelegate
-//- (void)clickButton:(NSInteger)index{
-//    if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
-//        [self.delegate clickButton:index];
-//    }
-//}
-//
-//@end
-//
-//@implementation TQLSwitchViewButtonCollectionReusableViewCell
-//-(id)initWithFrame:(CGRect)frame{
-//    if (self = [super initWithFrame:frame]) {
-//        _swithchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, 0, [TQLSwitchViewTool contentSize].width, [TQLSwitchViewTool contentSize].height)];
-//        _swithchViewTool.delegate = self;
-//        [self addSubview:_swithchViewTool];
-//    }
-//    return self;
-//}
-//
-//-(void)setCurrentIndex:(NSInteger)currentIndex{
-//    _currentIndex = currentIndex;
-//    _swithchViewTool.currentIndex = _currentIndex;
-//}
-//#pragma mark -- SwitchViewButtonDelegate
-//- (void)clickButton:(NSInteger)index{
-//
-//    if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
-//        [self.delegate clickButton:index];
-//    }
-//}
-//
-//
-//
-//@end
 
 

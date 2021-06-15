@@ -8,6 +8,7 @@
 
 #import "TQLRedBadgeBttton.h"
 #import <Masonry/Masonry.h>
+#import "TQLSwitchViewTool.h"
 @interface TQLRedBadgeBttton()
 /** labelNum */
 
@@ -104,5 +105,24 @@
     // Drawing code
 }
 */
+
+- (CGFloat)customCenterX
+{
+    NSInteger test = CGRectGetMinX(self.frame);
+    return CGRectGetMinX(self.frame) + CGRectGetMidX(self.titleLabel.frame);
+    return CGRectGetMinX(self.frame) + self.titleLabel.frame.origin.x + self.titleLabel.frame.size.width/2;
+//    return CGRectGetMinX(self.frame) + CGRectGetMinX(self.titleLabel.frame) + CGRectGetMidX(self.titleLabel.frame);
+}
+
+- (void)setSelected:(BOOL)selected
+{
+    [super setSelected:selected];
+    if (selected) {
+        [self.titleLabel setFont:self.selectedFont];
+    }else{
+        [self.titleLabel setFont:self.normalFont];
+    }
+    
+}
 
 @end

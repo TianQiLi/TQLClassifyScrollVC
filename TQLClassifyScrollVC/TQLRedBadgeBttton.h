@@ -8,10 +8,39 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger,TQLSwitchImgAlignment)
+{
+    TQLSwitchImgAlignmentVerticalTop,
+    TQLSwitchImgAlignmentVerticalBottom,
+    TQLSwitchImgAlignmentHorizontalLeft,
+    TQLSwitchImgAlignmentHorizontalRight,
+    TQLSwitchImgAlignmentCenter
+    
+};
+
+@protocol TQLSwitchViewItemProtocal <NSObject>
+- (NSString *)itemName;
+- (UIImage *)itemImgNormal;
+- (UIImage *)itemImgSelected;
+- (CGSize)itemImgSelectedSize;
+- (CGSize)itemImgNormalSize;
+///图片距离问题的间距
+- (CGFloat)marginTitleForImg;
+
+- (TQLSwitchImgAlignment)itemImgAlinmgent;
+
+@end
+
 @interface TQLRedBadgeBttton : UIButton
 @property (nonatomic, strong) UILabel *lableNum;
 /** num */
 @property (nonatomic, assign) NSInteger redNum;
+/** TQLSwitchImgAlignment */
+@property (nonatomic, assign) TQLSwitchImgAlignment imgAlignment;
+@property (nonatomic, strong) UIFont * normalFont;
+@property (nonatomic, strong) UIFont * selectedFont;
+
+
 /*
  * offset: leading & Bottom
  * offset 相当对titleLabel : trailing & top
@@ -27,5 +56,5 @@
  */
 - (void)showNumRedPoint:(NSInteger)num withPointBGColor:(UIColor *)pointColor textColor:(UIColor *)textColor font:(UIFont *)font size:(CGSize)size offSetLeadingBottom:(CGPoint)offset borderWidth:(NSInteger)borderWidth borderColor:(UIColor *)borderColor;
 
-
+- (CGFloat)customCenterX;
 @end
