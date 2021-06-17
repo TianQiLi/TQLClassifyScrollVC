@@ -78,7 +78,8 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 - (void)setOrignalRect:(CGRect)orignalRect;
 /*更新分类标签数组,会更新相应UI展示*/
 - (void)updateItemArray:(NSArray *)array;
-
+/*更新分类标签数组,不更新相应容器展示*/
+- (void)updateItemArrayNoReload:(NSArray *)array;
 /** 1-n
  * @param  isDefault = yes 表示首次初始化
  **/

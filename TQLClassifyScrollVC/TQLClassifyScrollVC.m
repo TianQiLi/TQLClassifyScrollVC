@@ -15,7 +15,7 @@ static NSInteger heightCollection = 0;
 @interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate,UIContentContainer>
 @property (nonatomic, strong) UICollectionView * collection;
 @property (nonatomic, strong) TQLSwitchViewTool * switchViewTool;
-@property (nonatomic, strong) NSArray<id<TQLSwitchViewItemProtocal>> * arrayItem;
+@property (nonatomic, strong) NSArray * arrayItem;
 @property (nonatomic, strong) NSArray *  classCustomArray;
 @property (nonatomic, strong) NSArray *cellIdentifiterArray;
 
@@ -231,6 +231,16 @@ static NSInteger heightCollection = 0;
     }
 }
 
+- (void)updateItemArrayNoReload:(NSArray *)array
+{
+    NSInteger lastIndex = self.switchViewTool.currentIndex;
+    _arrayItem = array;
+    self.switchViewTool.arrayItem = array;
+    if (lastIndex <= array.count) {
+        self.switchViewTool.currentIndex = lastIndex;
+    }
+}
+
 - (TQLSwitchViewTool *)switchViewTool{
     if (!_switchViewTool) {
         _switchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, self.switchViewStyle.switchViewY, self.view.frame.size.width,self.switchViewStyle.switchViewHeight)switchViewStyle:self.switchViewStyle];
@@ -410,7 +420,6 @@ static NSInteger heightCollection = 0;
         
         CGFloat heightCell = MAX(0, TQLScreenBound().height - _topAndBottomFixedForSlideCell);
         _flexCellSize = CGSizeMake(size.width, heightCell);
-        [self.switchViewTool updateButtonFrameAfterRotate];
         [self.collection reloadData];
     }
     
