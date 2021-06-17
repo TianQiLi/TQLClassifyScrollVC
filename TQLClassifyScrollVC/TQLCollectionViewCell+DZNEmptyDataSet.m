@@ -292,6 +292,11 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
     return 11;
 }
 
+- (BOOL)emptyDataSetShouldAllowScroll:(UIScrollView *)scrollView;
+{
+    return YES;
+}
+
 
 + (UIColor *)colorWithHexString:(NSString *)stringToConvert {
     NSScanner *scanner = [NSScanner scannerWithString:stringToConvert];
