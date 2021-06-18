@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "TQLClassifyScrollVC"
-  s.version      = "0.0.29.14-dev"
+  s.version      = "0.0.29.15"
   s.summary      = "多tab 滚动组件控制器."
   s.homepage     = "https://github.com/TianQiLi/TQLClassifyScrollVC"
   s.license      = "MIT"
