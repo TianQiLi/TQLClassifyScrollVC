@@ -27,6 +27,8 @@ static char const * const DataStatusNoDataTextKey = "DataStatusNoDataText";
 
 static char const * const DataStatusNoDataFontSizeKey = "DataStatusNoDataFontSize";
 static char const * const DataStatusNoDataImgKey = "DataStatusNoDataImg";
+static char const * const hq_DataStatusNoDataImgKey = "hq_DataStatusNoDataImg";
+
 static char const * const VerticalOffset = "VerticalOffset";
 static char const * const SpaceHeightKey = "SpaceHeightKey";
 
@@ -100,6 +102,14 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
 
 -(void)setDataStatusNoData_img:(NSString *)dataStatusNoData_img{
     objc_setAssociatedObject(self, DataStatusNoDataImgKey, dataStatusNoData_img, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (void)setHq_dataStatusNoData_img:(UIImage *)hq_dataStatusNoData_img {
+    objc_setAssociatedObject(self, hq_DataStatusNoDataImgKey, hq_dataStatusNoData_img, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (UIImage *)hq_dataStatusNoData_img {
+    return objc_getAssociatedObject(self, hq_DataStatusNoDataImgKey);
 }
 
 -(NSNumber *)verticalOffset{
@@ -200,8 +210,12 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
 
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
 {
-    NSString * imgUrl = @"";
+    NSString *imgUrl = @"";
     if ([self.dataStatusType integerValue] == CCDataStatusNoData) {
+        if (self.hq_dataStatusNoData_img) {
+            return self.hq_dataStatusNoData_img;
+        }
+        
         imgUrl = @"TQL_NoData_icon";
         if (self.dataStatusNoData_img && self.dataStatusNoData_img.length > 0) {
             imgUrl = self.dataStatusNoData_img;

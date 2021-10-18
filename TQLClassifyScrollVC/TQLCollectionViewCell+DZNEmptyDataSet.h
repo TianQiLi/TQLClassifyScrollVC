@@ -26,6 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable,nonatomic,copy) NSString * dataStatusError_img;//错误图片
 @property (nullable,nonatomic,copy) NSString * dataStatusNoData_text;//无数据文案
 @property (nullable,nonatomic,copy) NSString * dataStatusNoData_img;//无数据图片
+//优先级比dataStatusNoData_img高
+@property (nullable,nonatomic,strong) UIImage * hq_dataStatusNoData_img;//无数据图片
+
 @property (nullable,nonatomic,copy) NSString * dataStatusUnknown_text;//未知文案
 @property (nullable,nonatomic,copy) NSString * dataStatusUnknown_img;//未知图片
 @property (nullable,nonatomic,copy) NSNumber * verticalOffset;//图片偏移
@@ -33,6 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable,nonatomic,copy) NSString * dataStatusTextColor;//默认文字颜色
 
 @property (nullable,nonatomic,copy) NSString * dataStatusEmptyBGColor;//默认背景颜色
+
 
 + (UIColor *)tq_LightColor:(UIColor *)lightColor DarkColor:(UIColor *)darkColor;
 //+ (UIColor *)tq_DefaultLightColor:(UIColor *)lightColor;
@@ -42,6 +46,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (UIColor *)tq_CellBgColor:(UIColor *)lightColor;
 
 - (UIView *)tq_loadingViewForEmpty;
+
 @end
 
 NS_ASSUME_NONNULL_END
