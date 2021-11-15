@@ -58,6 +58,13 @@
         if (@available(iOS 11.0, *)) {
             _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
         }
+        if (@available(iOS 15.0 ,* )) {
+            _tableView.sectionHeaderTopPadding = 0;
+            if (_tableView.style == UITableViewStyleGrouped) {
+                _tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, CGFLOAT_MIN)];
+            }
+        }
+        
         [self.contentView addSubview:_tableView];
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.equalTo(self.contentView);
