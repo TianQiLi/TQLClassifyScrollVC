@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -38,7 +38,7 @@
 		1C3B80A0228AB14100AEFCFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1C3B80A1228AB14100AEFCFE /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		1C3B80A9228AB15B00AEFCFE /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		1C3B80AA228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TQLClassifyScrollVC.podspec; path = ../TQLClassifyScrollVC.podspec; sourceTree = "<group>"; };
+		1C3B80AA228AB15B00AEFCFE /* TQLClassifyScrollVC.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = TQLClassifyScrollVC.podspec; path = ../TQLClassifyScrollVC.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1C3B80B1228ABDE900AEFCFE /* TestVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestVC.h; sourceTree = "<group>"; };
 		1C3B80B2228ABDE900AEFCFE /* TestVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestVC.m; sourceTree = "<group>"; };
 		1C3B80B4228ABF7E00AEFCFE /* TestVC2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestVC2.h; sourceTree = "<group>"; };
