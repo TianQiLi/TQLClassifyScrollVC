@@ -11,6 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface CustomTableViewCell2 : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *nameL;
+@property (weak, nonatomic) IBOutlet UIImageView *imgV;
+
 + (NSString *)cellIdentifiter;
 
 + (CGFloat)cellHeight;

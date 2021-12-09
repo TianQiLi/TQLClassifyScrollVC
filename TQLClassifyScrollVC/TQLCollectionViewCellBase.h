@@ -7,13 +7,14 @@
 
 #import <UIKit/UIKit.h>
 
-
+#import "TQLDataCacheManager.h"
 typedef void(^SuccessBlock)(NSArray * array);
 typedef void(^FailureBlock)(NSError * error);
 
 @interface TQLCollectionViewCellBase : UICollectionViewCell<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UITableViewDelegate,UITableViewDataSource>
 @property (readonly)UICollectionView * subCollectionView;
 @property (readonly)UITableView * tableView;
+@property (strong,atomic)TQLPageDataCache * pageDataCahe;
 /** scrollView */
 @property (nonatomic, readonly) UIScrollView *currentScrollView;
 - (BOOL)isTableViewContoller;

@@ -210,7 +210,7 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
 
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
 {
-    NSString *imgUrl = @"";
+    NSString *imgUrl = nil;
     if ([self.dataStatusType integerValue] == CCDataStatusNoData) {
         if (self.hq_dataStatusNoData_img) {
             return self.hq_dataStatusNoData_img;
