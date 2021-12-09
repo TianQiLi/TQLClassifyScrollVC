@@ -10,6 +10,8 @@
 #import "CustomTableViewCell2.h"
 
 @interface TestVC2()<UITableViewDelegate, UITableViewDataSource>
+@property (assign ,atomic) NSInteger  count;
+@property (strong ,atomic) NSString * name;
 
 @end
 
@@ -32,8 +34,9 @@
     self.dataStatusNoData_text_fontSize = @(14);
 }
 
--(void)viewWillAppear:(NSInteger)index{
-    NSLog(@"%s\n",__func__);
+-(void)viewWillAppear:(NSInteger)index
+{
+    NSLog(@"%s,count= %ld, name= %@\n",__func__,self.count,self.name);
 }
 
 -(void)viewDidDisappear:(NSInteger)index{
@@ -42,13 +45,25 @@
 
 -(void)basicRequestData{
     //TODO: 网络请求
-    if (1) {
+    self.count = self.row;
+    if (self.row == 0) {
         //接口返回成功获取到了
+//        self.count = self.row;
+        self.name = [@(self.row) stringValue];
         [NSThread sleepForTimeInterval:1.5];
+      
+        self.successBlock(@[@"11",@"22",@"33"]);
+    }
+    else if (self.row == 1) {
+        //接口返回成功获取到了
+//        self.count = 2;
+        self.name = @"1";
+        [NSThread sleepForTimeInterval:1.5];
+     
         self.successBlock(@[@"11",@"22"]);
     }else{
         //接口返回失败
-        self.failureBlock(nil);
+        self.successBlock(@[@"1"]);
     }
     
     
@@ -62,6 +77,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     CustomTableViewCell2 * cell = [tableView dequeueReusableCellWithIdentifier:[CustomTableViewCell2 cellIdentifiter] forIndexPath:indexPath];
+    cell.nameL.text = [NSString stringWithFormat:@"tab=%ld-count=%ld row=%ld",self.row,self.count,indexPath.row];
     return cell;
 }
 

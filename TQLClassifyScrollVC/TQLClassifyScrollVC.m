@@ -8,6 +8,8 @@
 
 #import "TQLClassifyScrollVC.h"
 #import "TQLClassifyScrollVC_Header.h"
+#import "TQLDataCacheManager.h"
+
 NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 NSString * const TQLCS_ReceiveMemoryWarningNotification = @"TQLCS_ReceiveMemoryWarningNotification";
 
@@ -54,6 +56,8 @@ static NSInteger heightCollection = 0;
 
 //滚动是点击触发，还是滑动触发
 @property (nonatomic, assign) BOOL scrollFromClickEvent;
+@property (nonatomic, strong) TQLDataCacheManager * cacheManager;
+
 
 @end
 
@@ -123,6 +127,15 @@ static NSInteger heightCollection = 0;
 
 - (UICollectionView *)collection{
     return _collection;
+}
+
+
+- (TQLDataCacheManager *)cacheManager
+{
+    if (!_cacheManager) {
+        _cacheManager = TQLDataCacheManager.new;
+    }
+    return _cacheManager;
 }
 
 - (NSInteger)currentSwitchBtnIndex{
@@ -434,16 +447,12 @@ static NSInteger heightCollection = 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
-    NSString * cellIdentifiter = @"";
-    if (indexPath.row < self.cellIdentifiterArray.count) {
-         cellIdentifiter = self.cellIdentifiterArray[indexPath.row];
-    }else{
-        cellIdentifiter = (self.cellIdentifiterArray.count > 0) ? self.cellIdentifiterArray.lastObject : @"cell";
-    }
-//    NSLog(@"cellForItem=%ld\n",indexPath.row);
-    TQLViewContorller * cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
+  
+    NSLog(@"cellForItemAtIndexPath=%ld\n\n",indexPath.row);
+    TQLViewContorller * cell = [self createCellFor:collectionView indexPath:indexPath];
     cell.currentVC = self;
     cell.configTQLVCBlock = self.configTQLVCBlock;
+ 
     [cell cellForItem:indexPath.row];
     cell.mjRefreshColor = self.mjRefreshColor;
     cell.paraDic = self.paramaterDic;
@@ -454,14 +463,38 @@ static NSInteger heightCollection = 0;
     return cell;
 }
 
+- (TQLViewContorller *)createCellFor:(UICollectionView *)collection indexPath:(NSIndexPath *)indexPath
+{
+    NSString * cellIdentifiter = @"";
+    if (indexPath.row < self.cellIdentifiterArray.count) {
+         cellIdentifiter = self.cellIdentifiterArray[indexPath.row];
+    }else{
+        cellIdentifiter = (self.cellIdentifiterArray.count > 0) ? self.cellIdentifiterArray.lastObject : @"cell";
+    }
+ 
+    TQLViewContorller * cell = [collection dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
+    NSLog(@"cellp=%p\n",cell);
+    //create cache
+    [self.cacheManager checkIsNeedCreate:[@(indexPath.row) stringValue]];
+    TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+    obj.row = indexPath.row;
+    cell.pageDataCahe =  obj;
+    return cell;
+}
+
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
-//     NSLog(@"willDisplay=%ld\n",indexPath.row);
+    NSLog(@"willDisplay=%ld\n",indexPath.row);
     TQLViewContorller * cellNew = (TQLViewContorller *)cell;
+    TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+    [obj recoverAllDataFromCache:cellNew];
     [cellNew willDisplayRow:indexPath.row];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"endDisplay=%ld\n",indexPath.row);
     TQLViewContorller * cellNew = (TQLViewContorller *)cell;
+    TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+    [obj saveAllData:cellNew];
     [cellNew didEndDisplayRow:indexPath.row];
    
 }
@@ -566,7 +599,8 @@ static NSInteger heightCollection = 0;
     }
    
     UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:indexPathTo];
-        [_collection setContentOffset:attributes.frame.origin animated:_enableScollForSwitchClick];///fix:ios 14 不会滚动问题
+       
+    [_collection setContentOffset:attributes.frame.origin animated:_enableScollForSwitchClick];///fix:ios 14 不会滚动问题
     
 //    [_collection scrollToItemAtIndexPath:indexPathTo atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:_enableScollForSwitchClick];///ios 14有问题，不会滚动
     [[NSNotificationCenter defaultCenter] postNotificationName:SwitchBttonClickNotification object:@(_currentSwitchBtnIndex)];
