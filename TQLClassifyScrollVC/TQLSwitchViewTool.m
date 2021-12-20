@@ -178,7 +178,9 @@
     }
     
     UIButton *button = self.buttonItemArray[index];
+   
     [self updateFlagLineFrame:button];
+    [self layoutIfNeeded];
 }
 
 - (void)updateFlagLineFrame:(TQLRedBadgeBttton *)button

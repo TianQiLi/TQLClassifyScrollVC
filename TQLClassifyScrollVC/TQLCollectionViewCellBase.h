@@ -20,6 +20,10 @@ typedef void(^FailureBlock)(NSError * error);
 - (BOOL)isTableViewContoller;
 - (BOOL)isCollectionViewContoller;
 - (void)viewDidLoad;
+/*指定忽略缓存的成员：例：@[@"_xxx"]*/
+- (NSArray *)tq_ignoreKeyArray;
+/*指定需要缓存的成员：例：@[@"_xxx"]*/
+- (NSArray *)tq_needCacheKeyArray;
 /**
  index = 0...n
  */

@@ -294,7 +294,11 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     return [super pointInside:point withEvent:event];
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    if (!self.currentVC.enabelSuperAutoScroll) {
+        return;
+    }
     CGPoint translate = [scrollView.panGestureRecognizer translationInView:scrollView];
     NSArray * arrayScrollView = [self getScrollViewSuper];
     if (arrayScrollView.count > 0) {//下
@@ -340,7 +344,9 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     NSMutableArray * array = [NSMutableArray new];
     UIView * superView = self.currentVC.view.superview;
     while (superView) {
-        if ([superView isMemberOfClass:[UIScrollView class]] || [superView isMemberOfClass:[UICollectionView class]] || [superView isMemberOfClass:[UITableView class]]) {
+        //外部可能继承
+        if ([superView isKindOfClass:[UIScrollView class]]) {
+//        if ([superView isMemberOfClass:[UIScrollView class]] || [superView isMemberOfClass:[UICollectionView class]] || [superView isMemberOfClass:[UITableView class]]) {
             [array addObject:superView];
         }
         superView = superView.superview;

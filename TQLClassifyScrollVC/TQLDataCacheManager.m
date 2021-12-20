@@ -18,6 +18,12 @@ static inline BOOL IsEmpty(id thing) {
 
 }
 
+static inline BOOL IsNeedIgnoreType(id thing) {
+    return  ([thing isKindOfClass:[UIResponder class]]);
+
+}
+
+
 @interface TQLPageDataCache()
 @property(strong,atomic) NSMutableDictionary * allDataDic;
 @end
@@ -41,19 +47,24 @@ static inline BOOL IsEmpty(id thing) {
         Ivar  property = properList[i];
 //        const char * name = property_getName(property);
         const char *name = ivar_getName(property);
-        
         NSString *  nameStr = [NSString stringWithUTF8String:name];
         id value = [viewController valueForKey:nameStr];
         if (!IsEmpty(value)) {
-            [self.allDataDic setObject:value forKey:nameStr];
+            NSArray * needCacheArray = [viewController tq_needCacheKeyArray];
+            NSArray * ignoreArray = [viewController tq_ignoreKeyArray];
+            if ([needCacheArray containsObject:nameStr]) {
+                [self.allDataDic setObject:value forKey:nameStr];
+                [arrayrPName addObject:nameStr];
+                 
+            } else if (![ignoreArray containsObject:nameStr] && !IsNeedIgnoreType(value)) {
+                [self.allDataDic setObject:value forKey:nameStr];
+                [arrayrPName addObject:nameStr];
+            }else {
+                NSLog(@"忽略");
+            }
         }
-    
-        [arrayrPName addObject:nameStr];
-        
-        
     }
     free(properList);
-    
     NSLog(@"%@",arrayrPName);
     
 }
