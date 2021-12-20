@@ -57,6 +57,12 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 
 /** 监听屏幕旋转刷新:iphone默认为NO, ipad 默认是YES */
 @property (nonatomic, assign) BOOL enableRotate;
+
+/*是否自动缓存页面自定义数据，默认为NO*/
+@property (nonatomic, assign) BOOL enabelAutoCachePageData;
+/*是否自动滚动嵌套的父类scrollView，默认为YES*/
+@property (nonatomic, assign) BOOL enabelSuperAutoScroll;
+
 @property (nonatomic, copy) void(^blockForDealloc)();
 
 

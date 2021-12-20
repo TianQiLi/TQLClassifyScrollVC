@@ -177,7 +177,7 @@ static NSInteger heightCollection = 0;
         
         _enableRotate = NO;
         _viewMethodLoaded = NO;
-        
+        _enabelSuperAutoScroll = YES;
         if ([[self class] currentDeviceIsIpad_tq]) {
             _enableRotate = YES;
         }
@@ -433,6 +433,7 @@ static NSInteger heightCollection = 0;
         
         CGFloat heightCell = MAX(0, TQLScreenBound().height - _topAndBottomFixedForSlideCell);
         _flexCellSize = CGSizeMake(size.width, heightCell);
+        [self.switchViewTool updateButtonFrameAfterRotate];
         [self.collection reloadData];
     }
     
@@ -475,26 +476,34 @@ static NSInteger heightCollection = 0;
     TQLViewContorller * cell = [collection dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
     NSLog(@"cellp=%p\n",cell);
     //create cache
-    [self.cacheManager checkIsNeedCreate:[@(indexPath.row) stringValue]];
-    TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
-    obj.row = indexPath.row;
-    cell.pageDataCahe =  obj;
+    if (self.enabelAutoCachePageData) {
+        [self.cacheManager checkIsNeedCreate:[@(indexPath.row) stringValue]];
+        TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+        obj.row = indexPath.row;
+        cell.pageDataCahe =  obj;
+    }
+   
     return cell;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"willDisplay=%ld\n",indexPath.row);
     TQLViewContorller * cellNew = (TQLViewContorller *)cell;
-    TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
-    [obj recoverAllDataFromCache:cellNew];
+    if (self.enabelAutoCachePageData) {
+        TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+        [obj recoverAllDataFromCache:cellNew];
+    }
+  
     [cellNew willDisplayRow:indexPath.row];
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"endDisplay=%ld\n",indexPath.row);
     TQLViewContorller * cellNew = (TQLViewContorller *)cell;
-    TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
-    [obj saveAllData:cellNew];
+    if (self.enabelAutoCachePageData) {
+        TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+        [obj saveAllData:cellNew];
+    }
     [cellNew didEndDisplayRow:indexPath.row];
    
 }

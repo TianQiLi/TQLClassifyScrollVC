@@ -108,4 +108,15 @@
     
 }
 
+- (NSArray *)tq_ignoreKeyArray
+{
+    return nil;
+}
+
+- (NSArray *)tq_needCacheKeyArray
+{
+    return nil;
+}
+
+
 @end
