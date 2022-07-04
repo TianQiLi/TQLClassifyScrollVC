@@ -253,7 +253,12 @@ static NSInteger heightCollection = 0;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     _topAndBottomFixedForSlideCell = screenSize.height- heightCollection;
     _leftAndRightFixedForSlideCell = screenSize.width - self.orignalRect.size.width;
-    CGFloat width = MIN(self.orignalRect.size.width, [UIApplication sharedApplication].keyWindow.frame.size.width);
+    UIWindow * _window = UIApplication.sharedApplication.keyWindow;
+    if (!_window) {
+        _window = UIApplication.sharedApplication.windows.firstObject;
+    }
+    
+    CGFloat width = MIN(self.orignalRect.size.width, CGRectGetWidth(_window.frame));
     _flexCellSize = CGSizeMake(width, heightCollection);
 }
 
