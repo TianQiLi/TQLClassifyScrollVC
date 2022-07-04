@@ -8,7 +8,7 @@
 
 #import "TQLCollectionViewCellBase.h"
 // //数据接口请求的状态
-typedef NS_ENUM(NSInteger, CCDataAPIStatusType) {
+typedef NS_ENUM(NSInteger, CCDataStatus) {
     CCDataStatusNoKnown,//未知 : 请求前
     CCDataStatusNoData, //请求成功，无数据
     CCDataStatusIncompleteData, //请求成功 ,返回数据不足一页,表示后面没有数据
@@ -20,22 +20,22 @@ typedef NS_ENUM(NSInteger, CCDataAPIStatusType) {
 NS_ASSUME_NONNULL_BEGIN
 
 @interface TQLCollectionViewCellBase (DZNEmptyDataSet)
-@property (nullable,nonatomic,strong) NSNumber* dataStatusType;//记录接口返回状态
-@property (nullable,nonatomic,strong) NSNumber* dataStatusNoData_text_fontSize;//字体大小
-@property (nullable,nonatomic,copy) NSString * dataStatusError_text;//错误文案
-@property (nullable,nonatomic,copy) NSString * dataStatusError_img;//错误图片
-@property (nullable,nonatomic,copy) NSString * dataStatusNoData_text;//无数据文案
-@property (nullable,nonatomic,copy) NSString * dataStatusNoData_img;//无数据图片
+@property (nullable, nonatomic, strong) NSNumber *tq_dataStatusType;//记录接口返回状态
+@property (nullable, nonatomic, strong) NSNumber *dataStatusNoData_text_fontSize;//字体大小
+@property (nullable, nonatomic, copy) NSString *dataStatusError_text;//错误文案
+@property (nullable, nonatomic, copy) NSString *dataStatusError_img;//错误图片
+@property (nullable, nonatomic, copy) NSString *dataStatusNoData_text;//无数据文案
+@property (nullable, nonatomic, copy) NSString *dataStatusNoData_img;//无数据图片
 //优先级比dataStatusNoData_img高
-@property (nullable,nonatomic,strong) UIImage * hq_dataStatusNoData_img;//无数据图片
-
-@property (nullable,nonatomic,copy) NSString * dataStatusUnknown_text;//未知文案
-@property (nullable,nonatomic,copy) NSString * dataStatusUnknown_img;//未知图片
-@property (nullable,nonatomic,copy) NSNumber * verticalOffset;//图片偏移
-@property (nullable,nonatomic,copy) NSNumber * spaceHeight;//item 间距
-@property (nullable,nonatomic,copy) NSString * dataStatusTextColor;//默认文字颜色
-
-@property (nullable,nonatomic,copy) NSString * dataStatusEmptyBGColor;//默认背景颜色
+@property (nullable, nonatomic, strong) UIImage *hq_dataStatusNoData_img;//无数据图片
+ 
+@property (nullable, nonatomic, copy) NSString *tq_dataStatusUnknown_text;//未知文案
+@property (nullable, nonatomic, copy) NSString *tq_dataStatusUnknown_img;//未知图片
+@property (nullable, nonatomic, copy) NSNumber *tq_verticalOffset;//图片偏移
+@property (nullable, nonatomic, copy) NSNumber *tq_spaceHeight;//item 间距
+@property (nullable, nonatomic, copy) NSString *tq_dataStatusTextColor;//默认文字颜色
+ 
+@property (nullable, nonatomic, copy) NSString *tq_dataStatusEmptyBGColor;//默认背景颜色
 
 
 + (UIColor *)tq_LightColor:(UIColor *)lightColor DarkColor:(UIColor *)darkColor;

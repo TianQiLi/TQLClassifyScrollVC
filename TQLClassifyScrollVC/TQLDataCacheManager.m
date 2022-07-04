@@ -24,18 +24,26 @@ static inline BOOL IsNeedIgnoreType(id thing) {
 }
 
 
-@interface TQLPageDataCache()
-@property(strong,atomic) NSMutableDictionary * allDataDic;
-@end
 
 @implementation TQLPageDataCache
 
-- (NSMutableDictionary *)allDataDic
+@end
+
+
+
+
+@interface TQLPageDataAutoCache()
+@property(strong,atomic) NSMutableDictionary * tql_allDataDic;
+@end
+
+@implementation TQLPageDataAutoCache
+
+- (NSMutableDictionary *)tql_allDataDic
 {
-    if (!_allDataDic) {
-        _allDataDic = @{}.mutableCopy;
+    if (!_tql_allDataDic) {
+        _tql_allDataDic = @{}.mutableCopy;
     }
-    return _allDataDic;
+    return _tql_allDataDic;
 }
 
 - (void)saveAllData:(TQLViewContorller *)viewController
@@ -53,11 +61,11 @@ static inline BOOL IsNeedIgnoreType(id thing) {
             NSArray * needCacheArray = [viewController tq_needCacheKeyArray];
             NSArray * ignoreArray = [viewController tq_ignoreKeyArray];
             if ([needCacheArray containsObject:nameStr]) {
-                [self.allDataDic setObject:value forKey:nameStr];
+                [self.tql_allDataDic setObject:value forKey:nameStr];
                 [arrayrPName addObject:nameStr];
                  
             } else if (![ignoreArray containsObject:nameStr] && !IsNeedIgnoreType(value)) {
-                [self.allDataDic setObject:value forKey:nameStr];
+                [self.tql_allDataDic setObject:value forKey:nameStr];
                 [arrayrPName addObject:nameStr];
             }else {
                 NSLog(@"忽略");
@@ -72,7 +80,7 @@ static inline BOOL IsNeedIgnoreType(id thing) {
 
 - (void)recoverAllDataFromCache:(TQLViewContorller *)viewController
 {
-    [self.allDataDic enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+    [self.tql_allDataDic enumerateKeysAndObjectsUsingBlock:^(NSString *  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         [viewController setValue:obj forKey:key];
     }];
     
@@ -88,6 +96,7 @@ static inline BOOL IsNeedIgnoreType(id thing) {
 @interface TQLDataCacheManager ()
 {
     NSMutableDictionary * _allData;
+    NSMutableDictionary * _allAutoPageData;
 }
 @end
 
@@ -97,25 +106,106 @@ static inline BOOL IsNeedIgnoreType(id thing) {
 {
     if (self = [super init]) {
         _allData = @{}.mutableCopy;
+        _allAutoPageData = @{}.mutableCopy;
     }
     return self;
 }
 
-- (BOOL)checkIsNeedCreate:(NSString *)keyId
+- (BOOL)checkIsNeedCreate:(NSString *)keyId autoCache:(BOOL)autoCache
+{
+    if (autoCache) {
+        if ([_allAutoPageData objectForKey:keyId]) {
+            return NO;
+        }
+    }else{
+        if ([_allData objectForKey:keyId]) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (void)create:(NSString *)keyId classStr:(NSString *)classPageData  autoCache:(BOOL)autoCache
+{
+    if (autoCache) {
+        [self auto_create:keyId classStr:classPageData];
+    }else{
+        [self tq_create:keyId classStr:classPageData];
+    }
+}
+
+- (TQLPageDataCache *)allCacheForKeyId:(NSString *)keyId autoCache:(BOOL)autoCache
+{
+    if (autoCache) {
+        TQLPageDataAutoCache * obj = [_allAutoPageData objectForKey:keyId];
+        return obj;
+    }else{
+        TQLPageDataCache * obj = [_allData objectForKey:keyId];
+        return obj;
+    }
+  
+}
+
+@end
+
+
+@implementation TQLDataCacheManager (PageCache)
+- (BOOL)tq_checkIsNeedCreate:(NSString *)keyId
 {
     if ([_allData objectForKey:keyId]) {
         return NO;
     }
-    TQLPageDataCache * obj = [TQLPageDataCache new];
-    obj.key_id = keyId;
-    [_allData setObject:obj forKey:keyId];
     return YES;
 }
 
-- (TQLPageDataCache *)allCacheForKeyId:(NSString *)keyId
+- (void)tq_create:(NSString *)keyId classStr:(NSString *)classPageData
+{
+    TQLPageDataCache * obj = [TQLPageDataCache new];
+    if (classPageData.length) {
+        if (NSClassFromString(classPageData)) {
+            obj = [NSClassFromString(classPageData) new];
+        }
+    }
+    
+    obj.key_id_TQL = keyId;
+    [_allData setObject:obj forKey:keyId];
+}
+
+- (TQLPageDataCache *)tq_allCacheForKeyId:(NSString *)keyId
 {
     TQLPageDataCache * obj = [_allData objectForKey:keyId];
     return obj;
 }
 
+@end
+
+
+@implementation TQLDataCacheManager (AutoCache)
+
+- (BOOL)auto_checkIsNeedCreate:(NSString *)keyId
+{
+    if ([_allAutoPageData objectForKey:keyId]) {
+        return NO;
+    }
+    return YES;
+}
+
+- (void)auto_create:(NSString *)keyId classStr:(NSString *)classPageData
+{
+    TQLPageDataAutoCache * obj = [TQLPageDataAutoCache new];
+    if (classPageData.length) {
+        if (NSClassFromString(classPageData)) {
+            obj = [NSClassFromString(classPageData) new];
+        }
+    }
+    
+    obj.key_id_TQL = keyId;
+    [_allAutoPageData setObject:obj forKey:keyId];
+}
+
+- (TQLPageDataAutoCache *)auto_allCacheForKeyId:(NSString *)keyId
+{
+    TQLPageDataAutoCache * obj = [_allAutoPageData objectForKey:keyId];
+    return obj;
+}
 @end

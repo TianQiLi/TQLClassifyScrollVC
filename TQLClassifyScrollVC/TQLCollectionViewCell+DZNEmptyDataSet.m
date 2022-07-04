@@ -38,123 +38,148 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
 
 @implementation TQLCollectionViewCellBase (DZNEmptyDataSet)
 
--(NSNumber*)dataStatusType{
+- (NSNumber*)tq_dataStatusType
+{
     return objc_getAssociatedObject(self, DataStatusTypeKey);
 }
 
--(void)setDataStatusType:(NSNumber*)dataStatusType{
-    objc_setAssociatedObject(self, DataStatusTypeKey, dataStatusType, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (void)setTq_dataStatusType:(NSNumber *)tq_dataStatusType
+{
+    objc_setAssociatedObject(self, DataStatusTypeKey, tq_dataStatusType, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
--(NSNumber*)dataStatusNoData_text_fontSize{
+- (NSNumber*)dataStatusNoData_text_fontSize
+{
     return objc_getAssociatedObject(self, DataStatusNoDataFontSizeKey);
 }
 
--(void)setDataStatusNoData_text_fontSize:(NSNumber *)dataStatusNoData_text_fontSize{
+- (void)setDataStatusNoData_text_fontSize:(NSNumber *)dataStatusNoData_text_fontSize
+{
     objc_setAssociatedObject(self, DataStatusNoDataFontSizeKey, dataStatusNoData_text_fontSize, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (NSString *)dataStatusUnknown_text{
+- (NSString *)tq_dataStatusUnknown_text
+{
     return objc_getAssociatedObject(self, DataStatusUnknownTextKey);
 }
 
-- (void)setDataStatusUnknown_text:(NSString *)dataStatusUnknown_text{
-    objc_setAssociatedObject(self, DataStatusUnknownTextKey, dataStatusUnknown_text, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setTq_dataStatusUnknown_text:(NSString *)tq_dataStatusUnknown_text
+{
+    objc_setAssociatedObject(self, DataStatusUnknownTextKey, tq_dataStatusUnknown_text, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (NSString *)dataStatusUnknown_img{
+- (NSString *)tq_dataStatusUnknown_img
+{
     return objc_getAssociatedObject(self, DataStatusUnknownImgKey);
 }
 
-- (void)setDataStatusUnknown_img:(NSString *)dataStatusUnknown_img{
-    objc_setAssociatedObject(self, DataStatusUnknownImgKey, dataStatusUnknown_img, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setTq_dataStatusUnknown_img:(NSString *)tq_dataStatusUnknown_img
+{
+    objc_setAssociatedObject(self, DataStatusUnknownImgKey, tq_dataStatusUnknown_img, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 
--(NSString*)dataStatusError_text{
+- (NSString*)dataStatusError_text
+{
     return objc_getAssociatedObject(self, DataStatusErrorTextKey);
 }
 
--(void)setDataStatusError_text:(NSString *)dataStatusError_text{
+- (void)setDataStatusError_text:(NSString *)dataStatusError_text
+{
     objc_setAssociatedObject(self, DataStatusErrorTextKey, dataStatusError_text, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (NSString *)dataStatusError_img{
+- (NSString *)dataStatusError_img
+{
     return objc_getAssociatedObject(self, DataStatusErrorImgKey);
 }
 
-- (void)setDataStatusError_img:(NSString *)dataStatusError_img{
+- (void)setDataStatusError_img:(NSString *)dataStatusError_img
+{
     objc_setAssociatedObject(self, DataStatusErrorImgKey, dataStatusError_img, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 
--(NSString *)dataStatusNoData_text{
+- (NSString *)dataStatusNoData_text
+{
     return objc_getAssociatedObject(self, DataStatusNoDataTextKey);
 }
 
--(void)setDataStatusNoData_text:(NSString *)dataStatusNoData_text{
+- (void)setDataStatusNoData_text:(NSString *)dataStatusNoData_text
+{
     objc_setAssociatedObject(self, DataStatusNoDataTextKey, dataStatusNoData_text, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
--(NSString *)dataStatusNoData_img{
+- (NSString *)dataStatusNoData_img
+{
     return objc_getAssociatedObject(self, DataStatusNoDataImgKey);
 }
 
--(void)setDataStatusNoData_img:(NSString *)dataStatusNoData_img{
+- (void)setDataStatusNoData_img:(NSString *)dataStatusNoData_img
+{
     objc_setAssociatedObject(self, DataStatusNoDataImgKey, dataStatusNoData_img, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (void)setHq_dataStatusNoData_img:(UIImage *)hq_dataStatusNoData_img {
+- (void)setHq_dataStatusNoData_img:(UIImage *)hq_dataStatusNoData_img
+{
     objc_setAssociatedObject(self, hq_DataStatusNoDataImgKey, hq_dataStatusNoData_img, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (UIImage *)hq_dataStatusNoData_img {
+- (UIImage *)hq_dataStatusNoData_img
+{
     return objc_getAssociatedObject(self, hq_DataStatusNoDataImgKey);
 }
 
--(NSNumber *)verticalOffset{
+- (NSNumber *)tq_verticalOffset
+{
     return objc_getAssociatedObject(self, VerticalOffset);
 }
-
--(void)setVerticalOffset:(NSNumber *)verticalOffset{
-    objc_setAssociatedObject(self, VerticalOffset, verticalOffset, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setTq_verticalOffset:(NSNumber *)tq_verticalOffset 
+{
+    objc_setAssociatedObject(self, VerticalOffset, tq_verticalOffset, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
--(NSNumber *)spaceHeight{
+- (NSNumber *)tq_spaceHeight
+{
     return objc_getAssociatedObject(self, SpaceHeightKey);
 }
 
--(void)setSpaceHeight:(NSNumber *)spaceHeight{
-    objc_setAssociatedObject(self, SpaceHeightKey, spaceHeight, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setTq_spaceHeight:(NSNumber *)tq_spaceHeight
+{
+    objc_setAssociatedObject(self, SpaceHeightKey, tq_spaceHeight, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 
-- (NSString *)dataStatusTextColor{
+- (NSString *)tq_dataStatusTextColor
+{
     return objc_getAssociatedObject(self, DataStatusTextColorKey);
 }
 
-- (void)setDataStatusTextColor:(NSString *)dataStatusTextColor{
-    return objc_setAssociatedObject(self, DataStatusTextColorKey, dataStatusTextColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setTq_dataStatusTextColor:(NSString *)tq_dataStatusTextColor
+{
+    return objc_setAssociatedObject(self, DataStatusTextColorKey, tq_dataStatusTextColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
     
 }
 
 
-- (NSString *)dataStatusEmptyBGColor{
+- (NSString *)tq_dataStatusEmptyBGColor
+{
     return objc_getAssociatedObject(self, DataStatusEmptyBgColorKey);
 }
 
-- (void)setDataStatusEmptyBGColor:(NSString *)dataStatusEmptyBGColor{
-    return objc_setAssociatedObject(self, DataStatusEmptyBgColorKey, dataStatusEmptyBGColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setTq_dataStatusEmptyBGColor:(NSString *)tq_dataStatusEmptyBGColor
+{
+    return objc_setAssociatedObject(self, DataStatusEmptyBgColorKey, tq_dataStatusEmptyBGColor, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 
 #pragma mark --DZNEmptyDataSetDelegate
 - (UIColor *)backgroundColorForEmptyDataSet:(UIScrollView *)scrollView
 {
-    UIColor * color = nil;
-    if (self.dataStatusEmptyBGColor) {
-        color = [[self class] colorWithHexString:self.dataStatusEmptyBGColor];
-    }else{
+    UIColor *color = nil;
+    if (self.tq_dataStatusEmptyBGColor) {
+        color = [[self class] colorWithHexString:self.tq_dataStatusEmptyBGColor];
+    } else {
         color =  [[self class] colorWithHexString:@"0xf4f6f9"];
     }
     
@@ -211,7 +236,7 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
 - (UIImage *)imageForEmptyDataSet:(UIScrollView *)scrollView
 {
     NSString *imgUrl = nil;
-    if ([self.dataStatusType integerValue] == CCDataStatusNoData) {
+    if ([self.tq_dataStatusType integerValue] == CCDataStatusNoData) {
         if (self.hq_dataStatusNoData_img) {
             return self.hq_dataStatusNoData_img;
         }
@@ -219,21 +244,21 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
         imgUrl = @"TQL_NoData_icon";
         if (self.dataStatusNoData_img && self.dataStatusNoData_img.length > 0) {
             imgUrl = self.dataStatusNoData_img;
-        }else{
+        } else {
             return TQLClassifyScrollImage(imgUrl);
         }
         UIImage *img = [UIImage imageNamed:imgUrl];
         return img;
-    } else if ([self.dataStatusType integerValue] == CCDataStatusError) {
+    } else if ([self.tq_dataStatusType integerValue] == CCDataStatusError) {
         imgUrl = @"TQL_error";
         if (self.dataStatusError_img && self.dataStatusError_img.length > 0) {
             imgUrl = self.dataStatusError_img;
-        }else{
+        } else {
             return TQLClassifyScrollImage(imgUrl);
         }
         return [UIImage imageNamed:imgUrl];
-    }else if ([self.dataStatusType integerValue] == CCDataStatusNoKnown) {
-        imgUrl = self.dataStatusUnknown_img ? self.dataStatusUnknown_img : imgUrl;
+    } else if ([self.tq_dataStatusType integerValue] == CCDataStatusNoKnown) {
+        imgUrl = self.tq_dataStatusUnknown_img ? self.tq_dataStatusUnknown_img : imgUrl;
         return [UIImage imageNamed:imgUrl];
     }
     else
@@ -243,25 +268,25 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
 - (NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView
 {
     NSString *text = @"";
-    if ([self.dataStatusType integerValue] == CCDataStatusNoData) {
+    if ([self.tq_dataStatusType integerValue] == CCDataStatusNoData) {
         text = self.dataStatusNoData_text;
         if (!text || text.length == 0) {
             text = DefaultNodataText;
         }
     }
-    else if ([self.dataStatusType integerValue] == CCDataStatusError) {
+    else if ([self.tq_dataStatusType integerValue] == CCDataStatusError) {
         text = self.dataStatusError_text;
         if (!text || text.length == 0) {
             text = DefaultErrorText;
         }
     }
-    else if ([self.dataStatusType integerValue] == CCDataStatusNoKnown){
-//        text = self.dataStatusUnknown_text;
+    else if ([self.tq_dataStatusType integerValue] == CCDataStatusNoKnown) {
+//        text = self.tq_dataStatusUnknown_text;
 //        if (!text || text.length == 0) {
 //            text = DefaultUnKnowndataText;
 //        }
         text = @"";
-    }else if ([self.dataStatusType integerValue] == CCDataStatusOk || [self.dataStatusType integerValue] == CCDataStatusIncompleteData){
+    } else if ([self.tq_dataStatusType integerValue] == CCDataStatusOk || [self.tq_dataStatusType integerValue] == CCDataStatusIncompleteData) {
         text = @"";
     }
     text = text ? text : @"";
@@ -269,10 +294,10 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
     if (self.dataStatusNoData_text_fontSize && [self.dataStatusNoData_text_fontSize integerValue]>0) {
         font = [UIFont systemFontOfSize:[self.dataStatusNoData_text_fontSize integerValue]];
     }
-    UIColor * textColor = nil;
-    if (self.dataStatusTextColor && self.dataStatusTextColor.length > 0) {
-        textColor = [[self class] colorWithHexString:self.dataStatusTextColor];
-    }else
+    UIColor *textColor = nil;
+    if (self.tq_dataStatusTextColor && self.tq_dataStatusTextColor.length > 0) {
+        textColor = [[self class] colorWithHexString:self.tq_dataStatusTextColor];
+    } else
         textColor = [[self class] colorWithHexString:@"0x969696"];
     
     NSMutableDictionary *attributes = [NSMutableDictionary new];
@@ -283,25 +308,27 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
     
 }
 
-- (CGFloat)verticalOffsetForEmptyDataSet:(UIScrollView *)scrollView{
-    if (self.verticalOffset) {
-        return [self.verticalOffset floatValue];
+- (CGFloat)verticalOffsetForEmptyDataSet:(UIScrollView *)scrollView
+{
+    if (self.tq_verticalOffset) {
+        return [self.tq_verticalOffset floatValue];
     }
     return 0;
 }
 
 - (UIView *)customViewForEmptyDataSet:(UIScrollView *)scrollView
 {
-    if ([self.dataStatusType integerValue] == CCDataStatusNoKnown) {
+    if ([self.tq_dataStatusType integerValue] == CCDataStatusNoKnown) {
         return [self tq_loadingViewForEmpty];
     }
     return nil;
 }
 
 
-- (CGFloat)spaceHeightForEmptyDataSet:(UIScrollView *)scrollView{
-    if (self.spaceHeight) {
-        return [self.spaceHeight floatValue];
+- (CGFloat)spaceHeightForEmptyDataSet:(UIScrollView *)scrollView
+{
+    if (self.tq_spaceHeight) {
+        return [self.tq_spaceHeight floatValue];
     }
     return 11;
 }
@@ -312,14 +339,18 @@ static char const * const DataStatusEmptyBgColorKey = "DataStatusEmptyBgColorKey
 }
 
 
-+ (UIColor *)colorWithHexString:(NSString *)stringToConvert {
++ (UIColor *)colorWithHexString:(NSString *)stringToConvert
+{
     NSScanner *scanner = [NSScanner scannerWithString:stringToConvert];
     unsigned hexNum;
-    if (![scanner scanHexInt:&hexNum]) return nil;
+    if (![scanner scanHexInt:&hexNum]) {
+        return nil;
+    }
     return [[self class] colorWithRGBHex:hexNum];
 }
 
-+ (UIColor *)colorWithRGBHex:(UInt32)hex {
++ (UIColor *)colorWithRGBHex:(UInt32)hex
+{
     int r = (hex >> 16) & 0xFF;
     int g = (hex >> 8) & 0xFF;
     int b = (hex) & 0xFF;

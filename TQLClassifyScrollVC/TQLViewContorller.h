@@ -19,7 +19,7 @@ extern NSString * const CellSelectedNotification;
 /** 外部传进来的额外参数 */
 @property (nonatomic, strong) NSDictionary *paraDic;
 /** id */
-@property (nonatomic, weak) TQLClassifyScrollVC * currentVC;
+@property (nonatomic, weak) TQLClassifyScrollVC *currentVC;
 
 /* 所有页面的数据  */
 @property (nonatomic, strong) NSMutableDictionary *dataForRowArray;
@@ -35,27 +35,27 @@ extern NSString * const CellSelectedNotification;
 /** 每页的行数 - 默认20 */
 @property (nonatomic, assign) NSInteger pageRows;
 /** 第一页的起止页码 - 默认0 */
-@property (assign, nonatomic) NSInteger pageFirst;//默认0
+@property (nonatomic, assign) NSInteger pageFirst;//默认0
 
 /** btnArray */
-@property (nonatomic, strong) NSArray<TQLRedBadgeBttton *>  *switchToolBtnArray;
+@property (nonatomic, strong) NSArray<TQLRedBadgeBttton *> *switchToolBtnArray;
 
 /** itemArray */
 @property (nonatomic, strong) NSArray<NSString *> *switchToolItemArray;
 
-@property (nonatomic, strong) UIColor * mjRefreshColor;
+@property (nonatomic, strong) UIColor *mjRefreshColor;
 
 
 @property (nonatomic, copy)  SuccessBlock  successBlock;
 @property (nonatomic, copy)  FailureBlock  failureBlock;
 
 @property (nonatomic, copy) ConfigTQLViewContorllerBlock configTQLVCBlock;
-@property (assign, nonatomic) BOOL enableHeaderRefresh;//默认NO
-@property (assign, nonatomic) BOOL enableFooterRefresh;//默认NO
+@property (nonatomic, assign) BOOL enableHeaderRefresh;//默认NO
+@property (nonatomic, assign) BOOL enableFooterRefresh;//默认NO
 
 
 /** 1...n */
-@property (nonatomic, assign,readonly) NSInteger currentSwitchBtnIndex;
+@property (nonatomic, assign, readonly) NSInteger currentSwitchBtnIndex;
 
 - (void)cellForItem:(NSInteger)row;
 - (void)willDisplayRow:(NSInteger)row;

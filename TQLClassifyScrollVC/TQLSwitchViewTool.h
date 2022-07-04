@@ -21,9 +21,9 @@ typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index
 @end
 
 @interface TQLSwitchViewTool : UIView
-@property (nonatomic, copy)NSArray<id<TQLSwitchViewItemProtocal>> * arrayItem;
+@property (nonatomic, copy)NSArray<id<TQLSwitchViewItemProtocal>> *arrayItem;
 @property (nonatomic, assign)NSInteger currentIndex;//默认1: 1...n
-@property (weak ,nonatomic) id<TQLSwitchViewToolDelegate>delegate;
+@property (nonatomic, weak) id<TQLSwitchViewToolDelegate>delegate;
 /** 是否需要圆角 */
 @property (nonatomic, assign) float cornerRadius;
 
@@ -32,14 +32,14 @@ typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index
 /** 遍历分类button */
 @property (nonatomic, copy) EnumerateItemBtnBlock enumerateItemBtnBlock;
 
--(id)initWithFrame:(CGRect)frame switchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle;
+- (id)initWithFrame:(CGRect)frame switchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle;
 /** TQLSwitchViewStyleModel */
-@property (nonatomic,readonly) TQLSwitchViewStyleModel *switchViewStyle;
+@property (nonatomic, readonly) TQLSwitchViewStyleModel *switchViewStyle;
 
 + (CGSize)contentSize;
 - (void)setSwitchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle;
 - (UIView *)flagView;
--(void)clickButton:(id)sender;
+- (void)clickButton:(id)sender;
 
 - (void)updateButtonFrameAfterRotate;
 
