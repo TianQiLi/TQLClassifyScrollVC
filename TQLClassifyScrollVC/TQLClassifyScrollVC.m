@@ -15,10 +15,10 @@ NSString * const TQLCS_ReceiveMemoryWarningNotification = @"TQLCS_ReceiveMemoryW
 
 static NSInteger heightCollection = 0;
 @interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate,UIContentContainer>
-@property (nonatomic, strong) UICollectionView * collection;
-@property (nonatomic, strong) TQLSwitchViewTool * switchViewTool;
-@property (nonatomic, strong) NSArray * arrayItem;
-@property (nonatomic, strong) NSArray *  classCustomArray;
+@property (nonatomic, strong) TQLCollectionView * collection;
+@property (nonatomic, strong) TQLSwitchViewTool *switchViewTool;
+@property (nonatomic, strong) NSArray *arrayItem;
+@property (nonatomic, strong) NSArray *classCustomArray;
 @property (nonatomic, strong) NSArray *cellIdentifiterArray;
 
 @property (nonatomic, strong) NSMutableDictionary *dataForRowArray;
@@ -39,7 +39,7 @@ static NSInteger heightCollection = 0;
 /*option */
 @property (nonatomic, strong) UIColor *collectionBGColor;
 /*option */
-@property (nonatomic, strong) UIColor * mjRefreshColor;
+@property (nonatomic, strong) UIColor *mjRefreshColor;
 /** tap */
 @property (nonatomic, strong) UITapGestureRecognizer *tagG;
 
@@ -56,9 +56,11 @@ static NSInteger heightCollection = 0;
 
 //滚动是点击触发，还是滑动触发
 @property (nonatomic, assign) BOOL scrollFromClickEvent;
-@property (nonatomic, strong) TQLDataCacheManager * cacheManager;
+@property (nonatomic, strong) TQLDataCacheManager *cacheManager;
+@property (nonatomic, strong) NSString *collectionClassStr;
+@property (nonatomic, strong) NSMutableArray *cellQueue;
 
-
+@property (nonatomic, assign) CGFloat offsetXForCollection;
 @end
 
 @implementation TQLClassifyScrollVC
@@ -71,17 +73,27 @@ static NSInteger heightCollection = 0;
 //        [nav.navigationBar setShadowImage:[UIImagehq_imageWithColor:[UIColor colorWithHexString:@"efeff0"]]];
 //}
 
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated
+{
     [super viewWillAppear:animated];
+    if (self.offsetXForCollection  >= 0 && self.offsetXForCollection != self.collection.contentOffset.x) {
+        NSLog(@"TQL offset修正");
+        [self.collection setContentOffset:CGPointMake(self.offsetXForCollection, self.collection.contentOffset.y)];
+    }
+  
     if (_navBarShadowImageHidden) {
         [self.navigationController.navigationBar setShadowImage:_navBarShadowImageHidden];
     }
     if (self.viewWillAppearBlock) {
         self.viewWillAppearBlock();
     }
+    
+    
+    
 }
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewDidAppear:(BOOL)animated
+{
     [super viewDidAppear:animated];
     if (_navBarShadowImageHidden) {
         [self.navigationController.navigationBar setShadowImage:_navBarShadowImageHidden];
@@ -98,7 +110,8 @@ static NSInteger heightCollection = 0;
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated{
+- (void)viewDidDisappear:(BOOL)animated
+{
     [super viewDidDisappear:animated];
     if (_navBarShadowImageShow) {
          [self.navigationController.navigationBar setShadowImage:_navBarShadowImageShow];
@@ -108,24 +121,28 @@ static NSInteger heightCollection = 0;
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated{
+- (void)viewWillDisappear:(BOOL)animated
+{
     [super viewWillDisappear:animated];
+    self.offsetXForCollection = self.collection.contentOffset.x;
     if (self.viewWillDisappearBlock) {
         self.viewWillDisappearBlock();
     }
 }
 
-- (void)dealloc{
+- (void)dealloc
+{
     NSLog(@"%s",__func__);
     [_maskView removeGestureRecognizer:_tagG];
     _tagG = nil;
-    if(self.blockForDealloc){
+    if (self.blockForDealloc) {
         self.blockForDealloc();
     }
 
 }
 
-- (UICollectionView *)collection{
+- (TQLCollectionView *)collection
+{
     return _collection;
 }
 
@@ -138,34 +155,39 @@ static NSInteger heightCollection = 0;
     return _cacheManager;
 }
 
-- (NSInteger)currentSwitchBtnIndex{
+- (NSInteger)currentSwitchBtnIndex
+{
     return _currentSwitchBtnIndex;
 }
 
-- (void)configViewBgColor:(UIColor *)bgColor collectionBGColor:(UIColor *)colorCollectionBG swithBtnViewBGColor:(UIColor *)colorBGSwitchBtn{
+- (void)configViewBgColor:(UIColor *)bgColor collectionBGColor:(UIColor *)colorCollectionBG swithBtnViewBGColor:(UIColor *)colorBGSwitchBtn
+{
     _viewBgColor = bgColor;
     _collectionBGColor = colorCollectionBG;
     _switchViewBgColor = colorBGSwitchBtn;
     
 }
 
-- (id)initWithSwitchItemArray:(NSArray<NSString *> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray{
+- (id)initWithSwitchItemArray:(NSArray<NSString *> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray
+{
     return [self initWithSwitchItemArray:arrayItem withClassArray:classCellArray withIdentifiter:cellIdentiArray withRect:CGRectNull];
 }
 
-- (id)initWithSwitchItemArray:(NSArray<NSString *> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray  withRect:(CGRect)frame {
+- (id)initWithSwitchItemArray:(NSArray<TQLSwitchViewItemProtocal> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray  withRect:(CGRect)frame
+{
     if (self = [super init]) {
         _arrayItem = arrayItem;
         _classCustomArray = classCellArray;
         _cellIdentifiterArray = cellIdentiArray;
         if (!_cellIdentifiterArray || _cellIdentifiterArray.count == 0) {
-            NSMutableArray * array = @[].mutableCopy;
-            NSString * cellDefaultIdentifiter = @"cellDefaultIdentifiter";
+            NSMutableArray *array = @[].mutableCopy;
+            NSString *cellDefaultIdentifiter = @"cellDefaultIdentifiter";
             for (NSInteger i = 0;i < arrayItem.count ; ++i) {
                 [array addObject:[NSString stringWithFormat:@"%@_%ld",cellDefaultIdentifiter,(long)i]];
             }
             _cellIdentifiterArray = array.copy;
         }
+        _offsetXForCollection = -1;
         _bottomMargin = 10;//default
         _currentSwitchBtnIndex = 1;
         _enableScollForSwitchClick = NO;
@@ -196,29 +218,32 @@ static NSInteger heightCollection = 0;
     }
 }
 
-- (TQLSwitchViewStyleModel *)switchViewStyle{
+- (TQLSwitchViewStyleModel *)switchViewStyle
+{
     if (!_switchViewStyle) {
         _switchViewStyle = [[TQLSwitchViewStyleModel alloc] init];
     }
     return _switchViewStyle;
 }
 
-- (void)setSwitchButtonBottomMargin:(NSInteger)bottomMargin{
+- (void)setSwitchButtonBottomMargin:(NSInteger)bottomMargin
+{
     _bottomMargin = bottomMargin;
 }
 
-- (void)setOrignalRect:(CGRect)orignalRect{
+- (void)setOrignalRect:(CGRect)orignalRect
+{
     if (_viewMethodLoaded) {
         if (!CGRectIsEmpty(_orignalRect)) {
             self.view.frame = _orignalRect;
-        }else{
+        } else {
             return;
         }
         _orignalRect = orignalRect;
         heightCollection = MAX(_orignalRect.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY, 0);
         [self updateFixedMargin];
         [self.collection reloadData];
-    }else{
+    } else {
         _orignalRect = orignalRect;
     }
 }
@@ -228,7 +253,12 @@ static NSInteger heightCollection = 0;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
     _topAndBottomFixedForSlideCell = screenSize.height- heightCollection;
     _leftAndRightFixedForSlideCell = screenSize.width - self.orignalRect.size.width;
-    CGFloat width = MIN(self.orignalRect.size.width, [UIApplication sharedApplication].keyWindow.frame.size.width);
+    UIWindow * _window = UIApplication.sharedApplication.keyWindow;
+    if (!_window) {
+        _window = UIApplication.sharedApplication.windows.firstObject;
+    }
+    
+    CGFloat width = MIN(self.orignalRect.size.width, CGRectGetWidth(_window.frame));
     _flexCellSize = CGSizeMake(width, heightCollection);
 }
 
@@ -254,7 +284,8 @@ static NSInteger heightCollection = 0;
     }
 }
 
-- (TQLSwitchViewTool *)switchViewTool{
+- (TQLSwitchViewTool *)switchViewTool
+{
     if (!_switchViewTool) {
         _switchViewTool = [[TQLSwitchViewTool alloc] initWithFrame:CGRectMake(0, self.switchViewStyle.switchViewY, self.view.frame.size.width,self.switchViewStyle.switchViewHeight)switchViewStyle:self.switchViewStyle];
         _switchViewTool.enumerateItemBtnBlock = self.enumerateItemBtnBlock;
@@ -263,11 +294,13 @@ static NSInteger heightCollection = 0;
     return _switchViewTool;
 }
 
-- (void)clickTapG:(UITapGestureRecognizer *)tagG{
+- (void)clickTapG:(UITapGestureRecognizer *)tagG
+{
     [self removeFromSuperViewWithAnimation:nil];
 }
 
-- (void)removeFromSuperViewWithAnimation:(void(^)())block{
+- (void)removeFromSuperViewWithAnimation:(void(^)())block
+{
     [UIView animateWithDuration:0.3 animations:^{
         self.switchViewTool.transform = CGAffineTransformMakeTranslation(0, self.view.frame.size.height);
         self.collection.transform = self.switchViewTool.transform;
@@ -287,7 +320,8 @@ static NSInteger heightCollection = 0;
     }];
 }
 
-- (void)showViewWithAnimation:(void(^)())block{
+- (void)showViewWithAnimation:(void(^)())block
+{
     self.switchViewTool.transform = CGAffineTransformMakeTranslation(0, self.view.frame.size.height);
     self.collection.transform = self.switchViewTool.transform;
     [UIView animateWithDuration:0.3 animations:^{
@@ -300,20 +334,22 @@ static NSInteger heightCollection = 0;
     }];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view.
      _viewMethodLoaded = YES;
+    _cellQueue = @[].mutableCopy;
     if (!CGRectIsEmpty(_orignalRect)) {
         self.view.frame = _orignalRect;
-    }else{
+    } else {
         _orignalRect = self.view.frame;
     }
     
     heightCollection = MAX(self.view.frame.size.height- self.switchViewStyle.switchViewHeight -_bottomMargin - self.switchViewStyle.switchViewY ,0);
     [self updateFixedMargin];
     
-     UIColor * colorWhite = [TQLCollectionViewCellBase tq_WhiteColor:[UIColor whiteColor]];
+     UIColor *colorWhite = [TQLCollectionViewCellBase tq_WhiteColor:[UIColor whiteColor]];
     if (self.switchViewStyle.switchViewY > 0) {
         _maskView = [[UIView alloc] initWithFrame:self.view.bounds];
         [_maskView setBackgroundColor:colorWhite];
@@ -330,10 +366,10 @@ static NSInteger heightCollection = 0;
     }
     
     if (self.viewBgColor) {
-         UIColor * color = [TQLCollectionViewCellBase tq_ViewBgColor:self.viewBgColor];
+         UIColor *color = [TQLCollectionViewCellBase tq_ViewBgColor:self.viewBgColor];
          [_maskView setBackgroundColor:color];
          [self.view setBackgroundColor:color];
-    }else{
+    } else {
         [self.view setBackgroundColor:colorWhite];
     }
     self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -344,21 +380,22 @@ static NSInteger heightCollection = 0;
     self.switchViewTool.arrayItem = _arrayItem;
     self.switchViewTool.delegate = self;
     if (self.switchViewBgColor) {
-        UIColor * color = [TQLCollectionViewCellBase tq_WhiteColor:self.switchViewBgColor];
+        UIColor *color = [TQLCollectionViewCellBase tq_WhiteColor:self.switchViewBgColor];
         [_switchViewTool setBackgroundColor:color];
-    }else{
+    } else {
         [_switchViewTool setBackgroundColor:colorWhite];
     }
        
     [self.view addSubview:_switchViewTool];
-    UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     [flowLayout setMinimumInteritemSpacing:0.0f];
     [flowLayout setMinimumLineSpacing:0.0f];
     [flowLayout setSectionInset:UIEdgeInsetsZero];
 
-    _collection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, heightCollection) collectionViewLayout:flowLayout];
+    _collection = [[TQLCollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, heightCollection) collectionViewLayout:flowLayout];
     _collection.pagingEnabled = YES;
+    _collection.isPage = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     if (@available(iOS 11.0,*)) {
         self.collection.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
@@ -369,9 +406,9 @@ static NSInteger heightCollection = 0;
     _collection.pagingEnabled = YES;
     _collection.showsVerticalScrollIndicator = NO;
     if (self.collectionBGColor) {
-        UIColor * color = [TQLCollectionViewCellBase tq_CellBgColor:self.collectionBGColor];
+        UIColor *color = [TQLCollectionViewCellBase tq_CellBgColor:self.collectionBGColor];
         [_collection setBackgroundColor:color];
-    }else{
+    } else {
         [_collection setBackgroundColor:colorWhite];
     }
     
@@ -379,8 +416,8 @@ static NSInteger heightCollection = 0;
   
     NSInteger max_count = MAX(self.classCustomArray.count, self.cellIdentifiterArray.count);
     for (NSInteger i = 0 ; i< max_count ; i++) {
-        NSString * classCustom = (self.classCustomArray.count > i) ?self.classCustomArray[i] : self.classCustomArray.lastObject;
-        NSString * cellIdentif = (self.cellIdentifiterArray.count > i) ?self.cellIdentifiterArray[i] : self.cellIdentifiterArray.lastObject;
+        NSString *classCustom = (self.classCustomArray.count > i) ?self.classCustomArray[i] : self.classCustomArray.lastObject;
+        NSString *cellIdentif = (self.cellIdentifiterArray.count > i) ?self.cellIdentifiterArray[i] : self.cellIdentifiterArray.lastObject;
         [self.collection registerClass:NSClassFromString(classCustom) forCellWithReuseIdentifier:cellIdentif];
     }
     
@@ -414,7 +451,8 @@ static NSInteger heightCollection = 0;
    
 }
 
--(void)reLayoutCollectionView:(NSNotification *)notification {
+- (void)reLayoutCollectionView:(NSNotification *)notification
+{
 //    if (_enableRotate) {
 //        [self updateFlexiableCellSizeForRotate];
 //    }
@@ -439,18 +477,22 @@ static NSInteger heightCollection = 0;
     
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
     return _arrayItem.count;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
     return _flexCellSize;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
   
     NSLog(@"cellForItemAtIndexPath=%ld\n\n",indexPath.row);
-    TQLViewContorller * cell = [self createCellFor:collectionView indexPath:indexPath];
+    NSInteger row = indexPath.row;
+    TQLViewContorller *cell = [self createCellFor:collectionView indexPath:indexPath];
     cell.currentVC = self;
     cell.configTQLVCBlock = self.configTQLVCBlock;
  
@@ -466,42 +508,76 @@ static NSInteger heightCollection = 0;
 
 - (TQLViewContorller *)createCellFor:(UICollectionView *)collection indexPath:(NSIndexPath *)indexPath
 {
-    NSString * cellIdentifiter = @"";
+    NSString *cellIdentifiter = @"";
     if (indexPath.row < self.cellIdentifiterArray.count) {
          cellIdentifiter = self.cellIdentifiterArray[indexPath.row];
-    }else{
+    } else {
         cellIdentifiter = (self.cellIdentifiterArray.count > 0) ? self.cellIdentifiterArray.lastObject : @"cell";
     }
  
-    TQLViewContorller * cell = [collection dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
-    NSLog(@"cellp=%p\n",cell);
+    TQLViewContorller *cell = [collection dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
+    NSString *key = [@(indexPath.row) stringValue];
     //create cache
-    if (self.enabelAutoCachePageData) {
-        [self.cacheManager checkIsNeedCreate:[@(indexPath.row) stringValue]];
-        TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+    if ([self.cacheManager checkIsNeedCreate:key autoCache:NO]) {
+        [self.cacheManager create:key classStr:[cell.class cachePageClassStr] autoCache:NO];
+        TQLPageDataCache *obj = [self.cacheManager allCacheForKeyId:key autoCache:NO];
         obj.row = indexPath.row;
         cell.pageDataCahe =  obj;
+    }
+    
+    if (![self.cellQueue containsObject:cell]) {
+        cell.currentVC = self;
+        cell.row = indexPath.row;
+        [cell viewDidLoad];
+        [self.cellQueue addObject:cell];
+    }
+    
+    NSLog(@"cellp=%p\n",cell);
+    
+    if (self.enabelAutoCachePageData) {
+        if ([self.cacheManager checkIsNeedCreate:key autoCache:YES]) {
+            [self.cacheManager create:key classStr:[cell.class autocachePageClassStr] autoCache:YES];
+        }
+        
+        TQLPageDataAutoCache *obj = [self.cacheManager allCacheForKeyId:key autoCache:YES];
+        obj.row = indexPath.row;
+        cell.pageDataAutoCahe =  obj;
     }
    
     return cell;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
     NSLog(@"willDisplay=%ld\n",indexPath.row);
-    TQLViewContorller * cellNew = (TQLViewContorller *)cell;
+    TQLViewContorller *cellNew = (TQLViewContorller *)cell;
+    NSString *key = [@(indexPath.row) stringValue];
+    TQLPageDataCache *obj = [self.cacheManager allCacheForKeyId:key autoCache:NO];
+    if (cellNew.pageDataCahe != obj) {
+        cellNew.pageDataCahe = obj;
+        NSLog(@"%重新赋值！！！！\n");
+    }
+    
     if (self.enabelAutoCachePageData) {
-        TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+        TQLPageDataAutoCache *obj = [self.cacheManager allCacheForKeyId:key autoCache:YES];
+        if (cellNew.pageDataAutoCahe != obj) {
+            cellNew.pageDataAutoCahe = obj;
+            NSLog(@"%重新赋值！！！！\n");
+        }
         [obj recoverAllDataFromCache:cellNew];
     }
   
     [cellNew willDisplayRow:indexPath.row];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath{
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
     NSLog(@"endDisplay=%ld\n",indexPath.row);
-    TQLViewContorller * cellNew = (TQLViewContorller *)cell;
+    TQLViewContorller *cellNew = (TQLViewContorller *)cell;
+    NSString *key = [@(indexPath.row) stringValue];
+    
     if (self.enabelAutoCachePageData) {
-        TQLPageDataCache * obj = [self.cacheManager allCacheForKeyId:[@(indexPath.row) stringValue]];
+        TQLPageDataAutoCache *obj = [self.cacheManager allCacheForKeyId:key autoCache:YES];
         [obj saveAllData:cellNew];
     }
     [cellNew didEndDisplayRow:indexPath.row];
@@ -509,11 +585,13 @@ static NSInteger heightCollection = 0;
 }
 
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section{
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
     return 0;
 }
 
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
+{
     return 0;
 }
 
@@ -522,9 +600,10 @@ static NSInteger heightCollection = 0;
      _scrollFromClickEvent = NO;
 }
 
-- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset
+{
     CGPoint point  = *targetContentOffset;
-    NSIndexPath * indexPath = [self.collection indexPathForItemAtPoint:point];
+    NSIndexPath *indexPath = [self.collection indexPathForItemAtPoint:point];
 //    DDlogInfo(@"scrollView row =%ld",indexPath.row);
     NSInteger row = indexPath.row;
     if (!indexPath) {
@@ -535,7 +614,8 @@ static NSInteger heightCollection = 0;
     self.switchViewTool.currentIndex = _currentSwitchBtnIndex;
 }
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
     if (scrollView.dragging || scrollView.tracking || scrollView.decelerating) {
         return;
     }
@@ -545,18 +625,20 @@ static NSInteger heightCollection = 0;
     
 }
 
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
+{
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     CGFloat offSet = scrollView.contentOffset.x;
     CGFloat offsetNew = MAX((_currentSwitchBtnIndex-1), 0)*self.view.frame.size.width;
-    if (offsetNew != offSet ) {
+    if (offsetNew != offSet) {
         scrollView.contentOffset = CGPointMake(offsetNew, 0);
     }
     
 }
 
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
     NSLog(@"%s",__func__);
@@ -564,8 +646,9 @@ static NSInteger heightCollection = 0;
 }
 
 #pragma mark --TQLSwitchViewToolDelegate
-- (void)clickButton:(NSInteger)index{
-    TQLViewContorller * cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForRow:(_currentSwitchBtnIndex - 1) inSection:0]];
+- (void)clickButton:(NSInteger)index
+{
+    TQLViewContorller *cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForRow:(_currentSwitchBtnIndex - 1) inSection:0]];
     _scrollFromClickEvent = YES;
     if (self.ClickItemEventBlock) {
         self.ClickItemEventBlock(index,_currentSwitchBtnIndex);
@@ -579,27 +662,30 @@ static NSInteger heightCollection = 0;
     [self staticsCourseType:index];
     NSInteger row_to = index - 1;
     
-    NSIndexPath * indexPathTo = [NSIndexPath indexPathForRow:row_to inSection:0];
-    NSArray<NSIndexPath *> * array = _collection.indexPathsForVisibleItems;
+    NSIndexPath *indexPathTo = [NSIndexPath indexPathForRow:row_to inSection:0];
+    NSArray<NSIndexPath *> *array = _collection.indexPathsForVisibleItems;
     
     if (!array || array.count == 0) {
-        [_collection scrollToItemAtIndexPath:indexPathTo atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+      
+        UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:indexPathTo];
+        [_collection setContentOffset:attributes.frame.origin animated:NO];///fix:ios 14 不会滚动问题
+//        [_collection scrollToItemAtIndexPath:indexPathTo atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
         return;
     }
-    NSIndexPath * indexPath = array.firstObject;
+    NSIndexPath *indexPath = array.firstObject;
     NSInteger row_now = indexPath.row;
     if (labs(row_to - row_now) >= 2) {
         if ((row_to - row_now) > 0) {
             row_now = row_to;
             row_now--;
         }
-        else{
+        else {
             row_now = row_to;
             row_now++;
         }
         if (self.enableScollForSwitchClick && self.justTwoScrollForSwitchClick) {
             
-            NSIndexPath * indexPathNow = [NSIndexPath indexPathForRow:row_now inSection:0];
+            NSIndexPath *indexPathNow = [NSIndexPath indexPathForRow:row_now inSection:0];
             UICollectionViewLayoutAttributes *attributes = [_collection layoutAttributesForItemAtIndexPath:indexPathNow];
             [_collection setContentOffset:attributes.frame.origin animated:NO];///fix:ios 14 不会滚动问题
 //            [_collection scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:row_now inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
@@ -615,36 +701,67 @@ static NSInteger heightCollection = 0;
     [[NSNotificationCenter defaultCenter] postNotificationName:SwitchBttonClickNotification object:@(_currentSwitchBtnIndex)];
 }
 
-- (void)setMJRefreshBgColor:(UIColor *)mjRefreshColor{
+- (void)setMJRefreshBgColor:(UIColor *)mjRefreshColor
+{
     _mjRefreshColor = mjRefreshColor;
 }
 
-- (void)reloadSpecialCellReload:(NSInteger)row{
-    TQLViewContorller * cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
-    if([cell isKindOfClass:[TQLViewContorller class]]){
+- (void)reloadSpecialCellReload:(NSInteger)row
+{
+    TQLViewContorller *cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
+    if ([cell isKindOfClass:[TQLViewContorller class]]) {
         [cell willDisplayRow:row];
     }
 }
 
-- (void)reload{
+- (void)reloadCurrentPageCell
+{
+    NSInteger row = self.currentSwitchBtnIndex - 1;
+    TQLViewContorller *cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
+    if ([cell isKindOfClass:[TQLViewContorller class]]) {
+        [cell willDisplayRow:row];
+    }
+}
+
+- (void)forceReloadCurrentPageCellForNetWorkData
+{
+    NSInteger row = self.currentSwitchBtnIndex - 1;
+    TQLViewContorller *cell = (TQLViewContorller *)[self.collection cellForItemAtIndexPath:[NSIndexPath indexPathForItem:row inSection:0]];
+    if ([cell isKindOfClass:[TQLViewContorller class]]) {
+        [cell deleteArrayData];
+        [cell willDisplayRow:row];
+    }
+}
+
+
+- (void)reload
+{
     [self.collection reloadData];
 }
 
-- (void)removeAllData{
+- (void)removeAllData
+{
     [self.dataForRowArray removeAllObjects];
 }
 
-- (void)staticsCourseType:(NSInteger)index{
+- (void)staticsCourseType:(NSInteger)index
+{
     
 }
 
-- (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex isDefault:(BOOL)isDefault{
+- (void)setCurrentSwitchButtonIndex:(NSInteger)switchBtnIndex isDefault:(BOOL)isDefault
+{
     self.currentSwitchBtnIndex = switchBtnIndex;
     if (!isDefault) {
         self.switchViewTool.currentIndex = switchBtnIndex;
         [self clickButton:_switchViewTool.currentIndex];
     }
  
+}
+
+- (void)setCollectionClass:(NSString *)custionClassStr
+{
+    _collectionClassStr =  custionClassStr;
 }
 
 - (BOOL)scrollFromClickEvent

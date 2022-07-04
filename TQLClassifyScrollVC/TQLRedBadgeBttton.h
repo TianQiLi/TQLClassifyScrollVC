@@ -29,7 +29,16 @@ typedef NS_ENUM(NSInteger,TQLSwitchImgAlignment)
 
 - (TQLSwitchImgAlignment)itemImgAlinmgent;
 
+- (NSString *)itemkey;
 @end
+
+//默认类，外部可以使用
+@interface TQLSwitchViewItem :NSObject<TQLSwitchViewItemProtocal>
+@property (nonatomic, strong) NSString * name;
+@property (nonatomic, assign) NSInteger objId;
+
+@end
+
 
 @interface TQLRedBadgeBttton : UIButton
 @property (nonatomic, strong) UILabel *lableNum;

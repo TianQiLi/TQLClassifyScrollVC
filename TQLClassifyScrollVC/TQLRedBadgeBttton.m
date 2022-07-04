@@ -9,30 +9,50 @@
 #import "TQLRedBadgeBttton.h"
 #import <Masonry/Masonry.h>
 #import "TQLSwitchViewTool.h"
+
+@implementation TQLSwitchViewItem
+#pragma mark-- TQLSwitchViewItemProtocal
+
+- (NSString *)itemName
+{
+    return _name;
+}
+
+- (NSString *)itemkey
+{
+    return [NSString stringWithFormat:@"%ld",_objId];
+}
+
+@end
+
+
 @interface TQLRedBadgeBttton()
 /** labelNum */
 
 @end
 @implementation TQLRedBadgeBttton
 
-- (void)showRedPointBGColor:(UIColor *)pointColor size:(CGSize)size offSetLeadingBottom:(CGPoint)offset{
+- (void)showRedPointBGColor:(UIColor *)pointColor size:(CGSize)size offSetLeadingBottom:(CGPoint)offset
+{
     [self showNumRedPoint:0 withPointBGColor:pointColor textColor:pointColor font:nil size:size  offSetLeadingBottom:offset borderWidth:0 borderColor:nil];
 }
 
 
-- (void)showNumRedPoint:(NSInteger)num withPointBGColor:(UIColor *)pointColor textColor:(UIColor *)textColor font:(UIFont *)font size:(CGSize)size offSetLeadingBottom:(CGPoint)offset{
+- (void)showNumRedPoint:(NSInteger)num withPointBGColor:(UIColor *)pointColor textColor:(UIColor *)textColor font:(UIFont *)font size:(CGSize)size offSetLeadingBottom:(CGPoint)offset
+{
     [self showNumRedPoint:num withPointBGColor:pointColor textColor:textColor font:font size:size offSetLeadingBottom:offset borderWidth:0 borderColor:nil];
 }
 
-- (void)showNumRedPoint:(NSInteger)num withPointBGColor:(UIColor *)pointColor textColor:(UIColor *)textColor font:(UIFont *)font size:(CGSize)size offSetLeadingBottom:(CGPoint)offset borderWidth:(NSInteger)borderWidth borderColor:(UIColor *)borderColor{
+- (void)showNumRedPoint:(NSInteger)num withPointBGColor:(UIColor *)pointColor textColor:(UIColor *)textColor font:(UIFont *)font size:(CGSize)size offSetLeadingBottom:(CGPoint)offset borderWidth:(NSInteger)borderWidth borderColor:(UIColor *)borderColor
+{
     if (num == -1) {
         _lableNum.hidden = YES;
-    }else
+    } else
          _lableNum.hidden = NO;
     _redNum = num;
     if (num) {
          _lableNum.text = [NSString stringWithFormat:@"%ld",num];
-    }else
+    } else
          _lableNum.text = @"";
    
     _lableNum.textColor = textColor;
@@ -46,7 +66,7 @@
     if (borderWidth) {
         _lableNum.layer.borderColor = borderColor ? borderColor.CGColor : [UIColor whiteColor].CGColor;
         _lableNum.layer.borderWidth = borderWidth;
-    }else{
+    } else {
         _lableNum.layer.borderWidth = 0;
     }
     
@@ -62,17 +82,19 @@
 }
 
 
-- (void)setRedNum:(NSInteger)redNum{
+- (void)setRedNum:(NSInteger)redNum
+{
     _redNum = redNum;
     if (redNum <= 0) {
         _lableNum.hidden = YES;
-    }else
+    } else
         _lableNum.hidden = NO;
     _lableNum.text = [NSString stringWithFormat:@"%ld",redNum];
 }
 
-- (id)initWithFrame:(CGRect)frame{
-    if(self = [super initWithFrame:frame]){
+- (id)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
         float _w = frame.size.width;
         float _h = frame.size.height;
         _lableNum = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 10, 10)];
@@ -119,7 +141,7 @@
     [super setSelected:selected];
     if (selected) {
         [self.titleLabel setFont:self.selectedFont];
-    }else{
+    } else {
         [self.titleLabel setFont:self.normalFont];
     }
     

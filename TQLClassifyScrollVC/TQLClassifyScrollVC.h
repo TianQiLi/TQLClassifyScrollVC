@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "TQLSwitchViewTool.h"
+#import "TQLCollectionView.h"
 @class TQLSwitchViewStyleModel;
 @class TQLViewContorller;
 
@@ -22,7 +23,7 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 @interface TQLClassifyScrollVC : UIViewController
 @property (nonatomic, strong) UIImage *navBarShadowImageHidden;
 @property (nonatomic, strong) UIImage *navBarShadowImageShow;
-@property (nonatomic, readonly) UICollectionView * collection;
+@property (nonatomic, readonly) TQLCollectionView * collection;
 @property (nonatomic, readonly) TQLSwitchViewTool * switchViewTool;
 /** switchViewStyle.switchViewY > 0 才会初始化*/
 @property (nonatomic, strong) UIView *maskView;
@@ -60,17 +61,17 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 
 /*是否自动缓存页面自定义数据，默认为NO*/
 @property (nonatomic, assign) BOOL enabelAutoCachePageData;
-/*是否自动滚动嵌套的父类scrollView，默认为YES*/
+/*是否自动滚动<上下>嵌套的父类scrollView，默认为YES*/
 @property (nonatomic, assign) BOOL enabelSuperAutoScroll;
 
 @property (nonatomic, copy) void(^blockForDealloc)();
 
 
-- (id)initWithSwitchItemArray:(NSArray<NSString *> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray;
+- (id)initWithSwitchItemArray:(NSArray<TQLSwitchViewItemProtocal> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray;
 /**
  * cellIdentiArray = nil ;表示不采用复用，会创建相应个数的cell
  */
-- (id)initWithSwitchItemArray:(NSArray<NSString *> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray  withRect:(CGRect)frame;
+- (id)initWithSwitchItemArray:(NSArray<TQLSwitchViewItemProtocal> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray  withRect:(CGRect)frame;
 
  /*配置子视图bg color*/
 - (void)configViewBgColor:(UIColor *)bgColor collectionBGColor:(UIColor *)colorCollectionBG swithBtnViewBGColor:(UIColor *)colorBGSwitchBtn;
@@ -94,6 +95,12 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
  * row: collecion 的row :0-n
  */
 - (void)reloadSpecialCellReload:(NSInteger)row;
+//刷新当前页面的数据
+- (void)reloadCurrentPageCell;
+//刷新当前页面的网络数据
+- (void)forceReloadCurrentPageCellForNetWorkData;
+
+
 /**
  * TQLClassifyScrollVC 容器本身刷新
  */
@@ -110,4 +117,6 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 - (void)removeFromSuperViewWithAnimation:(void(^)())block;
 /* 动画*/
 - (void)showViewWithAnimation:(void(^)())block;
+/*自定义collection 类*/
+- (void)setCollectionClass:(NSString *)custionClassStr;
 @end

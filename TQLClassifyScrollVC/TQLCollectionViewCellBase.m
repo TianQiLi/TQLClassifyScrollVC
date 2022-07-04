@@ -15,7 +15,8 @@
 @end
 @implementation TQLCollectionViewCellBase
 
-- (UICollectionView *)subCollectionView{
+- (UICollectionView *)subCollectionView
+{
     if (!_subCollectionView) {
         
         UICollectionViewFlowLayout * flowLayout = [[UICollectionViewFlowLayout alloc] init];
@@ -44,7 +45,8 @@
     return _subCollectionView;
 }
 
-- (UITableView *)tableView{
+- (UITableView *)tableView
+{
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 10, 10) style:UITableViewStyleGrouped];
         _tableView.delegate = self;
@@ -54,17 +56,22 @@
         _tableView.estimatedRowHeight = 0;
         _tableView.estimatedSectionFooterHeight = 0;
         _tableView.estimatedSectionHeaderHeight = 0;
-        _tableView.tableFooterView = [UIView new];
+        _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.1)];
+        _tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.1)];
+        
         if (@available(iOS 11.0, *)) {
             _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+            NSInteger bottom = self.safeAreaInsets.bottom ? self.safeAreaInsets.bottom : 40;
+            _tableView.contentInset = UIEdgeInsetsMake(0, 0, bottom, 0);
         }
-        if (@available(iOS 15.0 ,* )) {
+        
+        if (@available(iOS 15.0 ,*)) {
             _tableView.sectionHeaderTopPadding = 0;
             if (_tableView.style == UITableViewStyleGrouped) {
                 _tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, CGFLOAT_MIN)];
             }
         }
-        
+         
         [self.contentView addSubview:_tableView];
         [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.leading.equalTo(self.contentView);
@@ -82,14 +89,16 @@
     return 0;
 }
 
-- (BOOL)isTableViewContoller{
+- (BOOL)isTableViewContoller
+{
     if (_tableView) {
         return YES;
     }
     return NO;
 }
 
-- (BOOL)isCollectionViewContoller{
+- (BOOL)isCollectionViewContoller
+{
     if (_subCollectionView) {
         return YES;
     }
@@ -97,14 +106,17 @@
     return NO;
 }
 
-- (void)viewDidLoad{
+- (void)viewDidLoad
+{
     
 }
 
-- (void)viewWillAppear:(NSInteger)index{
+- (void)viewWillAppear:(NSInteger)index
+{
     
 }
-- (void)viewDidDisappear:(NSInteger)index{
+- (void)viewDidDisappear:(NSInteger)index
+{
     
 }
 
@@ -116,6 +128,16 @@
 - (NSArray *)tq_needCacheKeyArray
 {
     return nil;
+}
+
++ (NSString *)cachePageClassStr
+{
+    return NSStringFromClass(TQLPageDataCache.class);
+}
+
++ (NSString *)autocachePageClassStr
+{
+    return NSStringFromClass(TQLPageDataAutoCache.class);
 }
 
 

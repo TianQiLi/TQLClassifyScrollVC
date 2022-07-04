@@ -15,6 +15,7 @@ typedef void(^FailureBlock)(NSError * error);
 @property (readonly)UICollectionView * subCollectionView;
 @property (readonly)UITableView * tableView;
 @property (strong,atomic)TQLPageDataCache * pageDataCahe;
+@property (strong,atomic)TQLPageDataCache * pageDataAutoCahe;
 /** scrollView */
 @property (nonatomic, readonly) UIScrollView *currentScrollView;
 - (BOOL)isTableViewContoller;
@@ -29,4 +30,8 @@ typedef void(^FailureBlock)(NSError * error);
  */
 - (void)viewWillAppear:(NSInteger)index;
 - (void)viewDidDisappear:(NSInteger)index;
+//子类可以重写，默认TQLPageDataCache
++ (NSString *)cachePageClassStr;
+//子类可重写，不过不建议重写，应该用不到
++ (NSString *)autocachePageClassStr;
 @end

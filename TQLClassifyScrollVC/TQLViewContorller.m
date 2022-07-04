@@ -17,25 +17,31 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 @end
 
 @implementation TQLViewContorller
-- (void)dealloc{
+- (void)dealloc
+{
     NSLog(@"%s",__func__);
     [[NSNotificationCenter defaultCenter] removeObserver:self name:TQLCS_ReceiveMemoryWarningNotification object:nil];
 }
 
-- (id)initWithFrame:(CGRect)frame{
+
+- (id)initWithFrame:(CGRect)frame
+{
     if (self = [super initWithFrame:frame]) {
+      
         _pageRows = 20;
         _page = 0;
         _pageFirst = 0;
         _enableHeaderRefresh = NO;
         _enableFooterRefresh = NO;
         _arrayData = @[];
-        [self viewDidLoad];
+      //放在控制器调用
+//        [self viewDidLoad];
     }
     return self;
 }
 
-- (void)cellForItem:(NSInteger)row{
+- (void)cellForItem:(NSInteger)row
+{
     //清楚已有View
     _row = row;
     self.arrayData = @[];
@@ -47,12 +53,14 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     
 }
 
-- (void)didEndDisplayRow:(NSInteger)row{
+- (void)didEndDisplayRow:(NSInteger)row
+{
      _row = row;
      [self viewDidDisappear:_row];
 }
 
-- (void)willDisplayRow:(NSInteger)row{
+- (void)willDisplayRow:(NSInteger)row
+{
     //赋值row
     _row = row;
     if (self.configTQLVCBlock) {
@@ -77,17 +85,21 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
         [self.currentScrollView.mj_header endRefreshing];
         if (self.currentVC.switchViewStyle.needFistRefresh) {
             [self.currentScrollView.mj_header beginRefreshing];
-        }else if(self.enableHeaderRefresh){
+        }
+        else if (self.enableHeaderRefresh){
             [self loadTopData];
         }
-     
-    }else{
+    }
+    else {
         if (self.currentScrollView) {
             if (self.isTableViewContoller) {
                 [self.tableView reloadData];
-            }else{
+            }
+            else {
                 [self.subCollectionView reloadData];
             }
+            
+            [self setEndRefreshAfterDisplay];
         }
        
         [self viewWillAppear:_row];
@@ -96,8 +108,21 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 //    [self viewWillAppear:_row];
 }
 
+/// 切换页面时，cellForItem:将arrayData=@[],造成footer的state设置成了StateIdle，
+/// 出现footer显示“加载更多”的文案，与实际不符。所以需根据tq_dataStatusType来处理一下
+- (void)setEndRefreshAfterDisplay
+{
+    NSInteger state = [self.tq_dataStatusType integerValue];
+    if (state == CCDataStatusIncompleteData) {
+        [self.currentScrollView.mj_footer endRefreshingWithNoMoreData];
+    }
+    else {
+        [self.currentScrollView.mj_footer endRefreshing];
+    }
+}
 
-- (void)setEnableHeaderRefresh:(BOOL)enableHeaderRefresh{
+- (void)setEnableHeaderRefresh:(BOOL)enableHeaderRefresh
+{
     _enableHeaderRefresh = enableHeaderRefresh;
     if (_enableHeaderRefresh) {
         self.currentScrollView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadTopData)];
@@ -110,7 +135,8 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     }
 }
 
-- (void)setEnableFooterRefresh:(BOOL)enableFooterRefresh{
+- (void)setEnableFooterRefresh:(BOOL)enableFooterRefresh
+{
     //上拉加载更多
     _enableFooterRefresh = enableFooterRefresh;
     if (_enableFooterRefresh) {
@@ -123,7 +149,8 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     }
 }
 
-- (SuccessBlock)successBlock{
+- (SuccessBlock)successBlock
+{
     if (!_successBlock) {
         __weak typeof(self) weakSelf = self;
         _successBlock = ^(NSArray * array){
@@ -152,7 +179,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
             //每次操作完成，要更新数组
             strongSelf.arrayData = arrayReslust.copy;
             NSLog(@"write array to dic,数组个数Row=%ld,count=%ld\n",strongSelf.row,(long)strongSelf.arrayData.count);
-            if (self.currentScrollView) {
+            if (strongSelf.currentScrollView) {
                 if (strongSelf.isTableViewContoller) {
                     [strongSelf.tableView reloadData];
                 }else{
@@ -165,7 +192,8 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     return _successBlock;
 }
 
-- (FailureBlock)failureBlock{
+- (FailureBlock)failureBlock
+{
     if (!_failureBlock) {
         __weak typeof(self) weakSelf = self;
         _failureBlock = ^(NSError * error){
@@ -173,14 +201,14 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
             strongSelf.page --;//reset
             [strongSelf setEndRefresh:nil];
             if (strongSelf.arrayData.count == 0) {
-                strongSelf.dataStatusType = @(CCDataStatusNoData);
+                strongSelf.tq_dataStatusType = @(CCDataStatusNoData);
                 if (strongSelf.isTableViewContoller) {
                     [strongSelf.tableView reloadData];
                 }
                 
             }
             else
-                strongSelf.dataStatusType = @(CCDataStatusIncompleteData);
+                strongSelf.tq_dataStatusType = @(CCDataStatusIncompleteData);
             
         };
     }
@@ -188,7 +216,8 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     
 }
 
-- (void)viewDidLoad{
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sc_reciveMemoryWarningNotification:) name:TQLCS_ReceiveMemoryWarningNotification object:nil];
 }
@@ -201,7 +230,8 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     }
 }
 
-- (void)setEndRefresh:(NSArray *)array{
+- (void)setEndRefresh:(NSArray *)array
+{
     if (self.page == self.pageFirst) {
         [self.currentScrollView.mj_header endRefreshing];
         if (!array || array.count == 0) {
@@ -221,50 +251,59 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     
 }
 
-- (void)setApiStatus:(NSArray *)array{
+- (void)setApiStatus:(NSArray *)array
+{
     /*下拉*/
     if ((!array || array.count == 0) && (self.page == self.pageFirst)) {
-        self.dataStatusType = @(CCDataStatusNoData);
+        self.tq_dataStatusType = @(CCDataStatusNoData);
         return;
     }
     if (array.count < self.pageRows) {
-        self.dataStatusType = @(CCDataStatusIncompleteData);
+        self.tq_dataStatusType = @(CCDataStatusIncompleteData);
     }else{
-        self.dataStatusType = @(CCDataStatusOk);
+        self.tq_dataStatusType = @(CCDataStatusOk);
     }
 }
 
-- (void)setPageFirst:(NSInteger)pageFirst{
+- (void)setPageFirst:(NSInteger)pageFirst
+{
     _pageFirst = pageFirst;
     _page = _pageFirst;
 }
 
-- (void)setCurrentVC:(TQLClassifyScrollVC *)currentVC{
+- (void)setCurrentVC:(TQLClassifyScrollVC *)currentVC
+{
     _currentVC = currentVC;
 }
 
-- (TQLSwitchViewTool *)switchViewTool{
+- (TQLSwitchViewTool *)switchViewTool
+{
     return _currentVC.switchViewTool;
 }
 
 
-- (NSInteger)currentSwitchBtnIndex{
+- (NSInteger)currentSwitchBtnIndex
+{
     return _currentVC.currentSwitchBtnIndex;
 }
 
-+ (NSString *)cellIdentifiter{
++ (NSString *)cellIdentifiter
+{
     return  @"Nest_CollectionViewCellIdentif";
 }
 
-- (BOOL)ignoreSwitchBtnEvent{
+- (BOOL)ignoreSwitchBtnEvent
+{
     return NO;
 }
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event
+{
     return [super hitTest:point withEvent:event];
 }
 // 解决左右滑动手势冲突问题-对右滑返回手势做了特定屏幕的兼容
-- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event{
+- (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
+{
     if (CGRectContainsPoint(self.frame, point)) {
         if (point.x < 40 && point.x >= 0) {
             self.currentVC.collection.scrollEnabled = NO;
@@ -300,11 +339,11 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
         return;
     }
     CGPoint translate = [scrollView.panGestureRecognizer translationInView:scrollView];
-    NSArray * arrayScrollView = [self getScrollViewSuper];
+    NSArray *arrayScrollView = [self getScrollViewSuper];
     if (arrayScrollView.count > 0) {//下
         __block  BOOL needScroll = NO;
         if (translate.y > 0) {
-            if (scrollView.contentOffset.y < 0 ) {
+            if (scrollView.contentOffset.y < 0) {
                 [arrayScrollView enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIScrollView * superScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
                     if (superScrollView.contentOffset.y > 0) {
                         NSInteger offsetY = MAX(superScrollView.contentOffset.y - translate.y, 0);
@@ -319,7 +358,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
                 return;
             }
-        }else{
+        } else {
             [arrayScrollView enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(UIScrollView * superScrollView, NSUInteger idx, BOOL * _Nonnull stop) {
                 NSInteger maxScrollView = superScrollView.contentSize.height - superScrollView.frame.size.height;
                 if (self.currentVC.switchViewStyle.maxOffsetY) {
@@ -339,10 +378,11 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     }
 }
 
-- (NSArray *)getScrollViewSuper{
-    UIScrollView * scrollView = nil;
-    NSMutableArray * array = [NSMutableArray new];
-    UIView * superView = self.currentVC.view.superview;
+- (NSArray *)getScrollViewSuper
+{
+    UIScrollView *scrollView = nil;
+    NSMutableArray *array = [NSMutableArray new];
+    UIView *superView = self.currentVC.view.superview;
     while (superView) {
         //外部可能继承
         if ([superView isKindOfClass:[UIScrollView class]]) {
@@ -356,26 +396,31 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
 #pragma mark -- 接口网络请求
 
-- (void)loadTopData{
+- (void)loadTopData
+{
     self.page = self.pageFirst;
     [self basicRequestData];
 }
 
-- (void)setPage:(NSInteger)page{
+- (void)setPage:(NSInteger)page
+{
     _page = (page >= self.pageFirst) ? page : self.pageFirst;
     [self.pageForIndex setObject:@(_page) forKey:@(self.row)];
 }
 
-- (void)loadMoreData{
+- (void)loadMoreData
+{
     self.page ++;
     [self basicRequestData];
 }
 
-- (void)basicRequestData {
+- (void)basicRequestData
+{
     NSAssert(NO, @"子类必须重写");
 }
 
-- (NSString *)keyForCurrentData{
+- (NSString *)keyForCurrentData
+{
     return [NSString stringWithFormat:@"%zd",self.row];
 }
 
@@ -385,8 +430,8 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
         return NO;
     }
      //读取当前所有的数据
-     NSString * keyForData = [self keyForCurrentData];
-     NSMutableArray * arrayReslust = [self.dataForRowArray objectForKey:keyForData];
+     NSString *keyForData = [self keyForCurrentData];
+     NSMutableArray *arrayReslust = [self.dataForRowArray objectForKey:keyForData];
      arrayReslust =  arrayReslust ? arrayReslust :@[].mutableCopy;
     
      if (index < arrayReslust.count) {
@@ -401,7 +446,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
          }
          if (self.isTableViewContoller) {
              [self.tableView reloadData];
-         }else{
+         } else {
              [self.subCollectionView reloadData];
          }
          return YES;
@@ -412,8 +457,8 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
 - (void)deleteArrayData
 {
-    NSString * keyForData = [self keyForCurrentData];
-    NSMutableArray * arrayReslust = [self.dataForRowArray objectForKey:keyForData];
+    NSString *keyForData = [self keyForCurrentData];
+    NSMutableArray *arrayReslust = [self.dataForRowArray objectForKey:keyForData];
     arrayReslust =  arrayReslust ? arrayReslust :@[].mutableCopy;
     [arrayReslust removeAllObjects];
     [self.dataForRowArray setObject:arrayReslust forKey:keyForData];
@@ -422,11 +467,13 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
 
 
 #pragma mark -- 当前的分类按钮
-- (TQLRedBadgeBttton *)currentSwitchBtn{
+- (TQLRedBadgeBttton *)currentSwitchBtn
+{
     return self.switchToolBtnArray[self.row];
 }
 
-- (NSString *)currentSwitchItem{
+- (NSString *)currentSwitchItem
+{
     return self.switchToolItemArray[self.row];
 }
  

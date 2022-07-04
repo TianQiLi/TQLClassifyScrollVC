@@ -13,13 +13,13 @@
 #import <Masonry/Masonry.h>
 
 
-@interface TQLSwitchViewTool (){
+@interface TQLSwitchViewTool () {
     TQLSwitchViewStyleModel *_switchViewStyle;
     
 }
-@property (nonatomic,strong) UIScrollView * scrollView;
-@property (nonatomic,strong) UIView *flagLine;
-@property (nonatomic,strong) UIView * bottomLine;
+@property (nonatomic, strong) UIScrollView * scrollView;
+@property (nonatomic, strong) UIView *flagLine;
+@property (nonatomic, strong) UIView *bottomLine;
 @property (nonatomic, strong) TQLSwitchViewStyleModel *switchViewStyle;
 /** btnArray */
 @property (nonatomic, strong) NSMutableArray *buttonItemArray;
@@ -28,22 +28,26 @@
 @end
 @implementation TQLSwitchViewTool
 
-- (NSArray *)btnArray{
+- (NSArray *)btnArray
+{
     return self.buttonItemArray;
 }
 
-- (TQLSwitchViewStyleModel *)switchViewStyle{
+- (TQLSwitchViewStyleModel *)switchViewStyle
+{
     if (!_switchViewStyle) {
         _switchViewStyle = [[TQLSwitchViewStyleModel alloc] init];
     }
     return _switchViewStyle;
 }
 
-- (void)setSwitchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle{
+- (void)setSwitchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle
+{
     _switchViewStyle = switchViewStyle;
 }
 
--(id)initWithFrame:(CGRect)frame switchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle{
+- (id)initWithFrame:(CGRect)frame switchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle
+{
     if (self = [super initWithFrame:frame]) {
         _buttonItemArray = @[].mutableCopy;
         _switchViewStyle = switchViewStyle;
@@ -87,16 +91,18 @@
     return self;
 }
 
-- (UIView *)flagView{
+- (UIView *)flagView
+{
     return self.flagLine;
 }
 
-- (void)setCornerRadius:(float)cornerRadius{
+- (void)setCornerRadius:(float)cornerRadius
+{
     _cornerRadius = cornerRadius;
     if (_cornerRadius > 0) {
-        UIBezierPath * path = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(_cornerRadius, _cornerRadius)];
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(_cornerRadius, _cornerRadius)];
         
-        CAShapeLayer * shapeLayer = [CAShapeLayer new];
+        CAShapeLayer *shapeLayer = [CAShapeLayer new];
         shapeLayer.path = path.CGPath;
         shapeLayer.frame = self.bounds;
         self.layer.mask = shapeLayer;
@@ -104,19 +110,20 @@
     
 }
 
-- (void)setArrayItem:(NSArray *)arrayItem{
+- (void)setArrayItem:(NSArray *)arrayItem
+{
     [self clearSubView];
     _arrayItem = arrayItem ? arrayItem : @[];
     
-    NSMutableArray * results = @[].mutableCopy;
+    NSMutableArray *results = @[].mutableCopy;
     NSInteger maxLength = self.switchViewStyle.maxItemNameLength;
     if (maxLength > 0) {
         [_arrayItem enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL * _Nonnull stop) {
            
-            NSString * name = @"";
+            NSString *name = @"";
             if (![obj isKindOfClass:[NSString class]] && [obj respondsToSelector:@selector(itemName)]) {
                 name = [obj itemName];
-            }else if([obj isKindOfClass:[NSString class]]){
+            } else if ([obj isKindOfClass:[NSString class]]) {
                 name =  obj;
             }
             
@@ -135,7 +142,8 @@
     [self loadSubView];
 }
 
-- (void)clearSubView{
+- (void)clearSubView
+{
     if (!_arrayItem || _arrayItem.count == 0) {
         _arrayItem = @[];
         return;
@@ -228,7 +236,7 @@
     BOOL isVertical = NO;
     switch (type) {
         case TQLSwitchImgAlignmentVerticalTop:
-        case TQLSwitchImgAlignmentVerticalBottom:{
+        case TQLSwitchImgAlignmentVerticalBottom: {
             isVertical = YES;
             break;
         }
@@ -269,11 +277,11 @@
                 CGFloat margin  = [obj marginTitleForImg];
                 if (type == TQLSwitchImgAlignmentHorizontalLeft) {
                     [button setImageEdgeInsets:UIEdgeInsetsMake(0, margin, 0, 0)];
-                }else if (type == TQLSwitchImgAlignmentHorizontalRight) {
+                } else if (type == TQLSwitchImgAlignmentHorizontalRight) {
                     [button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, margin)];
-                }else if (type == TQLSwitchImgAlignmentVerticalTop) {
+                } else if (type == TQLSwitchImgAlignmentVerticalTop) {
                     [button setImageEdgeInsets:UIEdgeInsetsMake(margin, 0, 0, 0)];
-                }else if (type == TQLSwitchImgAlignmentVerticalBottom) {
+                } else if (type == TQLSwitchImgAlignmentVerticalBottom) {
                     [button setImageEdgeInsets:UIEdgeInsetsMake(0, 0, margin, 0)];
                 }
             }
@@ -292,14 +300,14 @@
 
 - (TQLRedBadgeBttton *)createButton:(id<TQLSwitchViewItemProtocal>)obj
 {
-    NSString * name = @"";
+    NSString *name = @"";
     if ([obj isKindOfClass:[NSString class]]) {
         name = obj;
-    }else if ([obj respondsToSelector:@selector(itemName)]){
+    } else if ([obj respondsToSelector:@selector(itemName)]) {
         name = [obj itemName];
     }
     
-    TQLRedBadgeBttton * button  = [TQLRedBadgeBttton buttonWithType:UIButtonTypeCustom];
+    TQLRedBadgeBttton *button  = [TQLRedBadgeBttton buttonWithType:UIButtonTypeCustom];
     [button setTitle:name forState:UIControlStateNormal];
     [button setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateSelected];
     [button setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];
@@ -310,7 +318,8 @@
     return button;
 }
 
--(void)loadSubView{
+- (void)loadSubView
+{
     NSInteger btnWidth = (self.frame.size.width - self.switchViewStyle.scrollViewItemEdge.left - self.switchViewStyle.scrollViewItemEdge.right) / self.arrayItem.count;
     NSInteger index = 0;
     [_buttonItemArray removeAllObjects];
@@ -320,7 +329,7 @@
     NSInteger buttonHeight = self.scrollView.frame.size.height - self.switchViewStyle.itemOffset.y;
     for (id<TQLSwitchViewItemProtocal> obj in self.arrayItem) {
  
-        TQLRedBadgeBttton * button  = [self createButton:obj];
+        TQLRedBadgeBttton *button  = [self createButton:obj];
         [button setTag: ++index];
         [_buttonItemArray addObject:button];
         CGFloat imgWith = [[self class] getImgWidth:obj button:button isSelected:NO];
@@ -330,7 +339,7 @@
         if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFlexible) {
             if (index == 1) {
                 textWidth = ceil(self.switchViewStyle.selectedBtn_Font.pointSize) * button.titleLabel.text.length;
-            }else{
+            } else {
                 textWidth = ceil(self.switchViewStyle.normalBtn_Font.pointSize) * button.titleLabel.text.length;
             }
             
@@ -339,37 +348,37 @@
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2 + imgWith;
                 [button setTitleEdgeInsets: UIEdgeInsetsMake(0, -(self.switchViewStyle.scrollViewItemInterMargin/2 - imgWith), 0, 0)];
                 
-            }else if ((index) == countItem){//last
+            } else if ((index) == countItem) {//last
                 [button.titleLabel setTextAlignment:NSTextAlignmentRight];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
-            else{
+            else {
                 [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
             }
             
             [button setFrame:CGRectMake(lastBtnx,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
             lastBtnx = CGRectGetMaxX(button.frame);
-        }else if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFixedButtonWidth) {
+        } else if (self.switchViewStyle.scrollViewWidthStyle == TQLSwitchViewWidthStyleFixedButtonWidth) {
               [button.titleLabel setTextAlignment:NSTextAlignmentCenter];
             if (self.switchViewStyle.buttonItemWidth) {
                 btnWidth = self.switchViewStyle.buttonItemWidth + self.switchViewStyle.scrollViewItemInterMargin;
-            }else{
+            } else {
                 btnWidth = button.currentTitle.length * self.switchViewStyle.selectedBtn_Font.pointSize;
             }
             
             [button setFrame:CGRectMake(lastBtnx,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
             lastBtnx = CGRectGetMaxX(button.frame);
             
-            if ((index) == countItem){//last
+            if ((index) == countItem) {//last
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin ;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
 
-        }else{
+        } else {
             [button setFrame:CGRectMake(marginLeft + (index - 1) * btnWidth,self.switchViewStyle.itemOffset.y, btnWidth, buttonHeight)];
             [button.titleLabel setTextAlignment:NSTextAlignmentCenter];//默认
         }
@@ -378,7 +387,7 @@
             button.selected = YES;
             [self layoutIfNeeded];
             [self updateFlagLineFrame:button];
-        }else{
+        } else {
             button.selected = NO;
         }
          
@@ -397,8 +406,9 @@
     _currentIndex = 1;
 }
 
--(void)clickButton:(id)sender{
-    UIButton * button = (UIButton*)sender;
+- (void)clickButton:(id)sender
+{
+    UIButton *button = (UIButton *)sender;
     NSInteger index = [button tag];
   
     self.currentIndex = index;
@@ -408,7 +418,8 @@
     }
 }
 
-- (void)updateButtonFrame:(NSInteger)selectedIndex{
+- (void)updateButtonFrame:(NSInteger)selectedIndex
+{
     selectedIndex -= 1;
     if (selectedIndex < 0) {
         return;
@@ -431,19 +442,19 @@
                 button.selected = YES;
                 imgWith = [[self class] getImgWidth:obj button:button isSelected:YES];//选中
                 textWidth = ceil(self.switchViewStyle.selectedBtn_Font.pointSize) * button.titleLabel.text.length;
-            }else{
+            } else {
                 textWidth = ceil(self.switchViewStyle.normalBtn_Font.pointSize) * button.titleLabel.text.length;
             }
             
             if (index == 0) {
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin/2 + imgWith;
                 [button.titleLabel setTextAlignment:NSTextAlignmentLeft];
-            }else if ((index + 1) == countItem){//last
+            } else if ((index + 1) == countItem) {//last
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
                 NSInteger scrollViewWidth = lastBtnx + btnWidth + self.switchViewStyle.scrollViewItemEdge.right;
                 [self.scrollView setContentSize:CGSizeMake(scrollViewWidth, self.scrollView.contentSize.height)];
             }
-            else{
+            else {
                 btnWidth = textWidth + self.switchViewStyle.scrollViewItemInterMargin + imgWith;
             }
           
@@ -459,7 +470,8 @@
     
 }
 
--(void)setCurrentIndex:(NSInteger)currentIndex{
+- (void)setCurrentIndex:(NSInteger)currentIndex
+{
     if (currentIndex == _currentIndex) {
         return;
     }
@@ -474,7 +486,7 @@
         [self.btnArray enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (idx > (_currentIndex - 1)) {
                 [obj setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];
-            }else{
+            } else {
                 [obj setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateNormal];
             }
         }];
@@ -482,8 +494,9 @@
     
 }
 
--(void)changeButtonStyle:(NSInteger)index  withIsSelected:(BOOL)isSelect{
-    UIButton * button = [self.scrollView viewWithTag:index];
+- (void)changeButtonStyle:(NSInteger)index  withIsSelected:(BOOL)isSelect
+{
+    UIButton *button = [self.scrollView viewWithTag:index];
     if (!button || ![button isKindOfClass:[UIButton class]]) {
         return;
     }
@@ -494,7 +507,7 @@
         NSInteger absluteX = 0;
         if (button.center.x < self.scrollView.bounds.size.width/2) {
             absluteX = CGRectGetMinX(button.frame) - currentOffsetx;
-        }else{
+        } else {
             absluteX = CGRectGetMaxX(button.frame) - currentOffsetx;
         }
         
@@ -503,11 +516,11 @@
 //            NSInteger offsetx = MIN(currentOffsetx + absluteX + CGRectGetWidth(button.frame), self.scrollView.contentSize.width - self.scrollView.frame.size.width);
             NSInteger offsetx = MIN(CGRectGetMinX(button.frame), self.scrollView.contentSize.width - self.scrollView.frame.size.width);
             [self.scrollView setContentOffset:CGPointMake(offsetx ,0) animated:YES];
-        }else if (absluteX < CGRectGetWidth(button.frame)){//偏左
+        } else if (absluteX < CGRectGetWidth(button.frame)) {//偏左
             NSInteger offsetx = currentOffsetx + absluteX;
             offsetx = MAX(offsetx - CGRectGetWidth(button.frame), 0);
             [self.scrollView setContentOffset:CGPointMake(offsetx,0) animated:YES];
-        }else if (_scrollView.contentOffset.x < 0){
+        } else if (_scrollView.contentOffset.x < 0) {
             [self.scrollView setContentOffset:CGPointMake(0,0) animated:YES];
         }
  
@@ -555,7 +568,8 @@
     
 }
 
-+ (CGSize)contentSize{
++ (CGSize)contentSize
+{
     return CGSizeMake([UIScreen mainScreen].bounds.size.width, 50);
     
 }
