@@ -13,6 +13,8 @@
 NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 NSString * const TQLCS_ReceiveMemoryWarningNotification = @"TQLCS_ReceiveMemoryWarningNotification";
 
+
+static NSString * const TQLCellDefaultIdentifiter = @"TQLCellDefaultIdentifiter";
 static NSInteger heightCollection = 0;
 @interface TQLClassifyScrollVC ()<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,TQLSwitchViewToolDelegate,UIContentContainer>
 @property (nonatomic, strong) TQLCollectionView * collection;
@@ -155,6 +157,14 @@ static NSInteger heightCollection = 0;
     return _cacheManager;
 }
 
+- (NSArray *)cellIdentifiterArray
+{
+    if (!_cellIdentifiterArray || !_cellIdentifiterArray.count ) {
+        _cellIdentifiterArray = @[TQLCellDefaultIdentifiter];
+    }
+    return _cellIdentifiterArray;
+}
+
 - (NSInteger)currentSwitchBtnIndex
 {
     return _currentSwitchBtnIndex;
@@ -181,8 +191,10 @@ static NSInteger heightCollection = 0;
         _cellIdentifiterArray = cellIdentiArray;
         if (!_cellIdentifiterArray || _cellIdentifiterArray.count == 0) {
             NSMutableArray *array = @[].mutableCopy;
-            NSString *cellDefaultIdentifiter = @"cellDefaultIdentifiter";
-            for (NSInteger i = 0;i < arrayItem.count ; ++i) {
+            NSString *cellDefaultIdentifiter = TQLCellDefaultIdentifiter;
+            NSInteger max_count = MAX(self.classCustomArray.count, self.cellIdentifiterArray.count);
+            max_count = MAX(max_count, arrayItem.count);
+            for (NSInteger i = 0;i < max_count ; ++i) {
                 [array addObject:[NSString stringWithFormat:@"%@_%ld",cellDefaultIdentifiter,(long)i]];
             }
             _cellIdentifiterArray = array.copy;
@@ -781,5 +793,6 @@ static NSInteger heightCollection = 0;
 */
 
 @end
+
 
 
