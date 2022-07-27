@@ -25,8 +25,8 @@
     self.pageFirst = 0;
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorColor = [UIColor redColor];
-    self.dataStatusEmptyBGColor = @"0xf4f6f9";
-    self.verticalOffset = @(-30);
+    self.tq_dataStatusEmptyBGColor = @"0xf4f6f9";
+    self.tq_verticalOffset = @(-30);
     self.dataStatusNoData_text_fontSize = @(14);
 }
 

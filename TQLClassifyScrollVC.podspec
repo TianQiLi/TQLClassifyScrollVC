@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name         = "TQLClassifyScrollVC"
-  s.version      = "0.0.29.21"
+  s.version      = "0.0.29.22"
   s.summary      = "多tab 滚动组件控制器."
   s.homepage     = "https://github.com/TianQiLi/TQLClassifyScrollVC"
   s.license      = "MIT"
@@ -27,6 +27,6 @@ s.source       = { :git => "https://github.com/TianQiLi/TQLClassifyScrollVC.git"
   s.requires_arc = true
   s.dependency "Masonry"
   s.dependency "DZNEmptyDataSet"
-  s.dependency "MJRefresh", '~>2.0'
+  s.dependency "MJRefresh"
 
 end
