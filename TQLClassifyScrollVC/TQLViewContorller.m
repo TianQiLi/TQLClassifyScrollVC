@@ -141,6 +141,7 @@ NSString * const CellSelectedNotification = @"CellSelectedNotification";
     _enableFooterRefresh = enableFooterRefresh;
     if (_enableFooterRefresh) {
         self.currentScrollView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+        self.currentScrollView.mj_footer.alpha = 0;
         if (_mjRefreshColor) {
             self.currentScrollView.mj_footer.backgroundColor = self.mjRefreshColor;
         }
