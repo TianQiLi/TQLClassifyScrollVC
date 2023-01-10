@@ -45,10 +45,15 @@
     return _subCollectionView;
 }
 
++ (UITableView *)createTable
+{
+    return [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 10, 10) style:UITableViewStyleGrouped];
+}
+
 - (UITableView *)tableView
 {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 10, 10) style:UITableViewStyleGrouped];
+        _tableView = [[self class] createTable];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.emptyDataSetSource = self;
@@ -142,3 +147,4 @@
 
 
 @end
+
