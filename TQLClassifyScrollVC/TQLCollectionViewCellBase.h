@@ -18,6 +18,7 @@ typedef void(^FailureBlock)(NSError * error);
 @property (strong,atomic)TQLPageDataCache * pageDataAutoCahe;
 /** scrollView */
 @property (nonatomic, readonly) UIScrollView *currentScrollView;
++ (UITableView *)createTable;///可重写
 - (BOOL)isTableViewContoller;
 - (BOOL)isCollectionViewContoller;
 - (void)viewDidLoad;
@@ -35,3 +36,4 @@ typedef void(^FailureBlock)(NSError * error);
 //子类可重写，不过不建议重写，应该用不到
 + (NSString *)autocachePageClassStr;
 @end
+
