@@ -9,7 +9,7 @@
 #import "TQLClassifyScrollVC.h"
 #import "TQLClassifyScrollVC_Header.h"
 #import "TQLDataCacheManager.h"
-#import "CocoaLumberjack/CocoaLumberjack.h"
+//#import "CocoaLumberjack/CocoaLumberjack.h"
 NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 NSString * const TQLCS_ReceiveMemoryWarningNotification = @"TQLCS_ReceiveMemoryWarningNotification";
 
