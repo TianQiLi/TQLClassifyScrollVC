@@ -65,7 +65,8 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 @property (nonatomic, assign) BOOL enabelSuperAutoScroll;
 
 @property (nonatomic, copy) void(^blockForDealloc)();
-
+///拖动造成的index 改变事件回调
+@property (nonatomic, copy) void(^blockChangeIndexForPanGesture)(NSInteger newIndex,NSInteger oldIndex);
 
 - (id)initWithSwitchItemArray:(NSArray<TQLSwitchViewItemProtocal> *)arrayItem withClassArray:(NSArray<NSString *> *)classCellArray withIdentifiter:(NSArray<NSString *> *)cellIdentiArray;
 /**
@@ -120,3 +121,4 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 /*自定义collection 类*/
 - (void)setCollectionClass:(NSString *)custionClassStr;
 @end
+

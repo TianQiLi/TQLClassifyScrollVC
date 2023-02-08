@@ -627,8 +627,16 @@ static NSInteger heightCollection = 0;
         row = point.x/scrollView.frame.size.width;
     }
     _scrollFromClickEvent = NO;
-    _currentSwitchBtnIndex = row + 1;
+    NSInteger newIndex = row + 1;
+    NSInteger oldIndex = _currentSwitchBtnIndex;
+    
+    _currentSwitchBtnIndex = newIndex;
     self.switchViewTool.currentIndex = _currentSwitchBtnIndex;
+    
+    if (self.blockChangeIndexForPanGesture) {
+        self.blockChangeIndexForPanGesture(newIndex,oldIndex);
+    }
+
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

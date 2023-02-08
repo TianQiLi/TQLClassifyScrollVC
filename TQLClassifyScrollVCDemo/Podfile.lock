@@ -2,7 +2,7 @@ PODS:
   - DZNEmptyDataSet (1.8.1)
   - Masonry (1.1.0)
   - MJRefresh (3.7.5)
-  - TQLClassifyScrollVC (0.0.29.24):
+  - TQLClassifyScrollVC (0.0.29.26):
     - DZNEmptyDataSet
     - Masonry
     - MJRefresh
@@ -24,7 +24,7 @@ SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
-  TQLClassifyScrollVC: 35241b92f9cd36706f55af4d4f5de610b21414ae
+  TQLClassifyScrollVC: e1fbaad3bf43403881b434918570a0670403ae83
 
 PODFILE CHECKSUM: e4116f5facd77bfbde557fc70258ec3718f660f7
 
