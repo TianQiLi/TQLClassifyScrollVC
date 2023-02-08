@@ -9,7 +9,7 @@
 #import "TQLClassifyScrollVC.h"
 #import "TQLClassifyScrollVC_Header.h"
 #import "TQLDataCacheManager.h"
-
+#import "CocoaLumberjack/CocoaLumberjack.h"
 NSString * const SwitchBttonClickNotification = @"SwitchBttonClickNotification";
 NSString * const TQLCS_ReceiveMemoryWarningNotification = @"TQLCS_ReceiveMemoryWarningNotification";
 
@@ -189,7 +189,7 @@ static NSInteger heightCollection = 0;
         _arrayItem = arrayItem;
         _classCustomArray = classCellArray;
         _cellIdentifiterArray = cellIdentiArray;
-        if (!_cellIdentifiterArray || _cellIdentifiterArray.count == 0) {
+        if (_cellIdentifiterArray.count == 0) {
             NSMutableArray *array = @[].mutableCopy;
             NSString *cellDefaultIdentifiter = TQLCellDefaultIdentifiter;
             NSInteger max_count = MAX(self.classCustomArray.count, self.cellIdentifiterArray.count);
@@ -428,6 +428,9 @@ static NSInteger heightCollection = 0;
   
     NSInteger max_count = MAX(self.classCustomArray.count, self.cellIdentifiterArray.count);
     for (NSInteger i = 0 ; i< max_count ; i++) {
+        if (self.classCustomArray.count == 0) {
+            self.classCustomArray = @[NSStringFromClass([TQLViewContorller class])];
+        }
         NSString *classCustom = (self.classCustomArray.count > i) ?self.classCustomArray[i] : self.classCustomArray.lastObject;
         NSString *cellIdentif = (self.cellIdentifiterArray.count > i) ?self.cellIdentifiterArray[i] : self.cellIdentifiterArray.lastObject;
         [self.collection registerClass:NSClassFromString(classCustom) forCellWithReuseIdentifier:cellIdentif];
@@ -526,7 +529,9 @@ static NSInteger heightCollection = 0;
     } else {
         cellIdentifiter = (self.cellIdentifiterArray.count > 0) ? self.cellIdentifiterArray.lastObject : @"cell";
     }
- 
+    if ([cellIdentifiter isEqualToString:@"TQLCellDefaultIdentifiter_0"]) {
+        NSString *test = @"";
+    }
     TQLViewContorller *cell = [collection dequeueReusableCellWithReuseIdentifier:cellIdentifiter forIndexPath:indexPath];
     NSString *key = [@(indexPath.row) stringValue];
     //create cache
@@ -793,6 +798,7 @@ static NSInteger heightCollection = 0;
 */
 
 @end
+
 
 
 
