@@ -25,6 +25,9 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 @property (nonatomic, strong) UIImage *navBarShadowImageShow;
 @property (nonatomic, readonly) TQLCollectionView * collection;
 @property (nonatomic, readonly) TQLSwitchViewTool * switchViewTool;
+//@property (nonatomic, strong, readonly) NSArray *arrayItem;
+@property (nonatomic, strong, readonly) NSArray *classCustomArray;
+@property (nonatomic, strong, readonly) NSArray *cellIdentifiterArray;
 /** switchViewStyle.switchViewY > 0 才会初始化*/
 @property (nonatomic, strong) UIView *maskView;
 
@@ -84,10 +87,13 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 - (void)setMJRefreshBgColor:(UIColor *)mjRefreshColor;
 
 - (void)setOrignalRect:(CGRect)orignalRect;
-/*更新分类标签数组,会更新相应UI展示*/
+/*更新分类标签数组,会更新相应UI展示。如果是初始化后尾部 tab 增删，优先使用此方法*/
 - (void)updateItemArray:(NSArray *)array;
+/*更新分类标签数组,会更新相应UI展示。如果是初始化后中间 tab 增删，使用此方法。注意 classCellArray 与  identifiterArray应该一一对应*/
+- (void)updateItemArray:(NSArray *)array classCellArray:(NSArray *)classCellArray identifiterArray:(NSArray *)identifiterArray;
 /*更新分类标签数组,不更新相应容器展示*/
 - (void)updateItemArrayNoReload:(NSArray *)array;
+
 /** 1-n
  * @param  isDefault = yes 表示首次初始化
  **/
@@ -121,4 +127,5 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 /*自定义collection 类*/
 - (void)setCollectionClass:(NSString *)custionClassStr;
 @end
+
 

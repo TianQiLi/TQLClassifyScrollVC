@@ -274,11 +274,37 @@ static NSInteger heightCollection = 0;
     _flexCellSize = CGSizeMake(width, heightCollection);
 }
 
-
 - (void)updateItemArray:(NSArray *)array
 {
     NSInteger lastIndex = self.switchViewTool.currentIndex;
     _arrayItem = array;
+  
+    self.switchViewTool.arrayItem = array;
+    [self.collection reloadData];
+    if (lastIndex <= array.count) {
+        self.switchViewTool.currentIndex = lastIndex;
+    }
+}
+
+- (void)updateItemArray:(NSArray *)array classCellArray:(NSArray *)classCellArray identifiterArray:(NSArray *)identifiterArray
+{
+    NSInteger lastIndex = self.switchViewTool.currentIndex;
+    _arrayItem = array;
+    
+    if (classCellArray) {
+        self.classCustomArray = classCellArray;
+    }
+    
+    if (identifiterArray) {
+        self.cellIdentifiterArray = identifiterArray;
+    }
+    
+    // 更新 cell 注册
+    [self updateCollectionViewRegisterClass];
+    
+    // 清空缓存
+    _cacheManager = nil;
+  
     self.switchViewTool.arrayItem = array;
     [self.collection reloadData];
     if (lastIndex <= array.count) {
@@ -290,9 +316,23 @@ static NSInteger heightCollection = 0;
 {
     NSInteger lastIndex = self.switchViewTool.currentIndex;
     _arrayItem = array;
+    
     self.switchViewTool.arrayItem = array;
     if (lastIndex <= array.count) {
         self.switchViewTool.currentIndex = lastIndex;
+    }
+}
+
+- (void)updateCollectionViewRegisterClass
+{
+    NSInteger max_count = MAX(self.classCustomArray.count, self.cellIdentifiterArray.count);
+    for (NSInteger i = 0 ; i< max_count ; i++) {
+        if (self.classCustomArray.count == 0) {
+            self.classCustomArray = @[NSStringFromClass([TQLViewContorller class])];
+        }
+        NSString *classCustom = (self.classCustomArray.count > i) ?self.classCustomArray[i] : self.classCustomArray.lastObject;
+        NSString *cellIdentif = (self.cellIdentifiterArray.count > i) ?self.cellIdentifiterArray[i] : self.cellIdentifiterArray.lastObject;
+        [self.collection registerClass:NSClassFromString(classCustom) forCellWithReuseIdentifier:cellIdentif];
     }
 }
 
@@ -806,6 +846,7 @@ static NSInteger heightCollection = 0;
 */
 
 @end
+
 
 
 
