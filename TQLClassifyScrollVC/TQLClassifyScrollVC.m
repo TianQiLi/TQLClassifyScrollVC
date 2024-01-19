@@ -429,6 +429,7 @@ static NSInteger heightCollection = 0;
     _dataForRowArray = [NSMutableDictionary new];
     _pageForIndex = [NSMutableDictionary new];
     
+  
     self.switchViewTool.arrayItem = _arrayItem;
     self.switchViewTool.delegate = self;
     if (self.switchViewBgColor) {

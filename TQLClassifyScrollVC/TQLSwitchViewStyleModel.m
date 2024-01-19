@@ -25,6 +25,27 @@
     return self;
 }
 
+- (id)initIndicatorSwitchWithCount:(NSInteger)count normalColor:(UIColor *)colorNormal  selectedColor:(UIColor *)colorSelected   indicatorSize:(CGSize)size  switchViewRect:(CGRect)switchViewRect
+{
+    if (self = [self init]) {
+        _countItem = count;
+        _colorNormal = colorNormal;
+        _colorSelected = colorSelected;
+//        _flagColor = flagColor;
+       
+//        _selectedBtn_Font = selectedFontBtn;
+//        _normalBtn_Font = normalFontBtn;
+        _flagSize = size;
+//        _bottomLineColor = bottomLineColor;
+//        _bottomLineHidden = hidden;
+        _switchViewHeight = switchViewRect.size.height;
+        _switchViewY = switchViewRect.origin.y;
+        _swithchStyle = TQLSwitchStyleIndicator;
+        
+    }
+    return self;
+    
+}
 
 - (id)initSwitchButtonStyle:(UIColor *)colorNormal selectedColor:(UIColor *)colorSelected flagColor:(UIColor *)flagColor titleNormalBtnFont:(UIFont *)normalFontBtn selectedNormalBtnFont:(UIFont *)selectedFontBtn flagViewWidth:(CGSize)flagSize bottomLineColor:(UIColor *)bottomLineColor bottonLineHidden:(BOOL)hidden switchViewRect:(CGRect)switchViewRect
 {

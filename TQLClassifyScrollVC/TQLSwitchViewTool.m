@@ -13,11 +13,31 @@
 #import <Masonry/Masonry.h>
 
 
-@interface TQLSwitchViewTool () {
+@interface TQLSwitchCollectionView :UICollectionViewCell
+
+@end
+
+
+@implementation TQLSwitchCollectionView
+
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        
+    }
+    return self;
+}
+
+
+
+@end
+
+@interface TQLSwitchViewTool ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout> {
     TQLSwitchViewStyleModel *_switchViewStyle;
     
 }
 @property (nonatomic, strong) UIScrollView * scrollView;
+@property (nonatomic, strong) UICollectionView * collectionView;
 @property (nonatomic, strong) UIView *flagLine;
 @property (nonatomic, strong) UIView *bottomLine;
 @property (nonatomic, strong) TQLSwitchViewStyleModel *switchViewStyle;
@@ -41,6 +61,21 @@
     return _switchViewStyle;
 }
 
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.backgroundColor = self.backgroundColor;
+        [_collectionView registerClass:TQLSwitchCollectionView.class forCellWithReuseIdentifier:@"TQLSwitchCollectionView"];
+        
+    }
+    return _collectionView;
+}
+
+
 - (void)setSwitchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle
 {
     _switchViewStyle = switchViewStyle;
@@ -51,19 +86,31 @@
     if (self = [super initWithFrame:frame]) {
         _buttonItemArray = @[].mutableCopy;
         _switchViewStyle = switchViewStyle;
-        _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-        [_scrollView setContentSize:CGSizeMake(frame.size.width,0)];
-        _scrollView.showsHorizontalScrollIndicator = NO;
-        _scrollView.showsVerticalScrollIndicator = NO;
-        
-        [self addSubview:_scrollView];
-        
-        [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.leading.equalTo(self);
-            make.trailing.equalTo(self);
-            make.top.equalTo(self);
-            make.bottom.equalTo(self).offset(0);
-        }];
+        _currentIndex = 1;
+        BOOL showFlagView = YES;
+        if (switchViewStyle.swithchStyle == TQLSwitchStyleIndicator) {
+            showFlagView = NO;
+            [self addSubview:self.collectionView];
+            [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.mas_equalTo(0);
+                make.top.mas_equalTo(0);
+                make.bottom.mas_equalTo(0);
+            }];
+        } else {
+            _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+            [_scrollView setContentSize:CGSizeMake(frame.size.width,0)];
+            _scrollView.showsHorizontalScrollIndicator = NO;
+            _scrollView.showsVerticalScrollIndicator = NO;
+            
+            [self addSubview:_scrollView];
+            
+            [_scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.leading.equalTo(self);
+                make.trailing.equalTo(self);
+                make.top.equalTo(self);
+                make.bottom.equalTo(self).offset(0);
+            }];
+        }
         
         _bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0,frame.size.width ,1)];
         [_bottomLine setBackgroundColor:self.switchViewStyle.bottomLineColor];
@@ -79,11 +126,11 @@
         self.flagLine = [[UIView alloc] initWithFrame:CGRectMake(20,self.frame.size.height-self.switchViewStyle.flagSize.height - self.switchViewStyle.flagBottom,self.switchViewStyle.flagSize.width ,self.switchViewStyle.flagSize.height)];
         [_flagLine setBackgroundColor:self.switchViewStyle.flagColor];
         [_scrollView addSubview:_flagLine];
+        self.flagLine.hidden = !showFlagView;
         if (self.switchViewStyle.flagCorner) {
             [self.flagLine.layer setMasksToBounds:YES];
             [self.flagLine.layer setCornerRadius:self.switchViewStyle.flagCorner];
         }
-        
         
         self.cornerRadius = self.switchViewStyle.cornerRadius;
         
@@ -101,17 +148,21 @@
     _cornerRadius = cornerRadius;
     if (_cornerRadius > 0) {
         UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight cornerRadii:CGSizeMake(_cornerRadius, _cornerRadius)];
-        
         CAShapeLayer *shapeLayer = [CAShapeLayer new];
         shapeLayer.path = path.CGPath;
         shapeLayer.frame = self.bounds;
         self.layer.mask = shapeLayer;
     }
-    
 }
 
 - (void)setArrayItem:(NSArray *)arrayItem
 {
+    if (self.switchViewStyle.swithchStyle == TQLSwitchStyleIndicator) {
+        _arrayItem = arrayItem ? arrayItem : @[];
+        [self loadCustomIndicatorView];
+        return ;
+    }
+    
     [self clearSubView];
     _arrayItem = arrayItem ? arrayItem : @[];
     
@@ -140,6 +191,11 @@
     }
 
     [self loadSubView];
+}
+- (void)loadCustomIndicatorView
+{
+    [self.collectionView reloadData];
+    
 }
 
 - (void)clearSubView
@@ -208,27 +264,6 @@
     
     _flagLine.center = CGPointMake(centerX, self.flagLine.center.y);
     return;
-//
-//    NSInteger btnTextWidth = button.titleLabel.text.length * self.switchViewStyle.selectedBtn_Font.pointSize;
-//    CGRect frameFlag = self.flagLine.frame;
-//    frameFlag.size.width = self.switchViewStyle.flagSize.width ? self.switchViewStyle.flagSize.width : btnTextWidth ;
-//    frameFlag.size.height = self.switchViewStyle.flagSize.height ? self.switchViewStyle.flagSize.height : 2 ;
-//
-//    if (button.titleLabel.textAlignment == NSTextAlignmentCenter) {
-//        self.flagLine.center = CGPointMake(CGRectGetMidX(button.frame),self.flagLine.center.y);
-//    }
-//    else if(button.titleLabel.textAlignment == NSTextAlignmentLeft) {
-//        NSInteger centerX = button.center.x;
-//        if (centerX == 0) {
-//            centerX = button.frame.origin.x + button.frame.size.width/2;
-//        }
-//
-//        self.flagLine.center = CGPointMake(centerX - self.switchViewStyle.scrollViewItemInterMargin/4,self.flagLine.center.y);
-//    }
-//    else {
-//        NSInteger offsetx = (button.titleLabel.text.length * self.switchViewStyle.normalBtn_Font.pointSize) / 2 + 2;
-//        self.flagLine.center = CGPointMake(button.frame.origin.x + button.frame.size.width - offsetx ,self.flagLine.center.y);
-//    }
 }
 
 + (BOOL)isVertical:(TQLSwitchImgAlignment)type
@@ -298,7 +333,7 @@
     
 }
 
-- (TQLRedBadgeBttton *)createButton:(id<TQLSwitchViewItemProtocal>)obj
+- (TQLRedBadgeBttton *)createButton:(id<TQLSwitchViewItemProtocal>)obj index:(NSInteger)index
 {
     NSString *name = @"";
     if ([obj isKindOfClass:[NSString class]]) {
@@ -308,13 +343,24 @@
     }
     
     TQLRedBadgeBttton *button  = [TQLRedBadgeBttton buttonWithType:UIButtonTypeCustom];
-    [button setTitle:name forState:UIControlStateNormal];
-    [button setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateSelected];
-    [button setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];
-    [button.titleLabel setFont:self.switchViewStyle.selectedBtn_Font];
-    button.normalFont = self.switchViewStyle.normalBtn_Font;
-    button.selectedFont = self.switchViewStyle.selectedBtn_Font;
-    [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+    if (self.switchViewStyle.swithchStyle == TQLSwitchStyleIndicator) {
+        if (index < self.currentIndex) {
+            [button setBackgroundColor:self.switchViewStyle.colorSelected];
+        } else {
+            [button setBackgroundColor:self.switchViewStyle.colorNormal];
+        }
+        [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+        
+    } else {
+        [button setTitle:name forState:UIControlStateNormal];
+        [button setTitleColor:self.switchViewStyle.colorSelected forState:UIControlStateSelected];
+        [button setTitleColor:self.switchViewStyle.colorNormal forState:UIControlStateNormal];
+        [button.titleLabel setFont:self.switchViewStyle.selectedBtn_Font];
+        button.normalFont = self.switchViewStyle.normalBtn_Font;
+        button.selectedFont = self.switchViewStyle.selectedBtn_Font;
+        [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+    }
+   
     return button;
 }
 
@@ -329,7 +375,7 @@
     NSInteger buttonHeight = self.scrollView.frame.size.height - self.switchViewStyle.itemOffset.y;
     for (id<TQLSwitchViewItemProtocal> obj in self.arrayItem) {
  
-        TQLRedBadgeBttton *button  = [self createButton:obj];
+        TQLRedBadgeBttton *button  = [self createButton:obj index:index];
         [button setTag: ++index];
         [_buttonItemArray addObject:button];
         CGFloat imgWith = [[self class] getImgWidth:obj button:button isSelected:NO];
@@ -418,6 +464,14 @@
     }
 }
 
+- (void)scrollToIndex:(NSInteger)index
+{
+    self.currentIndex = index;
+    if ([self.delegate respondsToSelector:@selector(clickButton:)]) {
+        [self.delegate clickButton:index];
+    }
+}
+
 - (void)updateButtonFrame:(NSInteger)selectedIndex
 {
     selectedIndex -= 1;
@@ -475,6 +529,13 @@
     if (currentIndex == _currentIndex) {
         return;
     }
+    if (self.switchViewStyle.swithchStyle == TQLSwitchStyleIndicator) {
+        _currentIndex = currentIndex;
+        [self.collectionView reloadData];
+        
+        return;
+    }
+    
     [self updateButtonFrame:currentIndex];
     
     [self changeButtonStyle:_currentIndex withIsSelected:NO];
@@ -564,8 +625,41 @@
         } completion:nil];
  
     }
-    
-    
+
+}
+
+#pragma  mark --delegate
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.switchViewStyle.countItem;
+}
+
+- (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    return CGSizeMake(self.switchViewStyle.flagSize.width, self.switchViewStyle.flagSize.height);
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    TQLSwitchCollectionView *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TQLSwitchCollectionView" forIndexPath:indexPath];
+    BOOL needSelect = (indexPath.row < self.currentIndex);
+    if ( self.currentIndex == 1 && indexPath.row == 0 ){
+        needSelect = YES;
+    }
+    cell.contentView.backgroundColor = needSelect ? self.switchViewStyle.colorSelected : self.switchViewStyle.colorNormal;
+    cell.contentView.layer.cornerRadius = self.switchViewStyle.flagCorner;
+    return cell;
+}
+
+- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
+{
+    return self.switchViewStyle.scrollViewItemInterMargin;
+}
+
+- (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    return self.switchViewStyle.scrollViewItemEdge;
 }
 
 + (CGSize)contentSize
@@ -574,5 +668,4 @@
     
 }
 @end
-
 

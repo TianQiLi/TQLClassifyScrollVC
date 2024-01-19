@@ -36,10 +36,17 @@ typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index
 /** TQLSwitchViewStyleModel */
 @property (nonatomic, readonly) TQLSwitchViewStyleModel *switchViewStyle;
 
+/// 加载指示器样式UI 
+- (void)loadCustomIndicatorView;
+
 + (CGSize)contentSize;
 - (void)setSwitchViewStyle:(TQLSwitchViewStyleModel *)switchViewStyle;
 - (UIView *)flagView;
 - (void)clickButton:(id)sender;
+
+/// 滚动到指定的index
+/// - Parameter index: 1...n
+- (void)scrollToIndex:(NSInteger)index;
 
 - (void)updateButtonFrameAfterRotate;
 

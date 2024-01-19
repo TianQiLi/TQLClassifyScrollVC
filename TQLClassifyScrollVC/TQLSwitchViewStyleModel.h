@@ -14,6 +14,11 @@ typedef NS_ENUM(NSInteger,TQLSwitchViewWidthStyle) {
     TQLSwitchViewWidthStyleFixedButtonWidth = 2 //固定按钮宽度
 };
 
+typedef  NS_ENUM(NSInteger , TQLSwitchStyle) {
+    TQLSwitchStyleText,     ///文本按钮
+    TQLSwitchStyleIndicator,///指示器
+};
+
 NS_ASSUME_NONNULL_BEGIN
 @interface TQLSwitchViewStyleModel : NSObject
 //是否需要首次有下拉刷新的效果， 默认YES,前提是配置了下拉刷新特性
@@ -56,6 +61,9 @@ NS_ASSUME_NONNULL_BEGIN
  采用TQLSwitchViewWidthStyleFlexible 时，需要设置scrollViewItemEdge & scrollViewItemInterMargin
  */
 @property (nonatomic, assign) TQLSwitchViewWidthStyle scrollViewWidthStyle;
+/**文本还是纯指示条样式<##>*/
+@property (nonatomic, assign) TQLSwitchStyle swithchStyle;
+
 /* 默认值0 ： scroll控件边框四周间距*/
 @property (nonatomic, assign) UIEdgeInsets scrollViewItemEdge;//TQLSwitchViewWidthStyleFlexible 时有效
 /* 默认值5：元素间距*/
@@ -65,12 +73,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** super scrollView maxOffsetY  */
 @property (nonatomic, assign) NSInteger maxOffsetY;
+@property (nonatomic, assign) NSInteger countItem;
 
 
 
 - (id)initSwitchButtonStyle:(UIColor *)colorNormal selectedColor:(UIColor *)colorSelected flagColor:(UIColor *)flagColor titleBtnFont:(UIFont *)fontBtn flagViewWidth:(CGSize)flagSize bottomLineColor:(UIColor *)bottomLineColor bottonLineHidden:(BOOL)hidden switchViewRect:(CGRect)switchViewRect;//弃用了
 
 - (id)initSwitchButtonStyle:(UIColor *)colorNormal selectedColor:(UIColor *)colorSelected flagColor:(UIColor *)flagColor titleNormalBtnFont:(UIFont *)normalFontBtn selectedNormalBtnFont:(UIFont *)selectedFontBtn flagViewWidth:(CGSize)flagSize bottomLineColor:(UIColor *)bottomLineColor bottonLineHidden:(BOOL)hidden switchViewRect:(CGRect)switchViewRect;
+
+
+/// 多个指示条样式
+/// - Parameters:
+///   - count: 个数
+///   - colorNormal: 颜色
+///   - colorSelected: 颜色
+///   - size: 大小
+///   - switchViewRect: 大小
+- (id)initIndicatorSwitchWithCount:(NSInteger)count normalColor:(UIColor *)colorNormal  selectedColor:(UIColor *)colorSelected   indicatorSize:(CGSize)size  switchViewRect:(CGRect)switchViewRect;
 
 @end
 
