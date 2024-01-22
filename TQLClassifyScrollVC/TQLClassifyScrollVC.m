@@ -286,6 +286,13 @@ static NSInteger heightCollection = 0;
     }
 }
 
+//- (void)updateIndicatorCount:(NSInteger)count indicatorSize:(CGSize)size
+//{
+////    self.switchViewStyle.countItem = count;
+//    self.switchViewStyle.flagSize = size;
+//    [self.switchViewTool updateViewForCount:count];
+//}
+
 - (void)updateItemArray:(NSArray *)array classCellArray:(NSArray *)classCellArray identifiterArray:(NSArray *)identifiterArray
 {
     NSInteger lastIndex = self.switchViewTool.currentIndex;
@@ -833,6 +840,15 @@ static NSInteger heightCollection = 0;
 - (BOOL)scrollFromClickEvent
 {
     return _scrollFromClickEvent;
+}
+
+- (void)addParam:(NSDictionary *)param
+{
+    NSMutableDictionary *dic = self.paramaterDic.mutableCopy;
+    dic = dic ? dic :@{}.mutableCopy;
+    [dic addEntriesFromDictionary:param];
+    self.paramaterDic = dic.copy;
+    
 }
 
  

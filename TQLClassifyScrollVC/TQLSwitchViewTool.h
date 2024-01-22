@@ -50,6 +50,10 @@ typedef void(^EnumerateItemBtnBlock)(TQLRedBadgeBttton * itemBtn,NSInteger index
 
 - (void)updateButtonFrameAfterRotate;
 
+
+/// 更新指示器模式下的个数
+/// - Parameter count: 个数
+- (void)updateViewForCount:(NSInteger)count;
 @end
 
 

@@ -155,6 +155,17 @@
     }
 }
 
+- (void)updateViewForCount:(NSInteger)count
+{
+    self.switchViewStyle.countItem = count;
+    NSMutableArray *tempArray = @[].mutableCopy;
+    for (int i = 0 ; i < count ; i++) {
+        [tempArray addObject:@""];
+    }
+    _arrayItem = tempArray;
+    [self loadCustomIndicatorView];
+}
+
 - (void)setArrayItem:(NSArray *)arrayItem
 {
     if (self.switchViewStyle.swithchStyle == TQLSwitchStyleIndicator) {

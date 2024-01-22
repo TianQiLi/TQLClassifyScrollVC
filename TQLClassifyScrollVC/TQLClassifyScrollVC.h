@@ -94,6 +94,14 @@ typedef void(^ConfigTQLViewContorllerBlock) (TQLViewContorller *vc,NSInteger row
 /*更新分类标签数组,不更新相应容器展示*/
 - (void)updateItemArrayNoReload:(NSArray *)array;
 
+/// 增加公共参数
+- (void)addParam:(NSDictionary *)param;
+
+/// 更新指示器模式下的个数
+/// @param count 个数
+/// @param size  指示器大小
+//- (void)updateIndicatorCount:(NSInteger)count indicatorSize:(CGSize)size;
+
 /** 1-n
  * @param  isDefault = yes 表示首次初始化
  **/
